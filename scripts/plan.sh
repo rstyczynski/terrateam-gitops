@@ -6,12 +6,6 @@
 echo "Running custom engine plan stage..."
 echo "Creating Terraform execution plan..."
 
-# Add your custom planning logic here
-# For example:
-# - Run terraform plan
-# - Generate plan output
-# - Validate plan results
-
 echo "Writes the plan to $1"
 
 touch $1
