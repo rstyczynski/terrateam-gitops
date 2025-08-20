@@ -1,9 +1,3 @@
-engine:
-  name: custom
-  init: ['../scripts/init.sh']
-  plan: ['../scripts/plan.sh', '$TERRATEAM_PLAN_FILE']
-  apply: ['../scripts/apply.sh']
-  outputs: ['../scripts/outputs.sh']
 
 hooks:
   plan:
@@ -25,7 +19,12 @@ dirs:
 
 workflows:
   - tag_query: test1
-    engine: terraform
+    engine:
+      name: custom
+      init: ['../scripts/init.sh']
+      plan: ['../scripts/plan.sh', '$TERRATEAM_PLAN_FILE']
+      apply: ['../scripts/apply.sh']
+      outputs: ['../scripts/outputs.sh']
     plan:
       - type: init
       - type: plan
@@ -33,7 +32,8 @@ workflows:
       - type: init
       - type: apply
   - tag_query: test2
-    engine: custom
+    engine:
+      name: terraform
     plan:
       - type: init
       - type: plan
