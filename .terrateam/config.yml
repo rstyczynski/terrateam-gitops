@@ -12,20 +12,17 @@ hooks:
         run_on: always
 
 dirs:
-  test1:
-    tags: [test1]
-  test2:
-    tags: [test2]
+  terraform:
+    tags: [TF_code]
+  ansible:
+    tags: [ANS_code]
+    when_modified:
+      depends_on: 'dir:terraform'
 
 workflows:
-  - tag_query: test1
+  - tag_query: TF_code
     engine:
-      name: custom
-      init: ['../scripts/init.sh']
-      # plan: ['bash', '-c', '../scripts/plan.sh', '$TERRATEAM_PLAN_FILE']
-      plan: ['bash', '-c', '../scripts/plan.sh $TERRATEAM_PLAN_FILE']
-      apply: ['../scripts/apply.sh']
-      outputs: ['../scripts/outputs.sh']
+      name: terraform
     plan:
       - type: init
       - type: plan
@@ -33,9 +30,14 @@ workflows:
       - type: init
       - type: apply
 
-  - tag_query: test2
+  - tag_query: ANS_code
     engine:
-      name: terraform
+      name: custom
+      init: ['../scripts/init.sh']
+      # plan: ['bash', '-c', '../scripts/plan.sh', '$TERRATEAM_PLAN_FILE']
+      plan: ['bash', '-c', '../scripts/plan.sh $TERRATEAM_PLAN_FILE']
+      apply: ['../scripts/apply.sh']
+      outputs: ['../scripts/outputs.sh']
     plan:
       - type: init
       - type: plan
