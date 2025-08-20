@@ -1,14 +1,15 @@
 
+# hooks https://docs.terrateam.io/configuration-reference/hooks
 hooks:
   plan:
     pre:
       - type: run
         # scripts must have +x 
-        cmd: ['scripts/hello.sh']
+        cmd: ['.terrateam/hooks/hello.sh']
         run_on: always
     post:
       - type: run
-        cmd: ['scripts/bye.sh']
+        cmd: ['.terrateam/hooks/bye.sh']
         run_on: always
 
 dirs:
@@ -16,9 +17,17 @@ dirs:
     tags: [TF_code]
   ansible:
     tags: [ANS_code]
+    # layered run
+    # https://docs.terrateam.io/advanced-workflows/layered-runs/
     when_modified:
       depends_on: 'dir:terraform'
-
+      "file_patterns": [
+          "ansible/vars.json"
+          ]
+      # autoplan https://docs.terrateam.io/configuration-reference/when-modified
+      autoplan: true
+        
+# workflows https://docs.terrateam.io/configuration-reference/workflows
 workflows:
   - tag_query: TF_code
     engine:
@@ -33,11 +42,11 @@ workflows:
   - tag_query: ANS_code
     engine:
       name: custom
-      init: ['../scripts/init.sh']
-      # plan: ['bash', '-c', '../scripts/plan.sh', '$TERRATEAM_PLAN_FILE']
-      plan: ['bash', '-c', '../scripts/plan.sh $TERRATEAM_PLAN_FILE']
-      apply: ['../scripts/apply.sh']
-      outputs: ['../scripts/outputs.sh']
+      init: ['../.terrateam/ansible/init.sh']
+      # plan: ['bash', '-c', 'scripts/plan.sh', '$TERRATEAM_PLAN_FILE']
+      plan: ['bash', '-c', '../.terrateam/ansible/plan.sh $TERRATEAM_PLAN_FILE']
+      apply: ['../.terrateam/ansible/apply.sh']
+      outputs: ['../.terrateam/ansible/outputs.sh']
     plan:
       - type: init
       - type: plan
