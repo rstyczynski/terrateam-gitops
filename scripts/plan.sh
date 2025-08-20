@@ -14,9 +14,26 @@ echo "Creating Terraform execution plan..."
 
 echo "Writes the plan to $1"
 
-echo "here is a plan line no.1" | tee $1
-echo "here is a plan line no.2" | tee -a $1
-echo "here is a plan line no.3" | tee -a $1
-echo "here is a plan line no.4" | tee -a $1
+cat > $1 <<EOF
+Terraform will perform the following actions:
+
+ # null_resource.example2 will be created
+ + resource "null_resource" "example2" {
+     + id       = (known after apply)
+     + triggers = {
+         + "trigger_key" = "trigger_value1"
+       }
+   }
+
+ # null_resource.example3 will be created
+ + resource "null_resource" "example3" {
+     + id       = (known after apply)
+     + triggers = {
+         + "trigger_key" = "trigger_value4"
+       }
+   }
+
+Plan: 2 to add, 0 to change, 0 to destroy.
+EOF
 
 echo "Plan stage completed successfully!"
