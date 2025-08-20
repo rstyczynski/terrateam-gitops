@@ -1,3 +1,23 @@
+engine:
+  name: custom
+  stages:
+    init:
+      - type: run
+        cmd: ['scripts/init.sh']
+        run_on: always
+    plan:
+      - type: run
+        cmd: ['scripts/plan.sh']
+        run_on: always
+    apply:
+      - type: run
+        cmd: ['scripts/apply.sh']
+        run_on: always
+    destroy:
+      - type: run
+        cmd: ['scripts/destroy.sh']
+        run_on: always
+
 hooks:
   plan:
     pre:
@@ -9,12 +29,16 @@ hooks:
       - type: run
         cmd: ['scripts/bye.sh']
         run_on: always
+
 dirs:
   test1:
     tags: [test1]
+    
   test2:
     tags: [test2]
+
 workflows:
+
   - tag_query: test1
     plan:
       - type: init
@@ -22,6 +46,7 @@ workflows:
     apply:
       - type: init
       - type: apply
+
   - tag_query: test2
     plan:
       - type: init
