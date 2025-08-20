@@ -25,7 +25,8 @@ dirs:
 
 workflows:
   - tag_query: test1
-    engine: terraform
+    engine:
+      name: terraform
     plan:
       - type: init
       - type: plan
@@ -33,7 +34,8 @@ workflows:
       - type: init
       - type: apply
   - tag_query: test2
-    engine: custom
+    engine:
+      name: terraform
     plan:
       - type: init
       - type: plan
