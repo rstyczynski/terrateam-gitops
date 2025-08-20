@@ -14,9 +14,7 @@ echo "Creating Terraform execution plan..."
 
 echo "Writes the plan to $1"
 
-terraform init
 terraform plan -detailed-exitcode -out $1
-
 
 # cat > $1 <<EOF
 # Terraform will perform the following actions:
