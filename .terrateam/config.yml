@@ -3,7 +3,7 @@ engine:
   init: ['../scripts/init.sh']
   plan: ['../scripts/plan.sh', '$TERRATEAM_PLAN_FILE']
   apply: ['../scripts/apply.sh']
-  destroy: ['../scripts/destroy.sh']
+  outputs: ['../scripts/outputs.sh']
 
 hooks:
   plan:
