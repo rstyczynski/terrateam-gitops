@@ -7,7 +7,6 @@ echo "Running Ansible engine plan stage..."
 echo "Creating Ansible execution plan..."
 
 # Change to the ansible directory
-cd ../ansible
 
 # Get the plan file path from the first argument
 PLAN_FILE="$1"

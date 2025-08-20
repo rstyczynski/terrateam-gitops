@@ -6,9 +6,6 @@
 echo "Running Ansible engine apply stage..."
 echo "Applying Ansible playbook..."
 
-# Change to the ansible directory
-cd ../ansible
-
 # Run ansible-playbook
 echo "Running Ansible playbook..."
 ansible-playbook playbook.yml --diff

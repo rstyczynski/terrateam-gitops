@@ -6,8 +6,6 @@
 echo "Running Ansible engine init stage..."
 echo "Initializing Ansible configuration..."
 
-# Change to the ansible directory
-cd ../ansible
 
 # Check if ansible is available
 if ! command -v ansible &> /dev/null; then
