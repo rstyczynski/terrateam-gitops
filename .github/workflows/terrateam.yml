@@ -46,6 +46,15 @@ jobs:
           python -m pip install --upgrade pip
           pip install ansible ansible-lint
 
+      - name: Debug PATH
+        run: |
+          echo "PATH=$PATH"
+          echo "Python_ROOT_DIR=$Python_ROOT_DIR"
+          which python || true
+          which pip || true
+          which ansible || true
+          ls -l "$Python_ROOT_DIR/bin/" | sed -n '1,120p'
+
       - name: Run Terrateam Action
         id: terrateam
         uses: terrateamio/action@v1
