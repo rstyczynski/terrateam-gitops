@@ -5,11 +5,11 @@ hooks:
     pre:
       - type: run
         # scripts must have +x 
-        cmd: ['../.terrateam/scripts/hello.sh']
+        cmd: ['.terrateam/hooks/hello.sh']
         run_on: always
     post:
       - type: run
-        cmd: ['../.terrateam/scripts/bye.sh']
+        cmd: ['.terrateam/hooks/bye.sh']
         run_on: always
 
 dirs:
@@ -42,11 +42,11 @@ workflows:
   - tag_query: ANS_code
     engine:
       name: custom
-      init: ['../.terrateam/scripts/init.sh']
+      init: ['../.terrateam/ansible/init.sh']
       # plan: ['bash', '-c', 'scripts/plan.sh', '$TERRATEAM_PLAN_FILE']
-      plan: ['bash', '-c', '../.terrateam/scripts/plan.sh $TERRATEAM_PLAN_FILE']
-      apply: ['../.terrateam/scripts/apply.sh']
-      outputs: ['../.terrateam/scripts/outputs.sh']
+      plan: ['bash', '-c', '../.terrateam/ansible/plan.sh $TERRATEAM_PLAN_FILE']
+      apply: ['../.terrateam/ansible/apply.sh']
+      outputs: ['../.terrateam/ansible/outputs.sh']
     plan:
       - type: init
       - type: plan
