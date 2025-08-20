@@ -33,6 +33,7 @@ workflows:
     apply:
       - type: init
       - type: apply
+      - type: outputs
 
   - tag_query: test2
     plan:
@@ -41,3 +42,5 @@ workflows:
     apply:
       - type: init
       - type: apply
+      - type: outputs
+      
