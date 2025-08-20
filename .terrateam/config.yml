@@ -35,7 +35,7 @@ workflows:
       - type: apply
   - tag_query: test2
     engine:
-      name: terraform
+      name: custom
     plan:
       - type: init
       - type: plan
