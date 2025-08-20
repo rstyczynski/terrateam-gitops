@@ -14,9 +14,9 @@ echo "Creating Terraform execution plan..."
 
 echo "Writes the plan to $1"
 
-echo "here is a plan line no.1" > $1
-echo "here is a plan line no.2" >> $1
-echo "here is a plan line no.3" >> $1
-echo "here is a plan line no.4" >> $1
+echo "here is a plan line no.1" | tee $1
+echo "here is a plan line no.2" | tee -a $1
+echo "here is a plan line no.3" | tee -a $1
+echo "here is a plan line no.4" | tee -a $1
 
 echo "Plan stage completed successfully!"
