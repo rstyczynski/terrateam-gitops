@@ -1,0 +1,31 @@
+hooks:
+  plan:
+    pre:
+      - type: run
+        # scripts must have +x 
+        cmd: ['scripts/hello.sh']
+        run_on: always
+    post:
+      - type: run
+        cmd: ['scripts/bye.sh']
+        run_on: always
+dirs:
+  test1:
+    tags: [test1]
+  test2:
+    tags: [test2]
+workflows:
+  - tag_query: test1
+    plan:
+      - type: init
+      - type: plan
+    apply:
+      - type: init
+      - type: apply
+  - tag_query: test2
+    plan:
+      - type: init
+      - type: plan
+    apply:
+      - type: init
+      - type: apply
