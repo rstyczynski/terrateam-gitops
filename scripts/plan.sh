@@ -12,7 +12,7 @@ echo "Creating Terraform execution plan..."
 # - Generate plan output
 # - Validate plan results
 
-echo Writes the plan to $1
+echo "Writes the plan to $1"
 
 echo "here is a plan line no.1" > $1
 echo "here is a plan line no.2" >> $1
