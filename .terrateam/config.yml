@@ -22,7 +22,7 @@ workflows:
     engine:
       name: custom
       init: ['../scripts/init.sh']
-      plan: ['../scripts/plan.sh', '$TERRATEAM_PLAN_FILE']
+      plan: ['bash', '-c', '../scripts/plan.sh', '$TERRATEAM_PLAN_FILE']
       apply: ['../scripts/apply.sh']
       outputs: ['../scripts/outputs.sh']
     plan:
@@ -31,7 +31,7 @@ workflows:
     apply:
       - type: init
       - type: apply
-      
+
   - tag_query: test2
     engine:
       name: terraform

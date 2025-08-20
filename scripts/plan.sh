@@ -35,3 +35,5 @@ touch $1
 # EOF
 
 echo "Plan stage completed successfully!"
+
+exit 0
