@@ -25,7 +25,6 @@ dirs:
     tags: [test2]
 
 workflows:
-
   - tag_query: test1
     plan:
       - type: init
@@ -34,7 +33,6 @@ workflows:
       - type: init
       - type: apply
       - type: outputs
-
   - tag_query: test2
     plan:
       - type: init
@@ -43,4 +41,3 @@ workflows:
       - type: init
       - type: apply
       - type: outputs
-      
