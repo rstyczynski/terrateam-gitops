@@ -1,22 +1,9 @@
 engine:
   name: custom
-  stages:
-    init:
-      - type: run
-        cmd: ['scripts/init.sh']
-        run_on: always
-    plan:
-      - type: run
-        cmd: ['scripts/plan.sh']
-        run_on: always
-    apply:
-      - type: run
-        cmd: ['scripts/apply.sh']
-        run_on: always
-    destroy:
-      - type: run
-        cmd: ['scripts/destroy.sh']
-        run_on: always
+  init: ['scripts/init.sh']
+  plan: ['scripts/plan.sh']
+  apply: ['scripts/apply.sh']
+  destroy: ['scripts/destroy.sh']
 
 hooks:
   plan:
