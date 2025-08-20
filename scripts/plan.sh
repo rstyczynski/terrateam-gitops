@@ -12,4 +12,6 @@ echo "Creating Terraform execution plan..."
 # - Generate plan output
 # - Validate plan results
 
+echo "here is a plan" > $TERRATEAM_PLAN_FILE
+
 echo "Plan stage completed successfully!"
