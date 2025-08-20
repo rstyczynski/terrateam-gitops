@@ -23,7 +23,7 @@ workflows:
       name: custom
       init: ['../scripts/init.sh']
       # plan: ['bash', '-c', '../scripts/plan.sh', '$TERRATEAM_PLAN_FILE']
-      plan: ['bash', '-c', '../scripts/plan.sh "$TERRATEAM_PLAN_FILE"']
+      plan: ['bash', '-c', '../scripts/plan.sh $TERRATEAM_PLAN_FILE']
       apply: ['../scripts/apply.sh']
       outputs: ['../scripts/outputs.sh']
     plan:
