@@ -1,9 +1,9 @@
 engine:
   name: custom
   init: ['../scripts/init.sh']
-  plan: ['../scripts/plan.sh']
+  plan: ['../scripts/plan.sh', '$TERRATEAM_PLAN_FILE']
   apply: ['../scripts/apply.sh']
-  destroy: ['../scripts/destroy.sh']
+  outputs: ['../scripts/outputs.sh']
 
 hooks:
   plan:
@@ -20,12 +20,10 @@ hooks:
 dirs:
   test1:
     tags: [test1]
-    
   test2:
     tags: [test2]
 
 workflows:
-
   - tag_query: test1
     plan:
       - type: init
@@ -33,7 +31,6 @@ workflows:
     apply:
       - type: init
       - type: apply
-
   - tag_query: test2
     plan:
       - type: init
