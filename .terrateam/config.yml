@@ -28,7 +28,7 @@ workflows:
       outputs: ['../scripts/outputs.sh']
     plan:
       - type: init
-      - type: plan
+      # - type: plan
     apply:
       - type: init
       - type: apply
