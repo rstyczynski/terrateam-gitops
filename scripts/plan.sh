@@ -14,4 +14,4 @@ echo "Ansible plan" > $1
 
 echo "Plan stage completed successfully!"
 
-exit 1
+exit 0
