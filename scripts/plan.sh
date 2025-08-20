@@ -8,32 +8,10 @@ echo "Creating Terraform execution plan..."
 
 echo "Writes the plan to $1"
 
-touch $1
+echo "Ansible plan" > $1
 
-# terraform plan -detailed-exitcode -out $1
-
-# cat > $1 <<EOF
-# Terraform will perform the following actions:
-
-#  # null_resource.example2 will be created
-#  + resource "null_resource" "example2" {
-#      + id       = (known after apply)
-#      + triggers = {
-#          + "trigger_key" = "trigger_value1"
-#        }
-#    }
-
-#  # null_resource.example3 will be created
-#  + resource "null_resource" "example3" {
-#      + id       = (known after apply)
-#      + triggers = {
-#          + "trigger_key" = "trigger_value4"
-#        }
-#    }
-
-# Plan: 2 to add, 0 to change, 0 to destroy.
-# EOF
+# touch $1
 
 echo "Plan stage completed successfully!"
 
-exit 0
+exit 1
