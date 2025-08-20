@@ -1,9 +1,9 @@
 engine:
   name: custom
-  init: ['scripts/init.sh']
-  plan: ['scripts/plan.sh']
-  apply: ['scripts/apply.sh']
-  destroy: ['scripts/destroy.sh']
+  init: ['../scripts/init.sh']
+  plan: ['../scripts/plan.sh']
+  apply: ['../scripts/apply.sh']
+  destroy: ['../scripts/destroy.sh']
 
 hooks:
   plan:
