@@ -1,7 +1,8 @@
 engine:
   name: custom
   init: ['../scripts/init.sh']
-  plan: ['../scripts/plan.sh', '$TERRATEAM_PLAN_FILE']
+  #plan: ['../scripts/plan.sh', '$TERRATEAM_PLAN_FILE']
+  plan: ['touch', '$TERRATEAM_PLAN_FILE']
   apply: ['../scripts/apply.sh']
   outputs: ['../scripts/outputs.sh']
 
