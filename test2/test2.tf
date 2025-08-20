@@ -12,3 +12,4 @@ resource "null_resource" "example2" {
     command = "echo This is a local provisioner no.2"
   }
 }
+
