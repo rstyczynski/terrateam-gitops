@@ -4,6 +4,31 @@ echo "⚠️ ================================================" >&2
 echo "START: Ansible init stage" >&2
 
 echo "TODO Ansible init"
+
+echo "Diagnostic dump"
+
+# 1. Who am I?
+whoami
+id
+
+# 2. What does pip think my home is?
+echo "HOME=$HOME"
+
+# 3. Inspect the pip cache path
+echo "PIP cache dir: ${PIP_CACHE_DIR:-$HOME/.cache/pip}"
+
+# 4. Check if it exists
+ls -ld "$HOME" "$HOME/.cache" "$HOME/.cache/pip" 2>/dev/null || echo "Cache dir missing"
+
+# 5. Show ownership & permissions (drill down a bit)
+namei -l "$HOME/.cache/pip" 2>/dev/null || echo "namei not available"
+stat -c "%U:%G %A %n" "$HOME/.cache/pip" 2>/dev/null || echo "stat failed"
+
+# 6. Try creating a file (tests writability)
+touch "$HOME/.cache/pip/testfile" 2>/dev/null && echo "Writable" || echo "Not writable"
+rm -f "$HOME/.cache/pip/testfile" 2>/dev/null
+
+
 if ! command -v ansible-playbook >/dev/null 2>&1; then
   echo "❌ Error: 'ansible-playbook' command not found. Please install Ansible before proceeding." >&2
 else
