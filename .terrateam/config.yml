@@ -45,10 +45,9 @@ workflows:
   - tag_query: ANS_code
     engine:
       name: custom
-      init: ['../.terrateam/ansible/init.sh']
-      # plan: ['bash', '-c', 'scripts/plan.sh', '$TERRATEAM_PLAN_FILE']
-      plan: ['bash', '-c', '../.terrateam/ansible/plan.sh $TERRATEAM_PLAN_FILE']
-      apply: ['../.terrateam/ansible/apply.sh']
+      init:    ['../.terrateam/ansible/init.sh']
+      plan:    ['../.terrateam/ansible/plan.sh', '$TERRATEAM_PLAN_FILE']
+      apply:   ['../.terrateam/ansible/apply.sh']
       outputs: ['../.terrateam/ansible/outputs.sh']
     plan:
       - type: init
