@@ -7,11 +7,13 @@ echo "TODO"
 if ! command -v ansible-playbook >/dev/null 2>&1; then
   echo "❌ Error: 'ansible-playbook' command not found. Please install Ansible before proceeding."
 else
+    echo "ℹ️ ansible-playbook version info:"
     ansible-playbook --version
 
     if ! command -v ansible >/dev/null 2>&1; then
         echo "⚠️ Notice: 'ansible' command not found. Please install Ansible before proceeding."
     else
+        echo "ℹ️ ansible version info:"
         ansible --version
     fi
 fi
