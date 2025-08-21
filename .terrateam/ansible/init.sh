@@ -5,6 +5,7 @@ echo "START: Ansible init stage" >&2
 
 echo "TODO Ansible init"
 
+{
 echo "Diagnostic dump"
 
 # 1. Who am I?
@@ -27,6 +28,7 @@ stat -c "%U:%G %A %n" "$HOME/.cache/pip" 2>/dev/null || echo "stat failed"
 # 6. Try creating a file (tests writability)
 touch "$HOME/.cache/pip/testfile" 2>/dev/null && echo "Writable" || echo "Not writable"
 rm -f "$HOME/.cache/pip/testfile" 2>/dev/null
+} >&2
 
 
 if ! command -v ansible-playbook >/dev/null 2>&1; then
