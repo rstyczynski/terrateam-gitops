@@ -1,11 +1,11 @@
 #!/bin/bash
 
-echo "⚠️ ================================================"
-echo "START: Ansible apply stage"
+echo "⚠️ ================================================" >&2
+echo "START: Ansible apply stage" >&2
 
-echo "TODO"
+echo "TODO: Ansible apply"
 EXIT_CODE=0
 
-echo "END: Ansible apply stage"
-echo "⚠️ ================================================"
+echo "END: Ansible apply stage" >&2
+echo "⚠️ ================================================" >&2
 exit $EXIT_CODE
