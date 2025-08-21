@@ -30,8 +30,12 @@ echo "TODO Ansible init"
     rm -f "$HOME/.cache/pip/testfile" 2>/dev/null
 } >&2
 
+# removes error message from log, but does not improve 
+# the speed as each stage runs in a separate container
 mkdir -p ~/.cache
 
+# first use of ansible-playbook command initiates 
+# pip install of ansible and its dependencies
 if ! command -v ansible-playbook >/dev/null 2>&1; then
   echo "❌ Error: 'ansible-playbook' command not found. Please install Ansible before proceeding." >&2
 else
