@@ -7,6 +7,7 @@ echo ">>TERRATEAM_PLAN_FILE: $TERRATEAM_PLAN_FILE" >&2
 cat $TERRATEAM_PLAN_FILE >&2
 echo "<<TERRATEAM_PLAN_FILE" >&2
 
+# https://docs.terrateam.io/integrations/environment-variables/
 echo ">>TERRATEAM_RESULTS_FILE: $TERRATEAM_RESULTS_FILE" >&2
 cat $TERRATEAM_RESULTS_FILE >&2
 echo "<<TERRATEAM_RESULTS_FILE" >&2

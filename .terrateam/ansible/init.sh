@@ -3,7 +3,7 @@
 echo "⚠️ ================================================" >&2
 echo "START: Ansible init stage" >&2
 
-echo "TODO"
+echo "TODO Ansible init"
 if ! command -v ansible-playbook >/dev/null 2>&1; then
   echo "❌ Error: 'ansible-playbook' command not found. Please install Ansible before proceeding." >&2
 else
