@@ -5,6 +5,9 @@ PLAN_FILE=$1
 echo "⚠️ ================================================" >&2
 echo "START: Ansible plan stage" >&2
 
+# Call external debug script
+source "$(dirname "$0")/debug.sh" >&2
+
 echo "TODO Ansible plan stdout message. 'TODO Ansible plan file content' is sent to $PLAN_FILE"
 
 echo "TERRATEAM_PLAN_FILE (exported): $TERRATEAM_PLAN_FILE" >&2
