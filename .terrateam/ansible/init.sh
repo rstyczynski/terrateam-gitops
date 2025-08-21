@@ -5,12 +5,8 @@ echo "START: Ansible init stage" >&2
 
 echo "TODO Ansible init"
 
-# removes error message from log, but does not improve 
-# the speed as each stage runs in a separate container
-#mkdir -p ~/.cache
+source "$(dirname "$0")/../shared/debug.sh" >&2
 
-# Call external debug script
-source "$(dirname "$0")/debug.sh" >&2
 
 EXIT_CODE=0
 

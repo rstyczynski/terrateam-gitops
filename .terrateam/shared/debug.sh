@@ -2,7 +2,7 @@
 
 # Debug script for Ansible engine diagnostics
 
-echo "🔍 Diagnostic dump"
+echo "🔍 START: Diagnostic dump ================================"
 
 echo "========== TERRATEAM ENVIRONMENT VARIABLES =========="
 echo "TERRATEAM_DIR: $TERRATEAM_DIR"
@@ -63,13 +63,16 @@ rm -f "$HOME/.cache/pip/testfile" 2>/dev/null
 
 echo "========== ANSIBLE INFO =========="
 if command -v ansible-playbook >/dev/null 2>&1; then
+    echo "🛠️ ansible-playbook version:"
     ansible-playbook --version
 else
     echo "❌ ansible-playbook not found"
 fi
 if command -v ansible >/dev/null 2>&1; then
+    echo "🛠️ ansible version:"
     ansible --version
 else
     echo "❌ ansible not found"
 fi
 
+echo "🔍 END: Diagnostic dump ================================"

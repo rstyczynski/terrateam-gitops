@@ -5,8 +5,7 @@ PLAN_FILE=$1
 echo "⚠️ ================================================" >&2
 echo "START: Ansible plan stage" >&2
 
-# Call external debug script
-source "$(dirname "$0")/debug.sh" >&2
+source "$(dirname "$0")/../shared/debug.sh" >&2
 
 echo "TODO Ansible plan stdout message. 'TODO Ansible plan file content' is sent to $PLAN_FILE"
 
