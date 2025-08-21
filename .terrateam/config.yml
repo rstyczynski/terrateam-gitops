@@ -47,6 +47,7 @@ workflows:
       name: custom
       init:    ['../.terrateam/ansible/init.sh']
       plan:    ['../.terrateam/ansible/plan.sh', '$TERRATEAM_PLAN_FILE']
+      diff:    ['../.terrateam/ansible/diff.sh', '$TERRATEAM_PLAN_FILE']
       apply:   ['../.terrateam/ansible/apply.sh']
       outputs: ['../.terrateam/ansible/outputs.sh']
     plan:
