@@ -12,5 +12,12 @@ EXIT_CODE=0
 
 echo "END: Ansible plan stage" >&2
 echo "⚠️ ================================================" >&2
+
+echo "⚠️ ================================================" >&2
+echo ">>TERRATEAM_PLAN_FILE: $TERRATEAM_PLAN_FILE" >&2
+cat $TERRATEAM_PLAN_FILE >&2
+echo "<<TERRATEAM_PLAN_FILE" >&2
+echo "⚠️ ================================================" >&2
+
 exit $EXIT_CODE
 

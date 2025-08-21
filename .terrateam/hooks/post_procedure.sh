@@ -1,7 +1,15 @@
 #!/bin/bash
 
-echo "⚠️ ================================================"
-echo "START: post-hook"
+echo "⚠️ ================================================" >&2
+echo "START: post-hook" >&2
 
-echo "END: post-hook"
-echo "⚠️ ================================================"
+echo ">>TERRATEAM_PLAN_FILE: $TERRATEAM_PLAN_FILE" >&2
+cat $TERRATEAM_PLAN_FILE >&2
+echo "<<TERRATEAM_PLAN_FILE" >&2
+
+echo ">>TERRATEAM_RESULTS_FILE: $TERRATEAM_RESULTS_FILE" >&2
+cat $TERRATEAM_RESULTS_FILE >&2
+echo "<<TERRATEAM_RESULTS_FILE" >&2
+
+echo "END: post-hook" >&2
+echo "⚠️ ================================================" >&2
