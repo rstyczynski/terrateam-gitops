@@ -19,5 +19,5 @@ fi
 EXIT_CODE=0
 
 echo "⚠️ ================================================"
-echo "STOP: Ansible apply stage"
+echo "STOP: Ansible init stage"
 exit $EXIT_CODE
