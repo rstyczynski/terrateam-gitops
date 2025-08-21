@@ -1,34 +1,19 @@
 #!/bin/bash
 
-# Ansible engine init stage script
-# This script handles the initialization stage for Ansible playbooks
+echo "⚠️ ================================================"
+echo "START: Ansible init stage"
 
-echo "Running Ansible engine init stage..."
-echo "Initializing Ansible configuration..."
-
-
-# Check if ansible is available
-if ! command -v ansible &> /dev/null; then
-    echo "Error: Ansible is not installed or not in PATH"
-    exit 1
+echo "TODO"
+if ! command -v ansible >/dev/null 2>&1; then
+  echo "❌ Error: 'ansible' command not found. Please install Ansible before proceeding."
 fi
 
-# Validate the playbook and vars file
-if [ ! -f "playbook.yml" ]; then
-    echo "Error: playbook.yml not found"
-    exit 1
+if ! command -v ansible-playbook >/dev/null 2>&1; then
+  echo "❌ Error: 'ansible-playbook' command not found. Please install Ansible before proceeding."
 fi
 
-if [ ! -f "vars.json" ]; then
-    echo "Error: vars.json not found"
-    exit 1
-fi
+EXIT_CODE=0
 
-# Validate JSON syntax
-if ! python3 -m json.tool vars.json > /dev/null 2>&1; then
-    echo "Error: vars.json contains invalid JSON"
-    exit 1
-fi
-
-echo "Ansible configuration validated successfully!"
-echo "Init stage completed successfully!"
+echo "⚠️ ================================================"
+echo "STOP: Ansible apply stage"
+exit $EXIT_CODE

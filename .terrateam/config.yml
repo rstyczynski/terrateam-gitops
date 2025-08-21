@@ -1,15 +1,19 @@
 
+# cost estimation https://docs.terrateam.io/integrations/cost-estimation/#enabling-cost-estimation
+cost_estimation:
+  enabled: false
+
 # hooks https://docs.terrateam.io/configuration-reference/hooks
 hooks:
   plan:
     pre:
       - type: run
         # scripts must have +x 
-        cmd: ['.terrateam/hooks/hello.sh']
+        cmd: ['.terrateam/hooks/pre_procedure.sh']
         run_on: always
     post:
       - type: run
-        cmd: ['.terrateam/hooks/bye.sh']
+        cmd: ['.terrateam/hooks/post_procedure.sh']
         run_on: always
 
 dirs:
