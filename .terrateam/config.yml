@@ -8,7 +8,6 @@ hooks:
   plan:
     pre:
       - type: run
-        # scripts must have +x 
         cmd: ['.terrateam/hooks/pre_procedure.sh']
         run_on: always
     post:
