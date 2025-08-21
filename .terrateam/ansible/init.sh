@@ -30,6 +30,7 @@ echo "TODO Ansible init"
     rm -f "$HOME/.cache/pip/testfile" 2>/dev/null
 } >&2
 
+mkdir -p ~/.cache
 
 if ! command -v ansible-playbook >/dev/null 2>&1; then
   echo "❌ Error: 'ansible-playbook' command not found. Please install Ansible before proceeding." >&2
