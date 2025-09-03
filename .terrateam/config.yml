@@ -41,6 +41,8 @@ workflows:
     apply:
       - type: init
       - type: apply
+      - type: run
+        cmd: ['.terrateam/terraform/output.sh']
 
   - tag_query: ANS_code
     engine:
