@@ -19,7 +19,7 @@ dirs:
   terraform:
     tags: [TF_code]
     when_modified:
-      file_patterns: ["terraform/*"]
+      file_patterns: ["terraform/*", "!terraform/ansible/*"]
   terraform_ansible:
     tags: [ANS_code]
     # layered run
