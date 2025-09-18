@@ -1,7 +1,7 @@
 {
   "message": "Welcome to Terrateam Ansible Integration!",
   "environment": "development",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "create_file": true,
   "output_file": "/tmp/ansible_test_output.txt",
   "app_config": {
