@@ -26,7 +26,7 @@ dirs:
     # https://docs.terrateam.io/advanced-workflows/layered-runs/
     when_modified:
       depends_on: 'dir:terraform'
-      file_patterns: ["${DIR}/terraform/ansible/*"]
+      file_patterns: ["${DIR}/ansible/*", "${DIR}/terraform/ansible/*"]
       # autoplan https://docs.terrateam.io/configuration-reference/when-modified
       autoplan: true
         
