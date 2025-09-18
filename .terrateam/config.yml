@@ -32,8 +32,6 @@ dirs:
 
   ansible:
     tags: [ANS_code]
-    # layered run
-    # https://docs.terrateam.io/advanced-workflows/layered-runs/
     when_modified:
       # depends_on: 'dir:terraform'
       file_patterns: ["${DIR}/*"]
