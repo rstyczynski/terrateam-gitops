@@ -8,11 +8,11 @@ hooks:
   plan:
     pre:
       - type: run
-        cmd: ['.terrateam/hooks/pre_procedure.sh']
+        cmd: ['${TERRATEAM_ROOT}/.terrateam/hooks/pre_procedure.sh']
         run_on: always
     post:
       - type: run
-        cmd: ['.terrateam/hooks/post_procedure.sh']
+        cmd: ['${TERRATEAM_ROOT}/.terrateam/hooks/post_procedure.sh']
         run_on: always
 
 dirs:
@@ -52,16 +52,16 @@ workflows:
       - type: init
       - type: apply
       - type: run
-        cmd: ['../.terrateam/terraform/output.sh']
+        cmd: ['${TERRATEAM_ROOT}/.terrateam/terraform/output.sh']
 
   - tag_query: ANS_code
     engine:
       name: custom
-      init:    ['../.terrateam/ansible/init.sh']
-      plan:    ['../.terrateam/ansible/plan.sh', '$TERRATEAM_PLAN_FILE']
-      diff:    ['../.terrateam/ansible/diff.sh', '$TERRATEAM_PLAN_FILE']
-      apply:   ['../.terrateam/ansible/apply.sh']
-      outputs: ['../.terrateam/ansible/outputs.sh']
+      init:    ['${TERRATEAM_ROOT}/.terrateam/ansible/init.sh']
+      plan:    ['${TERRATEAM_ROOT}/.terrateam/ansible/plan.sh', '$TERRATEAM_PLAN_FILE']
+      diff:    ['${TERRATEAM_ROOT}/.terrateam/ansible/diff.sh', '$TERRATEAM_PLAN_FILE']
+      apply:   ['${TERRATEAM_ROOT}/.terrateam/ansible/apply.sh']
+      outputs: ['${TERRATEAM_ROOT}/.terrateam/ansible/outputs.sh']
     plan:
       - type: init
       - type: plan
