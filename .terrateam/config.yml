@@ -19,14 +19,14 @@ dirs:
   terraform:
     tags: [TF_code]
     when_modified:
-      file_patterns: ["${DIR}/terraform/*"]
+      file_patterns: ["/terraform/*"]
   ansible:
     tags: [ANS_code]
     # layered run
     # https://docs.terrateam.io/advanced-workflows/layered-runs/
     when_modified:
       depends_on: 'dir:terraform'
-      file_patterns: ["${DIR}/ansible/*", "${DIR}/terraform/ansible/*"]
+      file_patterns: ["/ansible/*"]
       # autoplan https://docs.terrateam.io/configuration-reference/when-modified
       autoplan: true
         
