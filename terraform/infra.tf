@@ -16,4 +16,3 @@ resource "null_resource" "example2" {
 output "example2_output" {
   value = null_resource.example2.id
 }
-
