@@ -1,6 +1,5 @@
-.ansible/
-terraform/.terraform/
-terraform/.terraform.lock.hcl
-terraform/terraform.tfstate
 .vscode/
-ansible/.ansible/
+.ansible/
+.terraform/
+.terraform.lock.hcl
+terraform.tfstate
