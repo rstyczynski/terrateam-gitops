@@ -58,6 +58,16 @@ if [ "${PLAN_DEBUG}" == "true" ]; then
 fi
 
 #
+# list collections
+#
+if [ "${PLAN_DEBUG}" == "true" ]; then
+    ansible-galaxy collection list >> $PLAN_FILE
+fi
+
+ANSIBLE_GALAXY_COLLECTIONS=$(ansible-galaxy collection list)
+
+
+#
 # detect playbook to run
 # Rules:
 # 1. If there is ANSIBLE_PLAYBOOK file, use the one specified in it.
@@ -115,6 +125,8 @@ if [ "${PLAN_DEBUG}" == "true" ]; then
     fi
 fi
 
+
+
 #
 # write all variables to plan file in yml format
 # 1. ANSIBLE_PLAYBOOK
@@ -148,7 +160,11 @@ fi
         echo "  ANSIBLE_CUSTOM_REQUIREMENTS: \"${ANSIBLE_CUSTOM_REQUIREMENTS}\""
     fi
     echo "  "
-    
+
+    echo "  ANSIBLE_GALAXY_COLLECTIONS: |"
+    sed 's/^/    /' "$ANSIBLE_GALAXY_COLLECTIONS"
+    echo "  "
+
     # Add TERRATEAM_DIR, TERRATEAM_WORKSPACE, and TERRATEAM_ROOT
     echo "  ENV:"
     env | grep -E '^(TERRATEAM_DIR|TERRATEAM_WORKSPACE|TERRATEAM_ROOT)=' | sed 's/^\(.*\)=\(.*\)$/    \1: "\2"/'
