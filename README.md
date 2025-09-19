@@ -2,14 +2,18 @@
 
 ## flows
 
-### file changed
+### file changed dir1
 Triggers selected PLAN workflow
 Send APPLY
 DONE. All ok
 
-### workflow changed
-??? Triggers all workflows
+### file changed dir2
+Triggers selected PLAN workflow
+Send APPLY
+DONE. All ok
 
+### workflow changed in branch
+??? Triggers all workflows
 
 ### file changed
 Triggers selected PLAN workflow
