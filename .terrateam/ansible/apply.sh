@@ -7,6 +7,9 @@ source "$(dirname "$0")/../shared/debug.sh" >&2
 
 echo "TODO: Ansible apply"
 echo "CWD: $PWD"
+echo "TERRATEAM_DIR: $TERRATEAM_DIR"
+echo "TERRATEAM_WORKSPACE: $TERRATEAM_WORKSPACE"
+echo "TERRATEAM_ROOT: $TERRATEAM_ROOT"
 EXIT_CODE=0
 
 echo "END: Ansible apply stage" >&2
