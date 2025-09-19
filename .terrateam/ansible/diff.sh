@@ -34,7 +34,7 @@ import sys, yaml, json
 with open(sys.argv[1]) as f:
     print(json.dumps(yaml.safe_load(f)))
 EOF
-"$$TERRATEAM_PLAN_FILE")
+"$TERRATEAM_PLAN_FILE")
 
 echo $json | jq
 
