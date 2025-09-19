@@ -39,6 +39,8 @@ DIR=$(echo "$json" | jq -r '.ansible_execution_context.ENV.TERRATEAM_DIR')
 echo "DIR: $DIR"
 WORKSPACE=$(echo "$json" | jq -r '.ansible_execution_context.ENV.TERRATEAM_WORKSPACE')
 echo "WORKSPACE: $WORKSPACE"
+ANSIBLE_ROOT=$(echo "$json" | jq -r '.ansible_execution_context.ENV.ANSIBLE_ROOT')
+echo "ANSIBLE_ROOT: $ANSIBLE_ROOT"
 
 EXIT_CODE=0
 
