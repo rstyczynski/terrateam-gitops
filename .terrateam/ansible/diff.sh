@@ -7,7 +7,7 @@ echo "START: Ansible diff stage" >&2
 
 source "$(dirname "$0")/../shared/debug.sh" >&2
 
-echo "TODO Ansible diff stdout message. Here is the content of $TERRATEAM_PLAN_FILE prepared at plan stage:"
+echo "Ansible will be executed in the following context:"
 cat $TERRATEAM_PLAN_FILE
 
 echo 
