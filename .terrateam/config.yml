@@ -48,7 +48,7 @@ dirs:
     tags: [ANS_code]
     workspaces: 
       dev: 
-        tags: prod]
+        tags: [dev]
       prod: 
         tags: [prod]
     when_modified:
