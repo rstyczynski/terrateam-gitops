@@ -2,18 +2,31 @@
 
 ## flows
 
-### file changed dir1
+### different tags, and workflows
+
+#### file changed dir1
 Triggers selected PLAN workflow
 Send APPLY
 DONE. All ok
 
-### file changed dir2
+#### file changed dir2
 Triggers selected PLAN workflow
 Send APPLY
 DONE. All ok
+
+### the same tag, and shared workflows
+
+#### file changed dir1
+Triggers selected PLAN workflow
+
+
+#### file changed dir2
+
 
 ### workflow changed in branch
-??? Triggers all workflows
+Nothing happened
+
+
 
 ### file changed
 Triggers selected PLAN workflow
