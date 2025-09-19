@@ -12,7 +12,7 @@ Triggers selected PLAN workflow
 Send APPLY
 DONE. All ok
 
-### workflow changed
+### workflow changed in branch
 ??? Triggers all workflows
 
 ### file changed
