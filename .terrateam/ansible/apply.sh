@@ -37,7 +37,6 @@ cd $ANSIBLE_ROOT
 ansible-playbook $PLAYBOOK
 
 
-
 echo "END: Ansible apply stage" >&2
 echo "⚠️ ================================================" >&2
 exit $EXIT_CODE

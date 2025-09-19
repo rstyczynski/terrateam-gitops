@@ -1,5 +1,7 @@
 #!/bin/bash
 
+exit 0
+
 # Debug script for Ansible engine diagnostics
 
 echo "🔍 START: Diagnostic dump ================================"

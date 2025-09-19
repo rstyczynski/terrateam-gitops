@@ -27,6 +27,11 @@ else
 fi
 
 #
+# trigger ansible install
+#
+ansible-playbook --version
+
+#
 # install requirements
 #
 test  -f "requirements.yml" && ANSIBLE_CUSTOM_REQUIREMENTS=${ANSIBLE_ROOT}/requirements.yml || unset ANSIBLE_CUSTOM_REQUIREMENTS
