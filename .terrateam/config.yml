@@ -48,9 +48,9 @@ dirs:
     tags: [ANS_code]
     workspaces: 
       dev: 
-        tags: [dev]
+        tags: [DEBUG_code, dev]
       prod: 
-        tags: [prod]
+        tags: [ANS_code, prod]
     when_modified:
       file_patterns: ["${DIR}/*"]
       # autoplan https://docs.terrateam.io/configuration-reference/when-modified
