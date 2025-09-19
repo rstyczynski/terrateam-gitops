@@ -128,7 +128,9 @@ fi
     echo "---"
     echo "ansible_execution_context:"
     echo "  ANSIBLE_PLAYBOOK: \"${ANSIBLE_PLAYBOOK}\""
+    echo "  "
     echo "  ANSIBLE_PLAYBOOK_ERROR: \"${ANSIBLE_PLAYBOOK_ERROR}\""
+    echo "  "
     # If ANSIBLE_CUSTOM_CFG is a file and exists, encode as YAML block scalar
     if [ -n "$ANSIBLE_CUSTOM_CFG" ] && [ -f "$ANSIBLE_CUSTOM_CFG" ]; then
         echo "  ANSIBLE_CUSTOM_CFG: |"
@@ -136,6 +138,8 @@ fi
     else
         echo "  ANSIBLE_CUSTOM_CFG: \"${ANSIBLE_CUSTOM_CFG}\""
     fi
+    echo "  "
+
     # If ANSIBLE_CUSTOM_REQUIREMENTS is a file and exists, encode as YAML block scalar
     if [ -n "$ANSIBLE_CUSTOM_REQUIREMENTS" ] && [ -f "$ANSIBLE_CUSTOM_REQUIREMENTS" ]; then
         echo "  ANSIBLE_CUSTOM_REQUIREMENTS: |"
@@ -143,7 +147,8 @@ fi
     else
         echo "  ANSIBLE_CUSTOM_REQUIREMENTS: \"${ANSIBLE_CUSTOM_REQUIREMENTS}\""
     fi
-
+    echo "  "
+    
     # Add TERRATEAM_DIR, TERRATEAM_WORKSPACE, and TERRATEAM_ROOT
     echo "  ENV:"
     env | grep -E '^(TERRATEAM_DIR|TERRATEAM_WORKSPACE|TERRATEAM_ROOT)=' | sed 's/^\(.*\)=\(.*\)$/    \1: "\2"/'
