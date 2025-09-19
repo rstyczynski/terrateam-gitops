@@ -30,7 +30,7 @@ dirs:
       autoplan: true
 
   ansible1:
-    tags: [ANS_code1]
+    tags: [code1_ans]
     when_modified:
       file_patterns: ["${DIR}/*"]
       # autoplan https://docs.terrateam.io/configuration-reference/when-modified
@@ -65,7 +65,7 @@ workflows:
       - type: init
       - type: apply
 
-  - tag_query: ANS_code1
+  - tag_query: code1_ans
     engine:
       name: custom
       init:    ['${TERRATEAM_ROOT}/.terrateam/ansible/init.sh']
