@@ -20,6 +20,7 @@ dirs:
     tags: [TF_code]
     when_modified:
       file_patterns: ["${DIR}/*"]
+      
   terraform/ansible:
     tags: [ANS_code]
     when_modified:
