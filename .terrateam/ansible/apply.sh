@@ -6,6 +6,7 @@ echo "START: Ansible apply stage" >&2
 source "$(dirname "$0")/../shared/debug.sh" >&2
 
 echo "TODO: Ansible apply"
+echo "CWD: $PWD"
 EXIT_CODE=0
 
 echo "END: Ansible apply stage" >&2
