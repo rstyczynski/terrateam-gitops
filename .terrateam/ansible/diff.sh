@@ -11,8 +11,8 @@ echo "Ansible will be executed in the following context:"
 cat $TERRATEAM_PLAN_FILE
 
 echo 
-echo "Environment variables:"
-echo "======================"
+echo "Environment variables (DEBUG):"
+echo "=============================="
 echo "CWD: $PWD"
 echo "TERRATEAM_DIR: $TERRATEAM_DIR"
 echo "TERRATEAM_WORKSPACE: $TERRATEAM_WORKSPACE"

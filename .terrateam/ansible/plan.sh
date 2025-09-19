@@ -96,7 +96,7 @@ if [ ! -f "$ANSIBLE_PLAYBOOK" ]; then
     ANSIBLE_PLAYBOOK_ERROR="ERROR: Detected playbook file '$ANSIBLE_PLAYBOOK' does not exist."
 fi
 
-
+echo >> $PLAN_FILE
 echo "Using playbook:" >> $PLAN_FILE
 echo "===============" >> $PLAN_FILE
 if [ ! -z "$ANSIBLE_PLAYBOOK_ERROR" ]; then
@@ -104,6 +104,35 @@ if [ ! -z "$ANSIBLE_PLAYBOOK_ERROR" ]; then
 else
     echo $ANSIBLE_PLAYBOOK >> $PLAN_FILE
 fi
+
+#
+# write all variables to plan file in yml format
+# 1. ANSIBLE_PLAYBOOK
+# 2. ANSIBLE_PLAYBOOK_ERROR
+# 3. ANSIBLE_CUSTOM_CFG
+# 4. ANSIBLE_CUSTOM_REQUIREMENTS
+
+# Write all relevant variables to the plan file in YAML format
+{
+    echo ""
+    echo "ansible_vars:"
+    echo "  ANSIBLE_PLAYBOOK: \"${ANSIBLE_PLAYBOOK}\""
+    echo "  ANSIBLE_PLAYBOOK_ERROR: \"${ANSIBLE_PLAYBOOK_ERROR}\""
+    # If ANSIBLE_CUSTOM_CFG is a file and exists, encode as YAML block scalar
+    if [ -n "$ANSIBLE_CUSTOM_CFG" ] && [ -f "$ANSIBLE_CUSTOM_CFG" ]; then
+        echo "  ANSIBLE_CUSTOM_CFG: |"
+        sed 's/^/    /' "$ANSIBLE_CUSTOM_CFG"
+    else
+        echo "  ANSIBLE_CUSTOM_CFG: \"${ANSIBLE_CUSTOM_CFG}\""
+    fi
+    # If ANSIBLE_CUSTOM_REQUIREMENTS is a file and exists, encode as YAML block scalar
+    if [ -n "$ANSIBLE_CUSTOM_REQUIREMENTS" ] && [ -f "$ANSIBLE_CUSTOM_REQUIREMENTS" ]; then
+        echo "  ANSIBLE_CUSTOM_REQUIREMENTS: |"
+        sed 's/^/    /' "$ANSIBLE_CUSTOM_REQUIREMENTS"
+    else
+        echo "  ANSIBLE_CUSTOM_REQUIREMENTS: \"${ANSIBLE_CUSTOM_REQUIREMENTS}\""
+    fi
+} >> $PLAN_FILE
 
 
 
