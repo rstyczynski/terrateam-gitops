@@ -29,7 +29,7 @@ dirs:
       # autoplan https://docs.terrateam.io/configuration-reference/when-modified
       autoplan: true
 
-  ansible:
+  ansible1:
     tags: [ANS_code1]
     when_modified:
       file_patterns: ["${DIR}/*"]
