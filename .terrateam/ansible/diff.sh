@@ -29,12 +29,11 @@ which yq
 which jq
 
 # Convert YAML → JSON on the fly
-json=$(python3 - <<'EOF'
+json=$(cat "$TERRATEAM_PLAN_FILE" | python3 - <<_PYTHON_EOF
 import sys, yaml, json
-with open(sys.argv[1], "r") as f:
-    print(json.dumps(yaml.safe_load(f)))
-EOF
-"$TERRATEAM_PLAN_FILE")
+print(json.dumps(yaml.safe_load(sys.stdin.read())))
+_PYTHON_EOF
+)
 
 echo "$json" | jq
 
