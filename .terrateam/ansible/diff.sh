@@ -28,6 +28,18 @@ which ansible-galaxy
 which yq
 which jq
 
+json=$(python3 -c 'import sys,yaml,json; print(json.dumps(yaml.safe_load(open(sys.argv[1]))))' $TERRATEAM_PLAN_FILE)
+echo "$json" | jq
+
+PLAYBOOK=$(echo "$json" | jq -r '.ansible_execution_context.ANSIBLE_PLAYBOOK')
+echo "PLAYBOOK: $PLAYBOOK"
+ROOT=$(echo "$json" | jq -r '.ansible_execution_context.ENV.TERRATEAM_ROOT')
+echo "ROOT: $ROOT"
+DIR=$(echo "$json" | jq -r '.ansible_execution_context.ENV.TERRATEAM_DIR')
+echo "DIR: $DIR"
+WORKSPACE=$(echo "$json" | jq -r '.ansible_execution_context.ENV.TERRATEAM_WORKSPACE')
+echo "WORKSPACE: $WORKSPACE"
+
 EXIT_CODE=0
 
 echo "END: Ansible diff stage" >&2
