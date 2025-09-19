@@ -20,7 +20,8 @@ dirs:
     tags: [TF_code]
     when_modified:
       file_patterns: ["${DIR}/*"]
-  terraform/ansible:
+
+  terraform/day-1_cfg:
     tags: [ANS_code]
     when_modified:
       # layered run https://docs.terrateam.io/advanced-workflows/layered-runs/
@@ -29,7 +30,7 @@ dirs:
       # autoplan https://docs.terrateam.io/configuration-reference/when-modified
       autoplan: true
 
-  ansible1:
+  day-2_ops:
     tags: [code1_ans]
     when_modified:
       file_patterns: ["${DIR}/*"]
