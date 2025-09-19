@@ -9,6 +9,7 @@ echo "START: Ansible plan stage" >&2
 #
 # initialize plan file
 #
+echo >> $PLAN_FILE
 echo "Ansible plan" > $PLAN_FILE
 echo "============" >> $PLAN_FILE
 
@@ -29,6 +30,7 @@ test  -f "ansible.cfg" && ANSIBLE_CUSTOM_CFG=${ANSIBLE_ROOT}/ansible.cfg || unse
 if [ ! -z  "${ANSIBLE_CUSTOM_CFG}" ]; then
     echo >> $PLAN_FILE
     echo "Custom ansible.cfg:" >> $PLAN_FILE
+    echo "===================" >> $PLAN_FILE
     cat ${ANSIBLE_CUSTOM_CFG} >> $PLAN_FILE
 else
     echo "Default ansible.cfg" >> $PLAN_FILE
@@ -41,11 +43,10 @@ test  -f "requirements.yml" && ANSIBLE_CUSTOM_REQUIREMENTS=${ANSIBLE_ROOT}/requi
 if [ ! -z "${ANSIBLE_CUSTOM_REQUIREMENTS}" ]; then
     echo >> $PLAN_FILE
     echo "Requirements file:" >> $PLAN_FILE
+    echo "==================" >> $PLAN_FILE
     cat ${ANSIBLE_CUSTOM_REQUIREMENTS} >> $PLAN_FILE
     echo "No requirements to install." >> $PLAN_FILE
 fi
-
-
 
 
 
