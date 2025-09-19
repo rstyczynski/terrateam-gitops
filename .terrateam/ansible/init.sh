@@ -15,6 +15,12 @@ else
 fi
 cd ${ANSIBLE_ROOT}
 
+
+#
+# install ansible
+#
+ansible-playbook --version
+
 #
 # detect ansible.cfg
 #
