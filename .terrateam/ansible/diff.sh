@@ -20,6 +20,15 @@ echo "TERRATEAM_DIR: $TERRATEAM_DIR"
 echo "TERRATEAM_WORKSPACE: $TERRATEAM_WORKSPACE"
 echo "TERRATEAM_ROOT: $TERRATEAM_ROOT"
 
+echo 
+echo 
+echo "Other tests (DEBUG):"
+echo "=============================="
+which ansible-galaxy
+which yq
+which jq
+
+
 EXIT_CODE=0
 
 echo "END: Ansible diff stage" >&2

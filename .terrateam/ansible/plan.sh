@@ -160,9 +160,6 @@ fi
         echo "  ANSIBLE_CUSTOM_REQUIREMENTS: \"${ANSIBLE_CUSTOM_REQUIREMENTS}\""
     fi
     echo "  "
-
-    echo "  ANSIBLE_GALAXY_COLLECTIONS: |"
-    sed 's/^/    /' "$ANSIBLE_GALAXY_COLLECTIONS"
     echo "  "
 
     # Add TERRATEAM_DIR, TERRATEAM_WORKSPACE, and TERRATEAM_ROOT
