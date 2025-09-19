@@ -44,6 +44,18 @@ dirs:
       # autoplan https://docs.terrateam.io/configuration-reference/when-modified
       autoplan: true
 
+  day-2_ops3:
+    tags: [ANS_code]
+    workspaces: 
+      dev: 
+        tags: prod]
+      prod: 
+        tags: [prod]
+    when_modified:
+      file_patterns: ["${DIR}/*"]
+      # autoplan https://docs.terrateam.io/configuration-reference/when-modified
+      autoplan: true
+
 # workflows https://docs.terrateam.io/configuration-reference/workflows
 workflows:
   - tag_query: TF_code
@@ -61,11 +73,11 @@ workflows:
   - tag_query: ANS_code
     engine:
       name: custom
-      init:    ['${TERRATEAM_ROOT}/.terrateam/ansible/init.sh']
-      plan:    ['${TERRATEAM_ROOT}/.terrateam/ansible/plan.sh', '$TERRATEAM_PLAN_FILE']
-      diff:    ['${TERRATEAM_ROOT}/.terrateam/ansible/diff.sh', '$TERRATEAM_PLAN_FILE']
-      apply:   ['${TERRATEAM_ROOT}/.terrateam/ansible/apply.sh']
-      outputs: ['${TERRATEAM_ROOT}/.terrateam/ansible/outputs.sh']
+      init:    ['${TERRATEAM_ROOT}/.terrateam/debug/init.sh']
+      plan:    ['${TERRATEAM_ROOT}/.terrateam/debug/plan.sh', '$TERRATEAM_PLAN_FILE']
+      diff:    ['${TERRATEAM_ROOT}/.terrateam/debug/diff.sh', '$TERRATEAM_PLAN_FILE']
+      apply:   ['${TERRATEAM_ROOT}/.terrateam/debug/apply.sh']
+      outputs: ['${TERRATEAM_ROOT}/.terrateam/debug/outputs.sh']
     plan:
       - type: init
       - type: plan
