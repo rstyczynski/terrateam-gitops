@@ -51,12 +51,10 @@ dirs:
         tags: [DEBUG_code, dev]
         when_modified:
           file_patterns: ["${DIR}/*"]
-        autoplan: true
       prod: 
         tags: [ANS_code, prod]
         when_modified:
           file_patterns: ["${DIR}/*"]
-        autoplan: true
     when_modified:
       file_patterns: ["${DIR}/*"]
       autoplan: true
