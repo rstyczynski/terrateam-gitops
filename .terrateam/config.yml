@@ -22,7 +22,7 @@ dirs:
       file_patterns: ["${DIR}/*"]
 
   terraform/day-1_cfg:
-    tags: [ANS_codeY]
+    tags: [ANS_code]
     when_modified:
       # layered run https://docs.terrateam.io/advanced-workflows/layered-runs/
       depends_on: 'dir:terraform'
@@ -31,7 +31,7 @@ dirs:
       autoplan: true
 
   day-2_ops:
-    tags: [codeX_ans]
+    tags: [ANS_code]
     when_modified:
       file_patterns: ["${DIR}/*"]
       # autoplan https://docs.terrateam.io/configuration-reference/when-modified
@@ -51,7 +51,7 @@ workflows:
       - type: run
         cmd: ['${TERRATEAM_ROOT}/.terrateam/terraform/output.sh']
 
-  - tag_query: ANS_codeY
+  - tag_query: ANS_code
     engine:
       name: custom
       init:    ['${TERRATEAM_ROOT}/.terrateam/ansible/init.sh']
@@ -65,19 +65,3 @@ workflows:
     apply:
       - type: init
       - type: apply
-
-  - tag_query: codeX_ans
-    engine:
-      name: custom
-      init:    ['${TERRATEAM_ROOT}/.terrateam/ansible/init.sh']
-      plan:    ['${TERRATEAM_ROOT}/.terrateam/ansible/plan.sh', '$TERRATEAM_PLAN_FILE']
-      diff:    ['${TERRATEAM_ROOT}/.terrateam/ansible/diff.sh', '$TERRATEAM_PLAN_FILE']
-      apply:   ['${TERRATEAM_ROOT}/.terrateam/ansible/apply.sh']
-      outputs: ['${TERRATEAM_ROOT}/.terrateam/ansible/outputs.sh']
-    plan:
-      - type: init
-      - type: plan
-    apply:
-      - type: init
-      - type: apply
-
