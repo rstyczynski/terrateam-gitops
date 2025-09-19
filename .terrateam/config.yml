@@ -13,7 +13,7 @@ hooks:
       - type: run
         cmd: ['apt-get', 'update']
       - type: run
-        cmd: ['apt-get', '-y', 'install', 'yq']
+        cmd: ['apt-get', '-y', 'install', 'python3-yaml']
     post:
       - type: run
         cmd: ['${TERRATEAM_ROOT}/.terrateam/hooks/post_procedure.sh']
