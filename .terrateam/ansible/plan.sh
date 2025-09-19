@@ -164,7 +164,7 @@ fi
 
     # Add TERRATEAM_DIR, TERRATEAM_WORKSPACE, and TERRATEAM_ROOT
     echo "  ENV:"
-    env | grep -E '^(TERRATEAM_DIR|TERRATEAM_WORKSPACE|TERRATEAM_ROOT)=' | sed 's/^\(.*\)=\(.*\)$/    \1: "\2"/'
+    env | grep -E '^(ANSIBLE_ROOT|TERRATEAM_DIR|TERRATEAM_WORKSPACE|TERRATEAM_ROOT)=' | sed 's/^\(.*\)=\(.*\)$/    \1: "\2"/'
 } >> $PLAN_FILE
 
 source "$(dirname "$0")/../shared/debug.sh" >&2

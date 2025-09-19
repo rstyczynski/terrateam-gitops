@@ -1,0 +1,13 @@
+{
+  "ansible_execution_context": {
+    "ANSIBLE_PLAYBOOK": "playbook.yml",
+    "ANSIBLE_PLAYBOOK_ERROR": "",
+    "ANSIBLE_CUSTOM_CFG": "[defaults]\ncollections_path = ./.ansible/collections\ncollections_scan_sys_path = false\n",
+    "ANSIBLE_CUSTOM_REQUIREMENTS": "---\ncollections:\n  - name: community.general\n    version: \"6.1.0\"  \n",
+    "ENV": {
+      "TERRATEAM_ROOT": "/github/workspace",
+      "TERRATEAM_DIR": "day-2_ops2",
+      "TERRATEAM_WORKSPACE": "default"
+    }
+  }
+}
