@@ -48,6 +48,7 @@ fi
 
 EXIT_CODE=0
 
+TERRATEAM_DEBUG=false
 source "$(dirname "$0")/../shared/debug.sh" >&2
 echo "⚠️ ================================================" >&2
 echo "STOP: Ansible init stage" >&2

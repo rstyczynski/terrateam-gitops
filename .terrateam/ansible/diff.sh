@@ -5,8 +5,6 @@ PLAN_FILE=$1
 echo "⚠️ ================================================" >&2
 echo "START: Ansible diff stage" >&2
 
-source "$(dirname "$0")/../shared/debug.sh" >&2
-
 echo "Ansible will be executed in the following context:"
 cat $TERRATEAM_PLAN_FILE
 
@@ -43,6 +41,9 @@ ANSIBLE_ROOT=$(echo "$json" | jq -r '.ansible_execution_context.ENV.ANSIBLE_ROOT
 echo "ANSIBLE_ROOT: $ANSIBLE_ROOT"
 
 EXIT_CODE=0
+
+TERRATEAM_DEBUG=false
+source "$(dirname "$0")/../shared/debug.sh" >&2
 
 echo "END: Ansible diff stage" >&2
 echo "⚠️ ================================================" >&2

@@ -3,8 +3,6 @@
 echo "⚠️ ================================================" >&2
 echo "START: Ansible apply stage" >&2
 
-source "$(dirname "$0")/../shared/debug.sh" >&2
-
 echo "Ansible apply"
 
 echo 
@@ -37,6 +35,8 @@ cd $ANSIBLE_ROOT
 ansible-playbook $PLAYBOOK
 
 
+TERRATEAM_DEBUG=false
+source "$(dirname "$0")/../shared/debug.sh" >&2
 
 echo "END: Ansible apply stage" >&2
 echo "⚠️ ================================================" >&2
