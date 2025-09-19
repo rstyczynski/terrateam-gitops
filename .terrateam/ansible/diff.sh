@@ -9,6 +9,8 @@ source "$(dirname "$0")/../shared/debug.sh" >&2
 
 echo "TODO Ansible diff stdout message. Here is the content of $TERRATEAM_PLAN_FILE prepared at plan stage:"
 cat $TERRATEAM_PLAN_FILE
+echo "CWD: $PWD"
+
 EXIT_CODE=0
 
 echo "END: Ansible diff stage" >&2
