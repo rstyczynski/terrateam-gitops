@@ -13,14 +13,15 @@ if [ "${TERRATEAM_WORKSPACE}" == "default" ]; then
 else
     ANSIBLE_ROOT=${TERRATEAM_ROOT}/${TERRATEAM_DIR}/${TERRATEAM_WORKSPACE}
 fi
-cd $ANSIBLE_ROOT
+cd ${ANSIBLE_ROOT}
 
 #
-# detest ansible.cfg
+# detect ansible.cfg
 #
-if [ -f "ansible.cfg" ]; then
-    echo "Ansible cfg file found"
-    cat ansible.cfg
+test  -f "ansible.cfg" && ANSIBLE_CUSTOM_CFG=${ANSIBLE_ROOT}/ansible.cfg || unset ANSIBLE_CUSTOM_CFG
+if [ ! -z  "${ANSIBLE_CUSTOM_CFG}" ]; then
+    echo "Ansible cfg file found."
+    cat ${ANSIBLE_CUSTOM_CFG}
 else
     echo "Using default ansible configuration.ansible.cfg file not found in workspace directory."
 fi
@@ -28,9 +29,11 @@ fi
 #
 # install requirements
 #
-if [ -f "requirements.yml" ]; then
-    echo "Requirements file found"
-    ansible-galaxy install -r requirements.yml
+test  -f "requirements.yml" && ANSIBLE_CUSTOM_REQUIREMENTS=${ANSIBLE_ROOT}/requirements.yml || unset ANSIBLE_CUSTOM_REQUIREMENTS
+if [ ! -z "${ANSIBLE_CUSTOM_REQUIREMENTS}" ]; then
+    echo "Requirements file found."
+    cat ${ANSIBLE_CUSTOM_REQUIREMENTS}
+    ansible-galaxy install -r ${ANSIBLE_CUSTOM_REQUIREMENTS}
 else
     echo "No requirements to install. Requirements file not found in workspace directory."
 fi
