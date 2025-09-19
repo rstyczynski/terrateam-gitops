@@ -9,9 +9,11 @@ echo "START: Ansible plan stage" >&2
 #
 # initialize plan file
 #
-echo >> $PLAN_FILE
-echo "Ansible plan" > $PLAN_FILE
-echo "============" >> $PLAN_FILE
+if [ "${PLAN_DEBUG}" == "true" ]; then
+    echo >> $PLAN_FILE
+    echo "Ansible plan (DEBUG)" > $PLAN_FILE
+    echo "===================" >> $PLAN_FILE
+fi
 
 #
 # detect workspace 
@@ -27,26 +29,32 @@ cd ${ANSIBLE_ROOT}
 # detect ansible.cfg
 #
 test  -f "ansible.cfg" && ANSIBLE_CUSTOM_CFG=${ANSIBLE_ROOT}/ansible.cfg || unset ANSIBLE_CUSTOM_CFG
-if [ ! -z  "${ANSIBLE_CUSTOM_CFG}" ]; then
-    echo >> $PLAN_FILE
-    echo "Custom ansible.cfg:" >> $PLAN_FILE
-    echo "===================" >> $PLAN_FILE
-    cat ${ANSIBLE_CUSTOM_CFG} >> $PLAN_FILE
-else
-    echo "Default ansible.cfg" >> $PLAN_FILE
+
+if [ "${PLAN_DEBUG}" == "true" ]; then
+    if [ ! -z  "${ANSIBLE_CUSTOM_CFG}" ]; then
+        echo >> $PLAN_FILE
+        echo "Custom ansible.cfg (DEBUG):" >> $PLAN_FILE
+        echo "===========================" >> $PLAN_FILE
+        cat ${ANSIBLE_CUSTOM_CFG} >> $PLAN_FILE
+    else
+        echo "Default ansible.cfg" >> $PLAN_FILE
+    fi
 fi
 
 #
 # install requirements
 #
 test  -f "requirements.yml" && ANSIBLE_CUSTOM_REQUIREMENTS=${ANSIBLE_ROOT}/requirements.yml || unset ANSIBLE_CUSTOM_REQUIREMENTS
-if [ ! -z "${ANSIBLE_CUSTOM_REQUIREMENTS}" ]; then
-    echo >> $PLAN_FILE
-    echo "Requirements file:" >> $PLAN_FILE
-    echo "==================" >> $PLAN_FILE
-    cat ${ANSIBLE_CUSTOM_REQUIREMENTS} >> $PLAN_FILE
-else
-    echo "No requirements to install." >> $PLAN_FILE
+
+if [ "${PLAN_DEBUG}" == "true" ]; then
+    if [ ! -z "${ANSIBLE_CUSTOM_REQUIREMENTS}" ]; then
+        echo >> $PLAN_FILE
+        echo "Requirements file (DEBUG):" >> $PLAN_FILE
+        echo "==========================" >> $PLAN_FILE
+        cat ${ANSIBLE_CUSTOM_REQUIREMENTS} >> $PLAN_FILE
+    else
+        echo "No requirements to install." >> $PLAN_FILE
+    fi
 fi
 
 #
@@ -96,13 +104,15 @@ if [ ! -f "$ANSIBLE_PLAYBOOK" ]; then
     ANSIBLE_PLAYBOOK_ERROR="ERROR: Detected playbook file '$ANSIBLE_PLAYBOOK' does not exist."
 fi
 
-echo >> $PLAN_FILE
-echo "Using playbook:" >> $PLAN_FILE
-echo "===============" >> $PLAN_FILE
-if [ ! -z "$ANSIBLE_PLAYBOOK_ERROR" ]; then
-    echo $ANSIBLE_PLAYBOOK_ERROR >> $PLAN_FILE
-else
-    echo $ANSIBLE_PLAYBOOK >> $PLAN_FILE
+if [ "${PLAN_DEBUG}" == "true" ]; then
+    echo >> $PLAN_FILE
+    echo "Using playbook (DEBUG):" >> $PLAN_FILE
+    echo "=======================" >> $PLAN_FILE
+    if [ ! -z "$ANSIBLE_PLAYBOOK_ERROR" ]; then
+        echo $ANSIBLE_PLAYBOOK_ERROR >> $PLAN_FILE
+    else
+        echo $ANSIBLE_PLAYBOOK >> $PLAN_FILE
+    fi
 fi
 
 #
@@ -112,10 +122,11 @@ fi
 # 3. ANSIBLE_CUSTOM_CFG
 # 4. ANSIBLE_CUSTOM_REQUIREMENTS
 
+
 # Write all relevant variables to the plan file in YAML format
 {
     echo ""
-    echo "ansible_vars:"
+    echo "ansible_execution_context:"
     echo "  ANSIBLE_PLAYBOOK: \"${ANSIBLE_PLAYBOOK}\""
     echo "  ANSIBLE_PLAYBOOK_ERROR: \"${ANSIBLE_PLAYBOOK_ERROR}\""
     # If ANSIBLE_CUSTOM_CFG is a file and exists, encode as YAML block scalar
@@ -133,7 +144,6 @@ fi
         echo "  ANSIBLE_CUSTOM_REQUIREMENTS: \"${ANSIBLE_CUSTOM_REQUIREMENTS}\""
     fi
 } >> $PLAN_FILE
-
 
 
 source "$(dirname "$0")/../shared/debug.sh" >&2
