@@ -2,8 +2,20 @@
 
 ## flows
 
+### file changed dir1
+Triggers selected PLAN workflow
+Send APPLY
+DONE. All ok
+
+### file changed dir2
+Triggers selected PLAN workflow
+Send APPLY
+DONE. All ok
+
+
 ### workflow changed
-Triggers all workflows
+??? Triggers all workflows
+
 
 ### file changed
 Triggers selected PLAN workflow
