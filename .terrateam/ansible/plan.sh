@@ -96,10 +96,10 @@ if [ -f "ANSIBLE_PLAYBOOK" ]; then
     fi
     ANSIBLE_PLAYBOOK="$PLAYBOOK_FILE"
 else
-    # 2. If there is only one playbook.yml file, use it.
-    # 4. If there are multiple playbook.yml files, use the one specified in ANSIBLE_PLAYBOOK file.
+    # 2. If there is only one *.yml file, use it.
+    # 4. If there are multiple *.yml files, use the one specified in ANSIBLE_PLAYBOOK file.
     # (Rule 3 is missing, so we skip to 4)
-    PLAYBOOKS_FOUND=($(find . -maxdepth 1 -type f -name "playbook.yml"))
+    PLAYBOOKS_FOUND=($(find . -maxdepth 1 -type f -name "*.yml" | grep -v requirements.yml))
     if [ ${#PLAYBOOKS_FOUND[@]} -eq 1 ]; then
         ANSIBLE_PLAYBOOK="${PLAYBOOKS_FOUND[0]#./}"
     elif [ ${#PLAYBOOKS_FOUND[@]} -gt 1 ]; then

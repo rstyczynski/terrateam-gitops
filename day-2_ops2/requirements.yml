@@ -1,4 +1,6 @@
 ---
 collections:
-  - name: community.general
-    version: "6.1.0"
+  - name: collections/ansible_collections/myorg/publicapi/
+    type: git
+    source: https://github.com/rstyczynski/ansible-collection-howto.git#/collections/ansible_collections/myorg/publicapi
+    version: 0.1.2
