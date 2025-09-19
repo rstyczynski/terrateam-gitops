@@ -38,6 +38,20 @@ EOF
 
 echo $json | jq
 
+# Extract values with jq
+playbook=$(jq -r '.ansible_execution_context.ANSIBLE_PLAYBOOK' <<<"$json")
+root=$(jq -r '.ansible_execution_context.ENV.TERRATEAM_ROOT' <<<"$json")
+dir=$(jq -r '.ansible_execution_context.ENV.TERRATEAM_DIR' <<<"$json")
+workspace=$(jq -r '.ansible_execution_context.ENV.TERRATEAM_WORKSPACE' <<<"$json")
+cfg=$(jq -r '.ansible_execution_context.ANSIBLE_CUSTOM_CFG' <<<"$json")
+
+echo "Playbook: $playbook"
+echo "Root: $root"
+echo "Dir: $dir"
+echo "Workspace: $workspace"
+echo "Custom CFG:"
+echo "$cfg"
+
 
 EXIT_CODE=0
 
