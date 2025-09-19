@@ -29,7 +29,7 @@ dirs:
       # autoplan https://docs.terrateam.io/configuration-reference/when-modified
       autoplan: true
 
-  ansible1:
+  ansible:
     tags: [ANS_code1]
     when_modified:
       file_patterns: ["${DIR}/*"]
@@ -50,7 +50,7 @@ workflows:
       - type: run
         cmd: ['${TERRATEAM_ROOT}/.terrateam/terraform/output.sh']
 
-  - tag_query: ANS_code
+  - tag_query: ANS_code or ANS_code1
     engine:
       name: custom
       init:    ['${TERRATEAM_ROOT}/.terrateam/ansible/init.sh']
@@ -65,18 +65,3 @@ workflows:
       - type: init
       - type: apply
 
-
-  - tag_query: ANS_code1
-    engine:
-      name: custom
-      init:    ['${TERRATEAM_ROOT}/.terrateam/ansible/init.sh']
-      plan:    ['${TERRATEAM_ROOT}/.terrateam/ansible/plan.sh', '$TERRATEAM_PLAN_FILE']
-      diff:    ['${TERRATEAM_ROOT}/.terrateam/ansible/diff.sh', '$TERRATEAM_PLAN_FILE']
-      apply:   ['${TERRATEAM_ROOT}/.terrateam/ansible/apply.sh']
-      outputs: ['${TERRATEAM_ROOT}/.terrateam/ansible/outputs.sh']
-    plan:
-      - type: init
-      - type: plan
-    apply:
-      - type: init
-      - type: apply
