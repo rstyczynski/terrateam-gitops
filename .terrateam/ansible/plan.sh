@@ -48,6 +48,38 @@ if [ ! -z "${ANSIBLE_CUSTOM_REQUIREMENTS}" ]; then
     echo "No requirements to install." >> $PLAN_FILE
 fi
 
+#
+# detect playbook to run
+# Rules:
+# 1. If there is only one playbook.yml file, use it.
+# 2. If there are multiple playbook.yml files, use the one specified in ANSIBLE_PLAYBOOK file.
+# 3. If there are no playbook.yml files, error out.
+#
+# ANSIBLE_PLAYBOOK file content is a single line with the name of the playbook to run.
+#
+# If ANSIBLE_PLAYBOOK file is not present, error out.
+
+# List all .yml files in the directory (excluding requirements.yml and ansible.cfg)
+playbooks=($(ls *.yml 2>/dev/null | grep -v -E '^(requirements|ansible)\.yml$'))
+
+if [ ${#playbooks[@]} -eq 1 ]; then
+    ANSIBLE_PLAYBOOK="${playbooks[0]}"
+elif [ ${#playbooks[@]} -gt 1 ]; then
+    if [ -f "ANSIBLE_PLAYBOOK" ]; then
+        ANSIBLE_PLAYBOOK=$(cat ANSIBLE_PLAYBOOK | tr -d '[:space:]')
+        if [ ! -f "$ANSIBLE_PLAYBOOK" ]; then
+            echo "ERROR: Playbook file specified in ANSIBLE_PLAYBOOK ('$ANSIBLE_PLAYBOOK') does not exist." >&2
+            exit 1
+        fi
+    else
+        echo "ERROR: Multiple playbook .yml files found, but no ANSIBLE_PLAYBOOK file present." >&2
+        exit 1
+    fi
+else
+    echo "ERROR: No playbook .yml files found in directory." >&2
+    exit 1
+fi
+
 
 
 source "$(dirname "$0")/../shared/debug.sh" >&2
