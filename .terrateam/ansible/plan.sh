@@ -125,7 +125,7 @@ fi
 
 # Write all relevant variables to the plan file in YAML format
 {
-    echo ""
+    echo "---"
     echo "ansible_execution_context:"
     echo "  ANSIBLE_PLAYBOOK: \"${ANSIBLE_PLAYBOOK}\""
     echo "  ANSIBLE_PLAYBOOK_ERROR: \"${ANSIBLE_PLAYBOOK_ERROR}\""
@@ -143,8 +143,11 @@ fi
     else
         echo "  ANSIBLE_CUSTOM_REQUIREMENTS: \"${ANSIBLE_CUSTOM_REQUIREMENTS}\""
     fi
-} >> $PLAN_FILE
 
+    # Add TERRATEAM_DIR, TERRATEAM_WORKSPACE, and TERRATEAM_ROOT
+    echo "  ENV:"
+    env | grep -E '^(TERRATEAM_DIR|TERRATEAM_WORKSPACE|TERRATEAM_ROOT)=' | sed 's/^\(.*\)=\(.*\)$/    \1: "\2"/'
+} >> $PLAN_FILE
 
 source "$(dirname "$0")/../shared/debug.sh" >&2
 

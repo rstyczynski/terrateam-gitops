@@ -10,6 +10,8 @@ source "$(dirname "$0")/../shared/debug.sh" >&2
 echo "Ansible will be executed in the following context:"
 cat $TERRATEAM_PLAN_FILE
 
+
+echo 
 echo 
 echo "Environment variables (DEBUG):"
 echo "=============================="
