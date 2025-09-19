@@ -6,6 +6,9 @@ https://docs.terrateam.io/integrations/installing-packages/
 
 when dir/workflow is changed all workflows are triggered
 
+TODO workspace file change detection does not work
+
+
 # env
 
 TODO: Ansible apply
