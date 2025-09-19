@@ -50,7 +50,7 @@ dirs:
       dev: 
         tags: [dev]
       prod: 
-        tags: [prod]]
+        tags: [prod]
     when_modified:
       file_patterns: ["${DIR}/*"]
       # autoplan https://docs.terrateam.io/configuration-reference/when-modified
