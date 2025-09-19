@@ -28,30 +28,6 @@ which ansible-galaxy
 which yq
 which jq
 
-# Convert YAML → JSON on the fly
-json=$(cat "$TERRATEAM_PLAN_FILE" | python3 - <<_PYTHON_EOF
-import sys, yaml, json
-print(json.dumps(yaml.safe_load(sys.stdin.read())))
-_PYTHON_EOF
-)
-
-echo "$json" | jq
-
-# Extract values with jq
-playbook=$(jq -r '.ansible_execution_context.ANSIBLE_PLAYBOOK' <<<"$json")
-root=$(jq -r '.ansible_execution_context.ENV.TERRATEAM_ROOT' <<<"$json")
-dir=$(jq -r '.ansible_execution_context.ENV.TERRATEAM_DIR' <<<"$json")
-workspace=$(jq -r '.ansible_execution_context.ENV.TERRATEAM_WORKSPACE' <<<"$json")
-cfg=$(jq -r '.ansible_execution_context.ANSIBLE_CUSTOM_CFG' <<<"$json")
-
-echo "Playbook: $playbook"
-echo "Root: $root"
-echo "Dir: $dir"
-echo "Workspace: $workspace"
-echo "Custom CFG:"
-echo "$cfg"
-
-
 EXIT_CODE=0
 
 echo "END: Ansible diff stage" >&2

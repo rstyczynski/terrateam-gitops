@@ -10,6 +10,10 @@ hooks:
       - type: run
         cmd: ['${TERRATEAM_ROOT}/.terrateam/hooks/pre_procedure.sh']
         run_on: always
+      - type: run
+        cmd: ['apt-get', 'update']
+      - type: run
+        cmd: ['apt-get', '-y', 'install', 'yq']
     post:
       - type: run
         cmd: ['${TERRATEAM_ROOT}/.terrateam/hooks/post_procedure.sh']
