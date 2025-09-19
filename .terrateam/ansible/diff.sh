@@ -31,12 +31,12 @@ which jq
 # Convert YAML → JSON on the fly
 json=$(python3 - <<'EOF'
 import sys, yaml, json
-with open(sys.argv[1]) as f:
+with open(sys.argv[1], "r") as f:
     print(json.dumps(yaml.safe_load(f)))
 EOF
 "$TERRATEAM_PLAN_FILE")
 
-echo $json | jq
+echo "$json" | jq
 
 # Extract values with jq
 playbook=$(jq -r '.ansible_execution_context.ANSIBLE_PLAYBOOK' <<<"$json")
