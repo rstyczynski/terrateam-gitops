@@ -45,39 +45,64 @@ if [ ! -z "${ANSIBLE_CUSTOM_REQUIREMENTS}" ]; then
     echo "Requirements file:" >> $PLAN_FILE
     echo "==================" >> $PLAN_FILE
     cat ${ANSIBLE_CUSTOM_REQUIREMENTS} >> $PLAN_FILE
+else
     echo "No requirements to install." >> $PLAN_FILE
 fi
 
 #
 # detect playbook to run
 # Rules:
-# 1. If there is only one playbook.yml file, use it.
-# 2. If there are multiple playbook.yml files, use the one specified in ANSIBLE_PLAYBOOK file.
-# 3. If there are no playbook.yml files, error out.
+# 1. If there is ANSIBLE_PLAYBOOK file, use the one specified in it.
+# 2. If there is only one playbook.yml file, use it.
+# 4. If there are multiple playbook.yml files, use the one specified in ANSIBLE_PLAYBOOK file.
+# 5. If detected playbook file does not exist, error out.
 #
 # ANSIBLE_PLAYBOOK file content is a single line with the name of the playbook to run.
-#
-# If ANSIBLE_PLAYBOOK file is not present, error out.
+# ANSIBLE_PLAYBOOK file may be missing.
 
-# List all .yml files in the directory (excluding requirements.yml and ansible.cfg)
-playbooks=($(ls *.yml 2>/dev/null | grep -v -E '^(requirements|ansible)\.yml$'))
+# Detect playbook to run
 
-if [ ${#playbooks[@]} -eq 1 ]; then
-    ANSIBLE_PLAYBOOK="${playbooks[0]}"
-elif [ ${#playbooks[@]} -gt 1 ]; then
-    if [ -f "ANSIBLE_PLAYBOOK" ]; then
-        ANSIBLE_PLAYBOOK=$(cat ANSIBLE_PLAYBOOK | tr -d '[:space:]')
-        if [ ! -f "$ANSIBLE_PLAYBOOK" ]; then
-            echo "ERROR: Playbook file specified in ANSIBLE_PLAYBOOK ('$ANSIBLE_PLAYBOOK') does not exist." >&2
-            exit 1
-        fi
-    else
-        echo "ERROR: Multiple playbook .yml files found, but no ANSIBLE_PLAYBOOK file present." >&2
+# Default to empty
+ANSIBLE_PLAYBOOK=""
+
+# 1. If there is ANSIBLE_PLAYBOOK file, use the one specified in it.
+if [ -f "ANSIBLE_PLAYBOOK" ]; then
+    PLAYBOOK_FILE=$(head -n 1 ANSIBLE_PLAYBOOK | xargs)
+    if [ -z "$PLAYBOOK_FILE" ]; then
+        echo "ERROR: ANSIBLE_PLAYBOOK file is empty." >&2
         exit 1
     fi
+    if [ ! -f "$PLAYBOOK_FILE" ]; then
+        echo "ERROR: Playbook specified in ANSIBLE_PLAYBOOK ('$PLAYBOOK_FILE') does not exist." >&2
+        exit 1
+    fi
+    ANSIBLE_PLAYBOOK="$PLAYBOOK_FILE"
 else
-    echo "ERROR: No playbook .yml files found in directory." >&2
-    exit 1
+    # 2. If there is only one playbook.yml file, use it.
+    # 4. If there are multiple playbook.yml files, use the one specified in ANSIBLE_PLAYBOOK file.
+    # (Rule 3 is missing, so we skip to 4)
+    PLAYBOOKS_FOUND=($(find . -maxdepth 1 -type f -name "playbook.yml"))
+    if [ ${#PLAYBOOKS_FOUND[@]} -eq 1 ]; then
+        ANSIBLE_PLAYBOOK="${PLAYBOOKS_FOUND[0]#./}"
+    elif [ ${#PLAYBOOKS_FOUND[@]} -gt 1 ]; then
+        ANSIBLE_PLAYBOOK_ERROR="Multiple playbook.yml files found. Please specify which to use in ANSIBLE_PLAYBOOK file."
+    else
+        ANSIBLE_PLAYBOOK_ERROR="ERROR: No playbook.yml file found and no ANSIBLE_PLAYBOOK file present."
+    fi
+fi
+
+# 5. If detected playbook file does not exist, error out.
+if [ ! -f "$ANSIBLE_PLAYBOOK" ]; then
+    ANSIBLE_PLAYBOOK_ERROR="ERROR: Detected playbook file '$ANSIBLE_PLAYBOOK' does not exist."
+fi
+
+
+echo "Using playbook:" >> $PLAN_FILE
+echo "===============" >> $PLAN_FILE
+if [ ! -z "$ANSIBLE_PLAYBOOK_ERROR" ]; then
+    echo $ANSIBLE_PLAYBOOK_ERROR >> $PLAN_FILE
+else
+    echo $ANSIBLE_PLAYBOOK >> $PLAN_FILE
 fi
 
 
