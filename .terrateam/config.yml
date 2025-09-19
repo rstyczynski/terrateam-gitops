@@ -30,7 +30,7 @@ dirs:
       # autoplan https://docs.terrateam.io/configuration-reference/when-modified
       autoplan: true
 
-  day-2_ops:
+  day-2_ops1:
     tags: [ANS_code]
     when_modified:
       file_patterns: ["${DIR}/*"]
@@ -38,7 +38,7 @@ dirs:
       autoplan: true
 
   day-2_ops2:
-    tags: [codeX_ans]
+    tags: [ANS_code]
     when_modified:
       file_patterns: ["${DIR}/*"]
       # autoplan https://docs.terrateam.io/configuration-reference/when-modified
