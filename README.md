@@ -8,7 +8,6 @@ when dir/workflow is changed all workflows are triggered
 
 TODO workspace file change detection does not work
 
-
 # env
 
 TODO: Ansible apply
@@ -25,4 +24,3 @@ CWD: /github/workspace/day-2_ops3
 TERRATEAM_DIR: day-2_ops3
 TERRATEAM_WORKSPACE: dev
 TERRATEAM_ROOT: /github/workspace
-
