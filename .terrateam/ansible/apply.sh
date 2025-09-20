@@ -15,10 +15,12 @@ echo "TERRATEAM_ROOT: $TERRATEAM_ROOT" >&2
 echo "Detect variables from plan file"
 
 json=$(python3 -c 'import sys,yaml,json; print(json.dumps(yaml.safe_load(open(sys.argv[1]))))' $TERRATEAM_PLAN_FILE)
-PLAYBOOK=$(echo "$json" | jq -r '.ansible_execution_context.ANSIBLE_PLAYBOOK')
-echo "PLAYBOOK: $PLAYBOOK"
 ANSIBLE_ROOT=$(echo "$json" | jq -r '.ansible_execution_context.ENV.ANSIBLE_ROOT')
 echo "ANSIBLE_ROOT: $ANSIBLE_ROOT"
+PLAYBOOK=$(echo "$json" | jq -r '.ansible_execution_context.ANSIBLE_PLAYBOOK')
+echo "PLAYBOOK: $PLAYBOOK"
+echo "$json" | jq -r '.ansible_execution_context.ANSIBLE_INVENTORY' > inventory_static.yml
+echo "INVENTORY: $(cat inventory_static.yml)"
 
 echo
 echo "Running ansible-playbook"
