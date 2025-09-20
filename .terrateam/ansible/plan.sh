@@ -208,7 +208,7 @@ echo "TERRATEAM_PLAN_FILE (exported): $TERRATEAM_PLAN_FILE" >&2
 echo "TERRATEAM_PLAN_FILE (argumnet): $PLAN_FILE" >&2
 EXIT_CODE=0
 
-TERRATEAM_DEBUG=false
+TERRATEAM_DEBUG=true
 source "$(dirname "$0")/../shared/debug.sh" >&2
 
 echo "END: Ansible plan stage" >&2
