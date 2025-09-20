@@ -50,6 +50,12 @@ dirs:
       file_patterns: ["${DIR}/*"]
       autoplan: true
 
+  day-2_ops4:
+    tags: [ANS_code]
+    when_modified:
+      file_patterns: ["${DIR}/*"]
+      autoplan: true
+
   # PROBLEM: workspace1 directories are not triggered at all
   day-2_ops_workspace1:
     workspaces: 

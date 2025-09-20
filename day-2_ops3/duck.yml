@@ -4,6 +4,3 @@
 
   roles:
     - role: myorg.publicapi.duckduckgo
-
-  vars:
-    duckduckgo_query: "Jan Matejko"
