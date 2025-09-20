@@ -51,12 +51,12 @@ dirs:
   day-2_ops_workspace1:
     workspaces: 
       dev: 
-        tags: [DEBUG_code, dev]
+        tags: [DEBUG_code]
         when_modified:
           file_patterns: ["${DIR}/*"]
           autoplan: true
       prod: 
-        tags: [ANS_code, prod]
+        tags: [ANS_code]
         when_modified:
           file_patterns: ["${DIR}/*"]
           autoplan: true
