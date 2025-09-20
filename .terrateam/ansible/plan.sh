@@ -125,7 +125,29 @@ if [ "${PLAN_DEBUG}" == "true" ]; then
     fi
 fi
 
+#
+# detect inventory
+#
+if [ -f "${ANSIBLE_ROOT}/inventory.ini" ]; then
+    ansible-inventory -i inventory.ini  --list --export --yaml --output inventory_static.yml
+    ANSIBLE_INVENTORY=inventory_static.yml
+elif [ -f "${ANSIBLE_ROOT}/inventory.yml" ]; then
+    ansible-inventory -i inventory.yml  --list --export --yaml --output inventory_static.yml
+    ANSIBLE_INVENTORY=inventory_static.yml
+else
+    unset ANSIBLE_INVENTORY
+fi
 
+if [ "${PLAN_DEBUG}" == "true" ]; then
+    echo >> $PLAN_FILE
+    echo "Using inventory (DEBUG):" >> $PLAN_FILE
+    echo "=======================" >> $PLAN_FILE
+    if [ ! -z "$ANSIBLE_INVENTORY" ]; then
+        echo $ANSIBLE_INVENTORY >> $PLAN_FILE
+    else
+        echo "(none)" >> $PLAN_FILE
+    fi
+fi
 
 #
 # write all variables to plan file in yml format
@@ -133,7 +155,6 @@ fi
 # 2. ANSIBLE_PLAYBOOK_ERROR
 # 3. ANSIBLE_CUSTOM_CFG
 # 4. ANSIBLE_CUSTOM_REQUIREMENTS
-
 
 # Write all relevant variables to the plan file in YAML format
 {
@@ -143,21 +164,31 @@ fi
     echo "  "
     echo "  ANSIBLE_PLAYBOOK_ERROR: \"${ANSIBLE_PLAYBOOK_ERROR}\""
     echo "  "
+
+
+    if [ -f "$ANSIBLE_INVENTORY" ]; then
+        echo "  ANSIBLE_INVENTORY: |"
+        sed 's/^/    /' "$ANSIBLE_INVENTORY"
+    else
+        echo "  ANSIBLE_INVENTORY:"
+    fi
+    echo "  "
+
     # If ANSIBLE_CUSTOM_CFG is a file and exists, encode as YAML block scalar
-    if [ -n "$ANSIBLE_CUSTOM_CFG" ] && [ -f "$ANSIBLE_CUSTOM_CFG" ]; then
+    if [ -f "$ANSIBLE_CUSTOM_CFG" ]; then
         echo "  ANSIBLE_CUSTOM_CFG: |"
         sed 's/^/    /' "$ANSIBLE_CUSTOM_CFG"
     else
-        echo "  ANSIBLE_CUSTOM_CFG: \"${ANSIBLE_CUSTOM_CFG}\""
+        echo "  ANSIBLE_CUSTOM_CFG:"
     fi
     echo "  "
 
     # If ANSIBLE_CUSTOM_REQUIREMENTS is a file and exists, encode as YAML block scalar
-    if [ -n "$ANSIBLE_CUSTOM_REQUIREMENTS" ] && [ -f "$ANSIBLE_CUSTOM_REQUIREMENTS" ]; then
+    if [ -f "$ANSIBLE_CUSTOM_REQUIREMENTS" ]; then
         echo "  ANSIBLE_CUSTOM_REQUIREMENTS: |"
         sed 's/^/    /' "$ANSIBLE_CUSTOM_REQUIREMENTS"
     else
-        echo "  ANSIBLE_CUSTOM_REQUIREMENTS: \"${ANSIBLE_CUSTOM_REQUIREMENTS}\""
+        echo "  ANSIBLE_CUSTOM_REQUIREMENTS:"
     fi
     echo "  "
     echo "  "
