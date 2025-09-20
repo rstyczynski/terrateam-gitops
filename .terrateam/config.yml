@@ -59,9 +59,9 @@ dirs:
         tags: [ANS_code, prod]
         when_modified:
           file_patterns: ["${DIR}/prod/*"]
-    when_modified:
-      file_patterns: ["${DIR}/*"]
-      autoplan: true
+    # when_modified:
+    #   file_patterns: ["${DIR}/*"]
+    #   autoplan: true
 
 # workflows https://docs.terrateam.io/configuration-reference/workflows
 workflows:
