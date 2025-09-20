@@ -25,7 +25,7 @@ echo "INVENTORY: $(cat inventory_static.yml)"
 echo
 echo "Running ansible-playbook"
 cd $ANSIBLE_ROOT
-ansible-playbook $PLAYBOOK
+ansible-playbook $PLAYBOOK -i inventory_static.yml
 
 
 TERRATEAM_DEBUG=false
