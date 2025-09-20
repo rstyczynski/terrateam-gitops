@@ -1,4 +1,0 @@
-trigger!
-go!
-go go tf/ans!
-go
