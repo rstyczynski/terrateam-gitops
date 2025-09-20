@@ -48,20 +48,18 @@ dirs:
       # autoplan https://docs.terrateam.io/configuration-reference/when-modified
       autoplan: true
 
-  day-2_ops_workspace1/:
-    # tags: [ANS_code]
+  day-2_ops_workspace1:
     workspaces: 
       dev: 
         tags: [DEBUG_code, dev]
-        # when_modified:
-        #   file_patterns: ["${DIR}/*"]
+        when_modified:
+          file_patterns: ["${DIR}/*"]
+          autoplan: true
       prod: 
         tags: [ANS_code, prod]
-        # when_modified:
-        #   file_patterns: ["${DIR}/*"]
-    when_modified:
-      file_patterns: ["${DIR}/prod/*"]
-      autoplan: true
+        when_modified:
+          file_patterns: ["${DIR}/*"]
+          autoplan: true
 
 # workflows https://docs.terrateam.io/configuration-reference/workflows
 workflows:
