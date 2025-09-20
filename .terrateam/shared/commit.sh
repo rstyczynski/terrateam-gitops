@@ -48,8 +48,19 @@ git config --global --unset-all http.https://github.com/.extraheader || true
 unset GIT_ASKPASS || true
 # Avoid accidental fallback to Actions token after we've captured our TOKEN
 unset GITHUB_TOKEN || true
-git remote set-url origin "https://x-access-token:${TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-echo "Remote (sanitized): https://x-access-token:***@github.com/${GITHUB_REPOSITORY}.git"
+
+# Aggressively purge any cached credentials and force tokenized URLs
+export GIT_TERMINAL_PROMPT=0
+# Remove any stored creds for github.com
+printf "protocol=https\nhost=github.com\nusername=x-access-token\n\n" | git credential reject || true
+printf "protocol=https\nhost=api.github.com\nusername=x-access-token\n\n" | git credential reject || true
+# Ensure any https://github.com/ URL is rewritten to include our token
+git config --global url."https://x-access-token:${TOKEN}@github.com/".insteadOf "https://github.com/"
+git config --global url."https://x-access-token:${TOKEN}@github.com/".insteadOf "https://api.github.com/"
+
+# Set origin explicitly (will already be covered by url.insteadOf, but this is explicit)
+git remote set-url origin "https://github.com/${GITHUB_REPOSITORY}.git"
+echo "Remote (sanitized): https://x-access-token:***@github.com/${GITHUB_REPOSITORY}.git (via url.insteadOf)"
 
 # 2) Figure out the branch name (PR vs direct branch runs)
 BRANCH="${GITHUB_HEAD_REF:-${GITHUB_REF_NAME}}"
@@ -67,9 +78,9 @@ git add -A
 if ! git diff --cached --quiet; then
   echo "Preparing commit for branch ${BRANCH}"
   git commit -m "Add generated file"
-  if ! git push origin "HEAD:${BRANCH}"; then
-    git pull --rebase origin "${BRANCH}"
-    git push origin "HEAD:${BRANCH}"
+  if ! git -c http.extraheader= -c http.https://github.com/.extraheader= push origin "HEAD:${BRANCH}"; then
+    git -c http.extraheader= -c http.https://github.com/.extraheader= pull --rebase origin "${BRANCH}"
+    git -c http.extraheader= -c http.https://github.com/.extraheader= push origin "HEAD:${BRANCH}"
   fi
 else
   echo "No changes to commit."
