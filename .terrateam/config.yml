@@ -28,37 +28,45 @@ dirs:
   terraform/day-1_cfg:
     tags: [ANS_code]
     when_modified:
-      # layered run https://docs.terrateam.io/advanced-workflows/layered-runs/
-      depends_on: 'dir:terraform'
+      depends_on: 'dir:terraform' # layered run https://docs.terrateam.io/advanced-workflows/layered-runs/
       file_patterns: ["${DIR}/*"]
-      # autoplan https://docs.terrateam.io/configuration-reference/when-modified
       autoplan: true
 
   day-2_ops1:
     tags: [ANS_code]
     when_modified:
       file_patterns: ["${DIR}/*"]
-      # autoplan https://docs.terrateam.io/configuration-reference/when-modified
       autoplan: true
 
   day-2_ops2:
     tags: [ANS_code]
     when_modified:
       file_patterns: ["${DIR}/*"]
-      # autoplan https://docs.terrateam.io/configuration-reference/when-modified
       autoplan: true
 
+  # PROBLEM: workspace1 are not triggered at all
   day-2_ops_workspace1:
-    tags: [ANS_code]
     workspaces: 
       dev: 
-        tags: [DEBUG_code, dev]
+        tags: [DEBUG_code]
         when_modified:
           file_patterns: ["${DIR}/*"]
+          autoplan: true
       prod: 
-        tags: [ANS_code, prod]
+        tags: [ANS_code]
         when_modified:
           file_patterns: ["${DIR}/*"]
+          autoplan: true
+
+  # PROBLEM: subdir1 are always triggered together
+  day-2_ops_subdir1/dev: 
+    tags: [DEBUG_code]
+    when_modified:
+      file_patterns: ["${DIR}/*"]
+      autoplan: true
+
+  day-2_ops_subdir1/prod: 
+    tags: [ANS_code]
     when_modified:
       file_patterns: ["${DIR}/*"]
       autoplan: true
