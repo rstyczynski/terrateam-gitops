@@ -42,6 +42,12 @@ echo "Using token source: ${_src}"
 
 # Force our credentials (avoid cached helpers using github-actions[bot])
 git config --global credential.helper ""
+# Remove Actions' auth header and askpass that force github-actions[bot]
+git config --unset-all http.https://github.com/.extraheader || true
+git config --global --unset-all http.https://github.com/.extraheader || true
+unset GIT_ASKPASS || true
+# Avoid accidental fallback to Actions token after we've captured our TOKEN
+unset GITHUB_TOKEN || true
 git remote set-url origin "https://x-access-token:${TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
 echo "Remote (sanitized): https://x-access-token:***@github.com/${GITHUB_REPOSITORY}.git"
 
