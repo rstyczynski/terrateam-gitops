@@ -208,10 +208,6 @@ echo "TERRATEAM_PLAN_FILE (exported): $TERRATEAM_PLAN_FILE" >&2
 echo "TERRATEAM_PLAN_FILE (argumnet): $PLAN_FILE" >&2
 EXIT_CODE=0
 
-echo "🚀 START: commit"
-echo "Hello!" > ${ANSIBLE_ROOT}/hello.txt
-$(dirname "$0")/../shared/commit.sh
-echo "🚀 STOP: commit"
 
 TERRATEAM_DEBUG=false
 source "$(dirname "$0")/../shared/debug.sh" >&2
