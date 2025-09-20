@@ -57,6 +57,18 @@ dirs:
           file_patterns: ["${DIR}/*"]
           autoplan: true
 
+  day-2_ops_workspace2/dev: 
+    tags: [DEBUG_code]
+    when_modified:
+      file_patterns: ["${DIR}/*"]
+      autoplan: true
+      
+  day-2_ops_workspace2/prod: 
+    tags: [ANS_code]
+    when_modified:
+      file_patterns: ["${DIR}/*"]
+      autoplan: true
+
 # workflows https://docs.terrateam.io/configuration-reference/workflows
 workflows:
   - tag_query: TF_code
