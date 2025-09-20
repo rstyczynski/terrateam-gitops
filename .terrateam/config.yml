@@ -53,15 +53,15 @@ dirs:
     workspaces: 
       dev: 
         tags: [DEBUG_code, dev]
-        when_modified:
-          file_patterns: ["${DIR}/*"]
+        # when_modified:
+        #   file_patterns: ["${DIR}/*"]
       prod: 
         tags: [ANS_code, prod]
-        when_modified:
-          file_patterns: ["${DIR}/*"]
-    # when_modified:
-    #   file_patterns: ["${DIR}/*"]
-    #   autoplan: true
+        # when_modified:
+        #   file_patterns: ["${DIR}/*"]
+    when_modified:
+      file_patterns: ["${DIR}/*"]
+      autoplan: true
 
 # workflows https://docs.terrateam.io/configuration-reference/workflows
 workflows:
