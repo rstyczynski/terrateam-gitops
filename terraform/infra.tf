@@ -9,7 +9,7 @@ resource "null_resource" "example2" {
   }
 
   provisioner "local-exec" {
-    command = "echo This is a local provisioner no.2"
+    command = "echo This is a local provisioner no.3"
   }
 }
 
