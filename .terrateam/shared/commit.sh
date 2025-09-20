@@ -37,7 +37,13 @@ fi
 
 [ -n "$TOKEN" ] || { echo "No GitHub token available (SECRETS_CONTEXT.github_token or GITHUB_TOKEN)"; exit 1; }
 
+
 echo "Using token source: ${_src}"
+
+# Force our credentials (avoid cached helpers using github-actions[bot])
+git config --global credential.helper ""
+git remote set-url origin "https://x-access-token:${TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+echo "Remote (sanitized): https://x-access-token:***@github.com/${GITHUB_REPOSITORY}.git"
 
 # 2) Figure out the branch name (PR vs direct branch runs)
 BRANCH="${GITHUB_HEAD_REF:-${GITHUB_REF_NAME}}"
@@ -55,9 +61,9 @@ git add -A
 if ! git diff --cached --quiet; then
   echo "Preparing commit for branch ${BRANCH}"
   git commit -m "Add generated file"
-  if ! git push "https://${TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:${BRANCH}"; then
+  if ! git push origin "HEAD:${BRANCH}"; then
     git pull --rebase origin "${BRANCH}"
-    git push "https://${TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:${BRANCH}"
+    git push origin "HEAD:${BRANCH}"
   fi
 else
   echo "No changes to commit."
