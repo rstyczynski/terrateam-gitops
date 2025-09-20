@@ -1,31 +1,14 @@
-## more packages?
+# Terrateam Ansible engine
 
-https://docs.terrateam.io/integrations/installing-packages/
+This project integrates Ansible automation into the Terrateam infrastructure-as-code workflow engine. The primary goal is to enable teams to manage both Terraform and Ansible operations seamlessly within Terrateam, supporting layered and multi-stage workflows across different environments and workspaces.
 
-## dir
+Preliminary capabilities include:
+- Custom workflow definitions for Ansible playbooks, including plan, diff, and apply stages.
 
-### env
+- Support for directory-based and workspace-based triggers, allowing fine-grained control over when Ansible code is executed.
 
-TODO: Ansible apply
-CWD: /github/workspace/terraform/day-1_cfg
-TERRATEAM_ROOT: /github/workspace
-TERRATEAM_DIR: terraform/day-1_cfg
-TERRATEAM_WORKSPACE: default
+- Debug and output hooks for enhanced visibility during CI/CD runs.
 
-### workflow
+- Early support for layered runs and workspace-specific Ansible execution contexts.
 
-when dir/workflow is changed all workflows are triggered
-
-## workspace
-
-### env with workspace cfg
-
-CWD: /github/workspace/day-2_ops3
-TERRATEAM_DIR: day-2_ops3
-TERRATEAM_WORKSPACE: dev
-TERRATEAM_ROOT: /github/workspace
-
-### workflows
-
-TODO workspace file change detection does not work
-TODO workspace tags do not influence engine. engine is taken from dir tag
+This setup is designed to help teams automate complex infrastructure and configuration management tasks, leveraging both Terraform and Ansible in a unified, auditable pipeline.
