@@ -3,7 +3,7 @@
 echo "⚠️ ================================================" >&2
 echo "START: Debug init stage" >&2
 
-echo "TODO Ansible init"
+echo "TODO Debug init"
 
 source "$(dirname "$0")/../shared/debug.sh" >&2
 
