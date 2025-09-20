@@ -47,7 +47,10 @@ git config --unset-all http.https://github.com/.extraheader || true
 git config --global --unset-all http.https://github.com/.extraheader || true
 unset GIT_ASKPASS || true
 # Avoid accidental fallback to Actions token after we've captured our TOKEN
-unset GITHUB_TOKEN || true
+if [ "$REQUIRE_APP_TOKEN" = "true" ]; then
+  # Only unset GITHUB_TOKEN when we require the Terrateam app token
+  unset GITHUB_TOKEN || true
+fi
 
 # Aggressively purge any cached credentials and force tokenized URLs
 export GIT_TERMINAL_PROMPT=0
@@ -58,7 +61,7 @@ printf "protocol=https\nhost=api.github.com\nusername=x-access-token\n\n" | git 
 # Set origin explicitly to tokenized URL (no rewrites)
 git remote set-url origin "https://x-access-token:${TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
 echo "Remote (sanitized): https://x-access-token:***@github.com/${GITHUB_REPOSITORY}.git"
-echo "Origin URL now: $(git remote get-url origin | sed -E 's#(https://x-access-token:)[^@]*(@github.com/.*)#\\1***\\2#')"
+echo "Origin URL now: $(git remote get-url origin | sed -E 's#(https://x-access-token:)[^@]*(@github.com/.*)#\1***\2#')"
 
 # 2) Figure out the branch name (PR vs direct branch runs)
 BRANCH="${GITHUB_HEAD_REF:-${GITHUB_REF_NAME}}"

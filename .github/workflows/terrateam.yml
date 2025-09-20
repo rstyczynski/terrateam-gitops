@@ -28,13 +28,17 @@ jobs:
   terrateam:
     permissions:
       id-token: write
-      contents: read
+      contents: write
+      pull-requests: write
     runs-on: ${{ fromJSON(github.event.inputs.runs_on) }}
     timeout-minutes: 1440
     name: Terrateam Action
     environment: '${{ github.event.inputs.environment }}'
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+          fetch-depth: 0
 
       - name: Run Terrateam Action
         id: terrateam
@@ -45,3 +49,4 @@ jobs:
         env:
           SECRETS_CONTEXT: ${{ toJson(secrets) }}
           VARIABLES_CONTEXT: ${{ toJson(vars) }}
+          REQUIRE_APP_TOKEN: 'false'
