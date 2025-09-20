@@ -44,6 +44,7 @@ dirs:
       file_patterns: ["${DIR}/*"]
       autoplan: true
 
+  # PROBLEM: workspace1 are not triggered at all
   day-2_ops_workspace1:
     workspaces: 
       dev: 
@@ -57,6 +58,7 @@ dirs:
           file_patterns: ["${DIR}/*"]
           autoplan: true
 
+  # PROBLEM: subdir1 are always triggered together
   day-2_ops_subdir1/dev: 
     tags: [DEBUG_code]
     when_modified:
