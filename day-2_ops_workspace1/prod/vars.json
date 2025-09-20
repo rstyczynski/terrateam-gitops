@@ -1,6 +1,6 @@
 {
   "message": "Welcome to Terrateam Ansible Integration!",
-  "environment": "development",
+  "environment": "prod",
   "version": "1.0.13",
   "create_file": true,
   "output_file": "/tmp/ansible_test_output.txt",
