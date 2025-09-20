@@ -49,7 +49,7 @@ dirs:
       autoplan: true
 
   day-2_ops_workspace1:
-    tags: [ANS_code]
+    # tags: [ANS_code]
     workspaces: 
       dev: 
         tags: [DEBUG_code, dev]
