@@ -17,3 +17,26 @@ Preliminary capabilities include:
 - Debug and output hooks for enhanced visibility during CI/CD runs.
 
 This setup is designed to help teams automate complex infrastructure and configuration management tasks, leveraging both Terraform and Ansible in a unified, auditable pipeline.
+
+## Examples
+
+- **day-2_ops1**: Demonstrates a basic Ansible playbook that performs a series of simple tasks on a localhost host reading parameters from a variable file.
+
+- **day-2_ops2**: Demonstrates gathering collection from a git source using requirements files.  
+
+- **day-2_ops3**: Demonstrates use of inventory.ini to provide host name and play variable.
+
+- **day-2_ops4**: Demonstrates use of ansible.cfg to control ansible execution context.
+
+- **terraform/day-1_cfg**: Contains the Terraform configuration for initial (Day 1) infrastructure provisioning, such as creating VMs, networks, or storage, which serves as the foundation for subsequent Ansible-driven Day 2 operations.
+
+
+## Ansible engine scripts
+
+## Output reception from Terraform
+
+TODO
+
+## Ansible output persistence
+
+TDO
