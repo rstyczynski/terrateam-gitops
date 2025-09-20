@@ -60,7 +60,7 @@ dirs:
         # when_modified:
         #   file_patterns: ["${DIR}/*"]
     when_modified:
-      file_patterns: ["${DIR}/*"]
+      file_patterns: ["${DIR}/prod/*"]
       autoplan: true
 
 # workflows https://docs.terrateam.io/configuration-reference/workflows
