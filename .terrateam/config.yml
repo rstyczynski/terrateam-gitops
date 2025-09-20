@@ -58,7 +58,7 @@ dirs:
           file_patterns: ["${DIR}/*"]
           autoplan: true
 
-  # PROBLEM: subdir1 are always triggered together
+  # PROBLEM: subdir1 directories are always triggered together
   day-2_ops_subdir1/dev: 
     tags: [DEBUG_code]
     when_modified:
