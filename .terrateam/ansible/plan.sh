@@ -210,8 +210,6 @@ EXIT_CODE=0
 
 echo "🚀 START: commit"
 echo "Hello!" > ${ANSIBLE_ROOT}/hello.txt
-git add -A
-git commit -m "Add generated file"
 $(dirname "$0")/../shared/commit.sh
 echo "🚀 STOP: commit"
 
