@@ -44,7 +44,7 @@ dirs:
       file_patterns: ["${DIR}/*"]
       autoplan: true
 
-  # PROBLEM: workspace1 are not triggered at all
+  # PROBLEM: workspace1 directories are not triggered at all
   day-2_ops_workspace1:
     workspaces: 
       dev: 
