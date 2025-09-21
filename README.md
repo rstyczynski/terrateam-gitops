@@ -95,7 +95,7 @@ To be able to write files to the current repository two configurations must be c
 
 `.github/workflows/terrateam.yml` → `jobs` → `terrateam` → `permissions` → **contents: write**
 
-TODO: Prepare Ansible role performing commit
+TODO: Prepare Ansible role performing the commit
 
 ## Output reception from Terraform
 
