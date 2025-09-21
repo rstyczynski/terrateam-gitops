@@ -16,6 +16,12 @@ fi
 cd ${ANSIBLE_ROOT}
 
 
+echo "🚀 START: commit"
+echo "Hello World!" > ${ANSIBLE_ROOT}/hello.txt
+export COMMIT_MSG="Hello! file updated"
+$(dirname "$0")/../shared/commit.sh
+echo "🚀 STOP: commit"
+
 #
 # install ansible
 #

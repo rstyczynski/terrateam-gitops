@@ -13,7 +13,7 @@ echo "TERRATEAM_ROOT: $TERRATEAM_ROOT" >&2
 
 
 echo "Detect variables from plan file"
-
+echo "==============================="
 json=$(python3 -c 'import sys,yaml,json; print(json.dumps(yaml.safe_load(open(sys.argv[1]))))' $TERRATEAM_PLAN_FILE)
 ANSIBLE_ROOT=$(echo "$json" | jq -r '.ansible_execution_context.ENV.ANSIBLE_ROOT')
 echo "ANSIBLE_ROOT: $ANSIBLE_ROOT"
@@ -24,8 +24,18 @@ echo "INVENTORY: $(cat inventory_static.yml)"
 
 echo
 echo "Running ansible-playbook"
+echo "========================"
 cd $ANSIBLE_ROOT
-ansible-playbook $PLAYBOOK -i inventory_static.yml
+ansible-playbook $PLAYBOOK -i inventory_static.yml 2> >(tee /tmp/ansible_stderr.log >&2)
+
+echo
+echo "Errors and warnings (stderr):"
+echo "============================="
+if [[ -s /tmp/ansible_stderr.log ]]; then
+  cat /tmp/ansible_stderr.log
+else
+  echo "(none)"
+fi
 
 
 TERRATEAM_DEBUG=false
