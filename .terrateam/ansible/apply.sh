@@ -13,7 +13,7 @@ echo "TERRATEAM_ROOT: $TERRATEAM_ROOT" >&2
 
 
 echo "Detect variables from plan file"
-
+echo "==============================="
 json=$(python3 -c 'import sys,yaml,json; print(json.dumps(yaml.safe_load(open(sys.argv[1]))))' $TERRATEAM_PLAN_FILE)
 ANSIBLE_ROOT=$(echo "$json" | jq -r '.ansible_execution_context.ENV.ANSIBLE_ROOT')
 echo "ANSIBLE_ROOT: $ANSIBLE_ROOT"
