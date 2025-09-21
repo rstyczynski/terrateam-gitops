@@ -17,7 +17,7 @@ cd ${ANSIBLE_ROOT}
 
 
 echo "🚀 START: commit"
-echo "Hello! Timestamp: $(date -u +"%Y-%m-%dT%H:%M:%SZ")" > ${ANSIBLE_ROOT}/hello.txt
+echo "Hello!" > ${ANSIBLE_ROOT}/hello.txt
 $(dirname "$0")/../shared/commit.sh
 echo "🚀 STOP: commit"
 
