@@ -136,4 +136,4 @@ Note that init is executed before both plan and apply, as Terrateam runs them in
 
 *apply.sh* - unloads the plan to Ansible directory and execute ansible-playbook. In reality only inventory is unloaded as rest of the context is carried by gitHub repository.
 
-*output.sh* - [Not yet implemented.] Writes Ansible facts to well known location. 
+*output.sh* - [Not yet implemented.] Writes Ansible facts to well known location.
