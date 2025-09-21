@@ -7,4 +7,4 @@
     - role: myorg.publicapi.duckduckgo
 
   vars:
-    duckduckgo_query: "Jan Chryzostom"
+    duckduckgo_query: "Jan Matejklo"
