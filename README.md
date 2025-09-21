@@ -85,6 +85,45 @@ export COMMIT_MSG="hello.txt file updated"
 ${TERRATEAM_ROOT}/.terrateam/shared/commit.sh
 ```
 
+To be able to write files to the current repository two configurations must be completed:
+
+1. GitHub repository must enable workflow to make changes
+
+**Where:**  
+`repository` → `Settings` → `Actions` → `General` → **Workflow permissions**
+
+**What:**  
+Enable **"Read and write permissions"**
+
+2. Terrateam workflow 
+
+**Where:**
+
+```
+.github/workflows/terrateam.yml
+```
+
+**What:**
+
+Base configuration:
+```yaml
+jobs:
+  terrateam:
+    permissions:
+      id-token: write
+      contents: read
+```
+
+Required configuration:
+```yaml
+jobs:
+  terrateam:
+    permissions:
+      id-token: write
+      contents: write
+      pull-requests: write
+```
+
 TODO: Prepare Ansible role performing commit
 
 ## Output reception from Terraform
