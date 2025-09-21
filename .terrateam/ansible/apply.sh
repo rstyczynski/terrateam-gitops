@@ -24,8 +24,18 @@ echo "INVENTORY: $(cat inventory_static.yml)"
 
 echo
 echo "Running ansible-playbook"
+echo "========================"
 cd $ANSIBLE_ROOT
-ansible-playbook $PLAYBOOK -i inventory_static.yml
+ansible-playbook $PLAYBOOK -i inventory_static.yml 2> >(tee /tmp/ansible_stderr.log >&2)
+
+echo
+echo "Errors and warnings (stderr):"
+echo "============================="
+if [[ -s /tmp/ansible_stderr.log ]]; then
+  cat /tmp/ansible_stderr.log
+else
+  echo "(none)"
+fi
 
 
 TERRATEAM_DEBUG=false
