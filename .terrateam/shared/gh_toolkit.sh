@@ -35,7 +35,7 @@ trap __on_err ERR
 #   2) GITHUB_TOKEN (if REQUIRE_APP_TOKEN!=true)
 #
 
-echo "🚀 START: terrateam git helpers ($*)"
+echo "🚀 START: terrateam git helpers ($*)" 1>&2
 
 API_STATE_DIR="${TMPDIR:-/tmp}/gh_toolkit"
 mkdir -p "$API_STATE_DIR" || true
@@ -81,7 +81,7 @@ setup_git_identity() {
   git config user.name  "${GITHUB_ACTOR:-ci-bot}"
   git config user.email "${GITHUB_ACTOR_ID:-0}+${GITHUB_ACTOR:-ci-bot}@users.noreply.github.com"
   if [ "${DRY_RUN:-}" = "1" ]; then
-    echo "[DRY_RUN] Skipping remote set-url for origin"
+    echo "[DRY_RUN] Skipping remote set-url for origin" 1>&2
   else
     git remote set-url origin "https://x-access-token:${TOKEN}@github.com/${REPO}.git"
   fi
@@ -155,17 +155,17 @@ JSON
 # Subcommand: commit
 # ------------------
 cmd_commit() {
-  echo "🚀 START: Current repository commit"
+  echo "🚀 START: Current repository commit" 1>&2
   setup_git_identity
 
   local BRANCH
   BRANCH="$(current_branch)"
-  [ -n "$BRANCH" ] || { echo "Cannot determine branch"; exit 1; }
+  [ -n "$BRANCH" ] || { echo "Cannot determine branch" 1>&2; exit 1; }
 
   git add -A
   if git diff --cached --quiet; then
-    echo "No changes to commit."
-    echo "🚀 STOP: Current repository commit"
+    echo "No changes to commit." 1>&2
+    echo "🚀 STOP: Current repository commit" 1>&2
     return 0
   fi
 
@@ -174,7 +174,7 @@ cmd_commit() {
   git commit -m "$COMMIT_MSG"
 
   if [ "${DRY_RUN:-}" = "1" ]; then
-    echo "[DRY_RUN] Would push HEAD:${BRANCH} to origin"
+    echo "[DRY_RUN] Would push HEAD:${BRANCH} to origin" 1>&2
   else
     # Push with one rebase-retry
     if ! git -c http.extraheader= -c http.https://github.com/.extraheader= push origin "HEAD:${BRANCH}"; then
@@ -183,8 +183,8 @@ cmd_commit() {
     fi
   fi
 
-  echo "Pushed ${REPO}@${BRANCH}"
-  echo "🚀 STOP: Current repository commit"
+  echo "Pushed ${REPO}@${BRANCH}" 1>&2
+  echo "🚀 STOP: Current repository commit" 1>&2
 }
 
 # ---------------------
@@ -199,13 +199,13 @@ cmd_create_pr() {
   BASE="${BASE_BRANCH:-$(remote_default_branch)}"
   TITLE="${PR_TITLE:-}"; BODY="${PR_BODY:-}"; DRAFT_FLAG="${DRAFT:-false}"
 
-  [ -n "$TITLE" ] || { echo "PR_TITLE is required"; exit 1; }
-  [ -n "$HEAD" ] || { echo "Cannot determine HEAD branch"; exit 1; }
-  [ -n "$BASE" ] || { echo "Cannot determine BASE branch (set BASE_BRANCH)"; exit 1; }
+  [ -n "$TITLE" ] || { echo "PR_TITLE is required" 1>&2; exit 1; }
+  [ -n "$HEAD" ] || { echo "Cannot determine HEAD branch" 1>&2; exit 1; }
+  [ -n "$BASE" ] || { echo "Cannot determine BASE branch (set BASE_BRANCH)" 1>&2; exit 1; }
 
-  echo "➡️  Creating PR"
-  echo "    repo=${REPO} head=${HEAD} base=${BASE} draft=${DRAFT_FLAG}"
-  echo "    title=${TITLE}"
+  echo "➡️  Creating PR" 1>&2
+  echo "    repo=${REPO} head=${HEAD} base=${BASE} draft=${DRAFT_FLAG}" 1>&2
+  echo "    title=${TITLE}" 1>&2
 
   # Build JSON payload
   if command -v jq >/dev/null 2>&1; then
@@ -240,11 +240,45 @@ cmd_create_pr() {
   fi
 
   if [ -n "$NUMBER" ]; then
-    echo "✅ Created PR #$NUMBER"
-    echo "$HTML"
+    echo "✅ Created PR #$NUMBER" 1>&2
+    echo "$HTML" 1>&2
+
+    # Emit YAML to STDOUT
+    echo "---"
+    if command -v jq >/dev/null 2>&1; then
+      STATE=$(printf '%s' "$RESP" | jq -r '.state // "open"')
+      DRAFT=$(printf '%s' "$RESP" | jq -r '.draft // false')
+      BASE_REF=$(printf '%s' "$RESP" | jq -r '.base.ref // ""')
+      HEAD_REF=$(printf '%s' "$RESP" | jq -r '.head.ref // ""')
+      TITLE_OUT=$(printf '%s' "$RESP" | jq -r '.title // ""')
+      URL_OUT=$(printf '%s' "$RESP" | jq -r '.html_url // ""')
+
+      TITLE_Q=$(printf '%s' "$TITLE_OUT" | sed 's/"/\\"/g')
+      URL_Q=$(printf '%s' "$URL_OUT" | sed 's/"/\\"/g')
+      printf 'number: %s\n' "$NUMBER"
+      printf 'state: %s\n' "$STATE"
+      printf 'draft: %s\n' "$DRAFT"
+      printf 'title: "%s"\n' "$TITLE_Q"
+      printf 'url: "%s"\n' "$URL_Q"
+      printf 'base: %s\n' "$BASE_REF"
+      printf 'head: %s\n' "$HEAD_REF"
+    else
+      # Minimal YAML without jq
+      TITLE_OUT=$(echo "$RESP" | sed -n 's/.*"title":"\([^"]\+\)".*/\1/p')
+      URL_OUT=$(echo "$RESP" | sed -n 's/.*"html_url":"\([^"]\+\)".*/\1/p')
+      TITLE_Q=$(printf '%s' "$TITLE_OUT" | sed 's/"/\\"/g')
+      URL_Q=$(printf '%s' "$URL_OUT" | sed 's/"/\\"/g')
+      echo "number: $NUMBER"
+      echo "state: open"
+      echo "draft: false"
+      echo "title: \"$TITLE_Q\""
+      echo "url: \"$URL_Q\""
+      echo "base: ${BASE:-}"  # may be empty
+      echo "head: ${HEAD:-}"  # may be empty
+    fi
   else
-    echo "❌ Failed to create PR: $ERR"
-    echo "$RESP" | sed 's/.*/  &/'
+    echo "❌ Failed to create PR: $ERR" 1>&2
+    echo "$RESP" | sed 's/.*/  &/' 1>&2
     exit 1
   fi
 }
@@ -277,9 +311,9 @@ cmd_pr_status() {
     fi
   fi
 
-  [ -n "$NUMBER" ] || { echo "Could not resolve PR number. Set PR_NUMBER or HEAD_BRANCH/BASE_BRANCH"; exit 1; }
+  [ -n "$NUMBER" ] || { echo "Could not resolve PR number. Set PR_NUMBER or HEAD_BRANCH/BASE_BRANCH" 1>&2; exit 1; }
 
-  echo "➡️  Reading PR status: repo=${REPO} number=${NUMBER}"
+  echo "➡️  Reading PR status: repo=${REPO} number=${NUMBER}" 1>&2
 
   local PR_JSON SHA STATUS_JSON
   PR_JSON=$(api GET "/pulls/${NUMBER}")
@@ -293,13 +327,16 @@ cmd_pr_status() {
   fi
 
   if command -v jq >/dev/null 2>&1; then
-    local STATE DRAFT MERGEABLE MERGEABLE_STATE TITLE URL HEAD_SHA CI_STATE CI_DESC
+    NUMBER_VAL="$NUMBER"
     STATE=$(printf '%s' "$PR_JSON" | jq -r '.state')
     DRAFT=$(printf '%s' "$PR_JSON" | jq -r '.draft')
-    MERGEABLE_STATE=$(printf '%s' "$PR_JSON" | jq -r '.mergeable_state // "unknown"')
     TITLE=$(printf '%s' "$PR_JSON" | jq -r '.title')
     URL=$(printf '%s' "$PR_JSON" | jq -r '.html_url')
+    BASE_REF=$(printf '%s' "$PR_JSON" | jq -r '.base.ref')
+    HEAD_REF=$(printf '%s' "$PR_JSON" | jq -r '.head.ref')
     HEAD_SHA=$(printf '%s' "$PR_JSON" | jq -r '.head.sha')
+    MERGEABLE_STATE=$(printf '%s' "$PR_JSON" | jq -r '.mergeable_state // "unknown"')
+
     STATUS_JSON=$(api GET "/commits/${HEAD_SHA}/status")
     API_LAST_STATUS=$(cat "$API_STATE_DIR/status" 2>/dev/null || echo "")
     API_LAST_URL=$(cat "$API_STATE_DIR/url" 2>/dev/null || echo "")
@@ -310,20 +347,127 @@ cmd_pr_status() {
       exit 1
     fi
     CI_STATE=$(printf '%s' "$STATUS_JSON" | jq -r '.state')
-    CI_DESC=$(printf '%s' "$STATUS_JSON" | jq -r '.statuses | map(.context+":"+.state) | join(", ")')
 
-    echo "PR #${NUMBER}: ${STATE} (draft=${DRAFT})"
-    echo "Title: ${TITLE}"
-    echo "URL:   ${URL}"
-    echo "Mergeable state: ${MERGEABLE_STATE}"
-    echo "Head SHA: ${HEAD_SHA}"
-    echo "Checks: ${CI_STATE} — ${CI_DESC}"
+    # --- Discussion: issue comments, review comments, and reviews ---
+    ISSUE_COMMENTS=$(api GET "/issues/${NUMBER}/comments")
+    API_LAST_STATUS=$(cat "$API_STATE_DIR/status" 2>/dev/null || echo "")
+    API_LAST_URL=$(cat "$API_STATE_DIR/url" 2>/dev/null || echo "")
+    if [ "${API_LAST_STATUS:-}" != "200" ]; then
+      echo "❌ GitHub API returned ${API_LAST_STATUS:-unknown} for issue comments at ${API_LAST_URL:-unknown}" 1>&2
+      echo "Response body:" 1>&2
+      echo "$ISSUE_COMMENTS" 1>&2
+      exit 1
+    fi
+
+    REVIEW_COMMENTS=$(api GET "/pulls/${NUMBER}/comments")
+    API_LAST_STATUS=$(cat "$API_STATE_DIR/status" 2>/dev/null || echo "")
+    API_LAST_URL=$(cat "$API_STATE_DIR/url" 2>/dev/null || echo "")
+    if [ "${API_LAST_STATUS:-}" != "200" ]; then
+      echo "❌ GitHub API returned ${API_LAST_STATUS:-unknown} for review comments at ${API_LAST_URL:-unknown}" 1>&2
+      echo "Response body:" 1>&2
+      echo "$REVIEW_COMMENTS" 1>&2
+      exit 1
+    fi
+
+    REVIEWS=$(api GET "/pulls/${NUMBER}/reviews")
+    API_LAST_STATUS=$(cat "$API_STATE_DIR/status" 2>/dev/null || echo "")
+    API_LAST_URL=$(cat "$API_STATE_DIR/url" 2>/dev/null || echo "")
+    if [ "${API_LAST_STATUS:-}" != "200" ]; then
+      echo "❌ GitHub API returned ${API_LAST_STATUS:-unknown} for reviews at ${API_LAST_URL:-unknown}" 1>&2
+      echo "Response body:" 1>&2
+      echo "$REVIEWS" 1>&2
+      exit 1
+    fi
+
+    COMMENTS_COUNT=$(printf '%s' "$ISSUE_COMMENTS" | jq -r 'length')
+    REVIEW_COMMENTS_COUNT=$(printf '%s' "$REVIEW_COMMENTS" | jq -r 'length')
+    REVIEWS_COUNT=$(printf '%s' "$REVIEWS" | jq -r 'length')
+
+    # YAML to STDOUT
+    echo "---"
+    printf 'number: %s\n' "$NUMBER_VAL"
+    printf 'state: %s\n' "$STATE"
+    printf 'draft: %s\n' "$DRAFT"
+    # Quote title and url safely
+    TITLE_Q=$(printf '%s' "$TITLE" | sed 's/"/\\"/g')
+    URL_Q=$(printf '%s' "$URL" | sed 's/"/\\"/g')
+    printf 'title: "%s"\n' "$TITLE_Q"
+    printf 'url: "%s"\n' "$URL_Q"
+    printf 'base: %s\n' "$BASE_REF"
+    printf 'head: %s\n' "$HEAD_REF"
+    printf 'head_sha: %s\n' "$HEAD_SHA"
+    printf 'mergeable_state: %s\n' "$MERGEABLE_STATE"
+    printf 'checks:\n'
+    printf '  state: %s\n' "$CI_STATE"
+    if printf '%s' "$STATUS_JSON" | jq -e '.statuses | length>0' >/dev/null 2>&1; then
+      printf '  statuses:\n'
+      printf '%s' "$STATUS_JSON" \
+        | jq -r '.statuses | map("    - context: \(.context|tojson)\n      state: \(.state)") | .[]'
+    else
+      printf '  statuses: []\n'
+    fi
+
+    # Discussion YAML
+    printf 'discussion:\n'
+    printf '  comments_count: %s\n' "$COMMENTS_COUNT"
+    printf '  review_comments_count: %s\n' "$REVIEW_COMMENTS_COUNT"
+    printf '  reviews_count: %s\n' "$REVIEWS_COUNT"
+
+    # Issue comments list
+    if [ "$COMMENTS_COUNT" -gt 0 ]; then
+      printf '  comments:\n'
+      printf '%s' "$ISSUE_COMMENTS" \
+        | jq -r '.[] | "    - author: \(.user.login)\n      created_at: \(.created_at)\n      body: \(.body|tojson)"'
+    else
+      printf '  comments: []\n'
+    fi
+
+    # Review comments list (file comments)
+    if [ "$REVIEW_COMMENTS_COUNT" -gt 0 ]; then
+      printf '  review_comments:\n'
+      printf '%s' "$REVIEW_COMMENTS" \
+        | jq -r '.[] | "    - author: \(.user.login)\n      path: \(.path)\n      created_at: \(.created_at)\n      body: \(.body|tojson)"'
+    else
+      printf '  review_comments: []\n'
+    fi
+
+    # Reviews list (stateful reviews)
+    if [ "$REVIEWS_COUNT" -gt 0 ]; then
+      printf '  reviews:\n'
+      printf '%s' "$REVIEWS" \
+        | jq -r '.[] | "    - author: \(.user.login)\n      state: \(.state)\n      submitted_at: \(.submitted_at)\n      body: \(.body|tojson)"'
+    else
+      printf '  reviews: []\n'
+    fi
   else
-    # Fallback summary without jq
-    echo "$PR_JSON" | sed -n 's/.*"title":"\([^"]\+\)".*/Title: \1/p'
-    echo "$PR_JSON" | sed -n 's/.*"html_url":"\([^"]\+\)".*/URL: \1/p'
-    echo "$PR_JSON" | sed -n 's/.*"state":"\([^"]\+\)".*/State: \1/p'
-    echo "$PR_JSON" | sed -n 's/.*"mergeable_state":"\([^"]\+\)".*/Mergeable state: \1/p'
+    # Fallback minimal YAML without jq
+    NUMBER_VAL="$NUMBER"
+    TITLE=$(echo "$PR_JSON" | sed -n 's/.*"title":"\([^"]\+\)".*/\1/p')
+    URL=$(echo "$PR_JSON" | sed -n 's/.*"html_url":"\([^"]\+\)".*/\1/p')
+    STATE=$(echo "$PR_JSON" | sed -n 's/.*"state":"\([^"]\+\)".*/\1/p' | head -n1)
+    MERGEABLE_STATE=$(echo "$PR_JSON" | sed -n 's/.*"mergeable_state":"\([^"]\+\)".*/\1/p')
+    echo "---"
+    echo "number: $NUMBER_VAL"
+    echo "state: ${STATE:-unknown}"
+    echo "draft: unknown"
+    TITLE_Q=$(printf '%s' "$TITLE" | sed 's/"/\\"/g')
+    URL_Q=$(printf '%s' "$URL" | sed 's/"/\\"/g')
+    echo "title: \"$TITLE_Q\""
+    echo "url: \"$URL_Q\""
+    echo "base: unknown"
+    echo "head: unknown"
+    echo "head_sha: unknown"
+    echo "mergeable_state: ${MERGEABLE_STATE:-unknown}"
+    echo "checks:"
+    echo "  state: unknown"
+    echo "  statuses: []"
+    echo "discussion:"
+    echo "  comments_count: unknown"
+    echo "  review_comments_count: unknown"
+    echo "  reviews_count: unknown"
+    echo "  comments: []"
+    echo "  review_comments: []"
+    echo "  reviews: []"
   fi
 }
 
@@ -335,8 +479,8 @@ case "$SUBCMD" in
   commit)    shift || true; cmd_commit "$@" ;;
   create-pr) shift || true; cmd_create_pr "$@" ;;
   pr-status) shift || true; cmd_pr_status "$@" ;;
-  *) echo "Unknown subcommand: $SUBCMD"; echo "Use one of: commit | create-pr | pr-status"; exit 1 ;;
+  *) echo "Unknown subcommand: $SUBCMD" 1>&2; echo "Use one of: commit | create-pr | pr-status" 1>&2; exit 1 ;;
 
 esac
 
-echo "🚀 STOP: terrateam git helpers ($SUBCMD)"
+echo "🚀 STOP: terrateam git helpers ($SUBCMD)" 1>&2
