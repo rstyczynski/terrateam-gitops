@@ -26,7 +26,13 @@ echo
 echo "Running ansible-playbook"
 echo "========================"
 cd $ANSIBLE_ROOT
-ansible-playbook $PLAYBOOK -i inventory_static.yml 2> >(tee /tmp/ansible_stderr.log >&2)
+
+if [ "$(cat inventory_static.yml)" != null ]; then
+  ansible-playbook $PLAYBOOK -i inventory_static.yml 2> >(tee /tmp/ansible_stderr.log >&2)
+else
+  rm inventory_static.yml
+  ansible-playbook $PLAYBOOK  2> >(tee /tmp/ansible_stderr.log >&2)
+fi
 
 echo "Hello World by Ansible init no.5!" > ${ANSIBLE_ROOT}/../terraform/trigger.txt
 export COMMIT_MSG="Hello! file updated"
