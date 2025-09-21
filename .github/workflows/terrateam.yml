@@ -29,7 +29,6 @@ jobs:
     permissions:
       id-token: write
       contents: write
-      pull-requests: write
     runs-on: ${{ fromJSON(github.event.inputs.runs_on) }}
     timeout-minutes: 1440
     name: Terrateam Action
