@@ -77,7 +77,13 @@ Notice ANSIBLE_ROOT that is build out of active directory and a workspace name.
 
 ## Commit files in current repo
 
-TODO
+Ansible Terrateam kist comes with a script that commits files changed in current repository using Terrateam token available in the environment.
+
+```bash
+echo "Hello World by Ansible!" > ${ANSIBLE_ROOT}/hello.txt
+export COMMIT_MSG="Hello file updated."
+${TERRATEAM_ROOT}/.terrateam/shared/commit.sh
+```
 
 ## Output reception from Terraform
 
