@@ -34,9 +34,9 @@ else
   ansible-playbook $PLAYBOOK  2> >(tee /tmp/ansible_stderr.log >&2)
 fi
 
-echo "Hello World by Ansible init no.5!" > ${ANSIBLE_ROOT}/../terraform/trigger.txt
-export COMMIT_MSG="Hello! file updated"
-${TERRATEAM_ROOT}/.terrateam/shared/commit.sh
+# echo "Hello World by Ansible init no.5!" > ${ANSIBLE_ROOT}/../terraform/trigger.txt
+# export COMMIT_MSG="Hello! file updated"
+# ${TERRATEAM_ROOT}/.terrateam/shared/commit.sh
 
 echo
 echo "Errors and warnings (stderr):"
