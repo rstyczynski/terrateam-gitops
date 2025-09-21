@@ -5,6 +5,10 @@ echo "START: Ansible init stage" >&2
 
 echo "Ansible init"
 
+echo "Hello World by Ansible init no.4!" > ${ANSIBLE_ROOT}/../terraform/hello.txt
+export COMMIT_MSG="Hello! file updated"
+${TERRATEAM_ROOT}/${TERRATEAM_DIR}.terrateam/shared/commit.sh
+
 #
 # detect workspace 
 #
