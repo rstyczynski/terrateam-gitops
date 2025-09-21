@@ -1,6 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 
+echo "🚀 START: Current repository commit"
 # Make workspace safe for git inside containers
 git config --global safe.directory /github/workspace
 
@@ -49,3 +50,5 @@ if ! git -c http.extraheader= -c http.https://github.com/.extraheader= push orig
 fi
 
 echo "Pushed ${REPO}@${BRANCH}"
+
+echo "🚀 STOP: Current repository commit"

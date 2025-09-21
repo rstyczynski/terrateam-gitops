@@ -77,7 +77,15 @@ Notice ANSIBLE_ROOT that is build out of active directory and a workspace name.
 
 ## Commit files in current repo
 
-TODO
+Ansible Terrateam kist comes with a script that commits files changed in current repository using Terrateam token available in the environment.
+
+```bash
+echo "Hello World by Ansible init!" > ${ANSIBLE_ROOT}/hello.txt
+export COMMIT_MSG="hello.txt file updated"
+${TERRATEAM_ROOT}/.terrateam/shared/commit.sh
+```
+
+TODO: Prepare Ansible role performing commit
 
 ## Output reception from Terraform
 
@@ -89,4 +97,33 @@ TBI
 
 ## Ansible engine scripts
 
-TODO
+Engine scripts are places in `.terrateam/ansible` directory, and registered in `.terrateam/config.yml` as ansible engine.
+
+```yaml
+  - tag_query: ANS_code
+    engine:
+      name: custom
+      init:    ['${TERRATEAM_ROOT}/.terrateam/ansible/init.sh']
+      plan:    ['${TERRATEAM_ROOT}/.terrateam/ansible/plan.sh', '$TERRATEAM_PLAN_FILE']
+      diff:    ['${TERRATEAM_ROOT}/.terrateam/ansible/diff.sh', '$TERRATEAM_PLAN_FILE']
+      apply:   ['${TERRATEAM_ROOT}/.terrateam/ansible/apply.sh']
+      outputs: ['${TERRATEAM_ROOT}/.terrateam/ansible/outputs.sh']
+    plan:
+      - type: init
+      - type: plan
+    apply:
+      - type: init
+      - type: apply
+```
+
+Note that init is executed before both plan and apply, as Terrateam runs them in another execution environments.
+
+*init.sh* - builds ANSIBLE_ROOT, and executed ansible-galaxy install.
+
+*plan.sh* - discovers Ansible execution context to document it in a plan file. The plan file is handled by Terrateam to be passed to apply phase. Note that here potentially dynamic inventory is converted to static form.
+
+*diff.sh* - converts the plan file to presentable format at Pull Request conversation.
+
+*apply.sh* - unloads the plan to Ansible directory and execute ansible-playbook. In reality only inventory is unloaded as rest of the context is carried by gitHub repository.
+
+*output.sh* - [Not yet implemented.] Writes Ansible facts to well known location. 

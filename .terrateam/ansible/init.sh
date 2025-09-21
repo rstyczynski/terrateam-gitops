@@ -16,14 +16,9 @@ fi
 cd ${ANSIBLE_ROOT}
 
 
-echo "🚀 START: commit"
-echo "Hello World!" > ${ANSIBLE_ROOT}/hello.txt
-export COMMIT_MSG="Hello! file updated"
-${TERRATEAM_ROOT}/${TERRATEAM_DIR}.terrateam/shared/commit.sh
-echo "🚀 STOP: commit"
-
 #
-# install ansible
+# install ansible. Terrateam checks if ansible is installed 
+# and if not, it installs it when ansible-playbook is executed.
 #
 ansible-playbook --version
 
