@@ -89,7 +89,7 @@ To be able to write files to the current repository two configurations must be c
 
 1. GitHub repository must enable workflow to make changes
 
-`github.com` → `repository` → `Settings` → `Actions` → `General` → **Workflow permissions**  → **"Read and write permissions"**
+`github.com` → `repository` → `Settings` → `Actions` → `General` → `Workflow permissions`  → <kbd>●</kbd> **Read and write permissions**
 
 2. Terrateam workflow definition must be updated with write permission fgor a terraform job
 
