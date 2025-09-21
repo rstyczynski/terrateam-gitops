@@ -93,8 +93,7 @@ To be able to write files to the current repository two configurations must be c
 
 2. Terrateam workflow definition must be updated with write permission fgor a terraform job
 
-`.github/workflows/terrateam.yml` → `jobs` → `terrateam` → `permissions`  → `contents` → **contents: write**
-
+`.github/workflows/terrateam.yml` → `jobs` → `terrateam` → `permissions` → **contents: write**
 
 TODO: Prepare Ansible role performing commit
 
