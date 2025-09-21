@@ -28,6 +28,10 @@ echo "========================"
 cd $ANSIBLE_ROOT
 ansible-playbook $PLAYBOOK -i inventory_static.yml 2> >(tee /tmp/ansible_stderr.log >&2)
 
+echo "Hello World by Ansible init no.5!" > ${ANSIBLE_ROOT}/../terraform/trigger.txt
+export COMMIT_MSG="Hello! file updated"
+${TERRATEAM_ROOT}/.terrateam/shared/commit.sh
+
 echo
 echo "Errors and warnings (stderr):"
 echo "============================="
