@@ -7,4 +7,4 @@
     - role: myorg.publicapi.duckduckgo
 
   vars:
-    duckduckgo_query: "Gal Anonim"
+    duckduckgo_query: "Jan Matejko"
