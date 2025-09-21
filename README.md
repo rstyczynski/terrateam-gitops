@@ -89,40 +89,12 @@ To be able to write files to the current repository two configurations must be c
 
 1. GitHub repository must enable workflow to make changes
 
-**Where:**  
-`repository` → `Settings` → `Actions` → `General` → **Workflow permissions**
+`github.com` → `repository` → `Settings` → `Actions` → `General` → **Workflow permissions**  → **"Read and write permissions"**
 
-**What:**  
-Enable **"Read and write permissions"**
+2. Terrateam workflow definition must be updated with write permission fgor a terraform job
 
-2. Terrateam workflow 
+`.github/workflows/terrateam.yml` → `jobs` → `terrateam` → `permissions`  → `contents` → **contents: write**
 
-**Where:**
-
-```
-.github/workflows/terrateam.yml
-```
-
-**What:**
-
-Base configuration:
-```yaml
-jobs:
-  terrateam:
-    permissions:
-      id-token: write
-      contents: read
-```
-
-Required configuration:
-```yaml
-jobs:
-  terrateam:
-    permissions:
-      id-token: write
-      contents: write
-      pull-requests: write
-```
 
 TODO: Prepare Ansible role performing commit
 
