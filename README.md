@@ -75,28 +75,6 @@ ansible-playbook $PLAYBOOK -i inventory_static.yml 2> >(tee /tmp/ansible_stderr.
 
 Notice ANSIBLE_ROOT that is build out of active directory and a workspace name.
 
-## Commit files in current repo
-
-Ansible Terrateam kist comes with a script that commits files changed in current repository using Terrateam token available in the environment.
-
-```bash
-echo "Hello World by Ansible init!" > ${ANSIBLE_ROOT}/hello.txt
-export COMMIT_MSG="hello.txt file updated"
-${TERRATEAM_ROOT}/.terrateam/shared/commit.sh
-```
-
-To be able to write files to the current repository two configurations must be completed:
-
-1. GitHub repository must enable workflow to make changes
-
-`github.com` → `repository` → `Settings` → `Actions` → `General` → `Workflow permissions`  → <kbd>●</kbd> **Read and write permissions**
-
-2. Terrateam workflow definition must be updated with write permission fgor a terraform job
-
-`.github/workflows/terrateam.yml` → `jobs` → `terrateam` → `permissions` → **contents: write**
-
-TODO: Prepare Ansible role performing the commit
-
 ## Output reception from Terraform
 
 TBI
@@ -126,7 +104,7 @@ Engine scripts are places in `.terrateam/ansible` directory, and registered in `
       - type: apply
 ```
 
-Note that init is executed before both plan and apply, as Terrateam runs them in another execution environments.
+Note that init is executed before both plan and apply, as Terrateam runs them in separate execution environments.
 
 *init.sh* - builds ANSIBLE_ROOT, and executed ansible-galaxy install.
 
