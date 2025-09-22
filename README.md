@@ -75,7 +75,15 @@ ansible-playbook $PLAYBOOK -i inventory_static.yml 2> >(tee /tmp/ansible_stderr.
 
 Notice ANSIBLE_ROOT that is build out of active directory and a workspace name.
 
-## Output reception from Terraform
+## Discover ansible neighbors
+
+TBI
+
+## Get terraform properties
+
+TBI
+
+## Get terraform outputs
 
 TBI
 
@@ -114,4 +122,4 @@ Note that init is executed before both plan and apply, as Terrateam runs them in
 
 *apply.sh* - unloads the plan to Ansible directory and execute ansible-playbook. In reality only inventory is unloaded as rest of the context is carried by gitHub repository.
 
-*output.sh* - [Not yet implemented.] Writes Ansible facts to well known location.
+*output.sh* - [Not yet implemented] Writes Ansible facts to well known location.
