@@ -1,6 +1,6 @@
-# Experimental capabilities
+= Experimental capabilities
 
-## TODO: Commit files in current repo / new branch from main
+== TODO: Commit files in current repo / new branch from main
 
 There may be a need to update file in repository as part of the workflow, that will continue once depended change is approved, applied and merged.
 
@@ -13,19 +13,21 @@ When there is a need to update file in the same repo or different:
 5. create PR
 6. save PR number
 
-## FAILED: Commit files in current repo / new branch form the current one
+== FAILED: Commit files in current repo / new branch form the current one
 
 When branch is created from another branch, PR works well, however after secondary PR close, the preliminary is closed as well. It's not expected, however it's a consequence of modifying Terrateam execution context.
 
-## FAILED: Commit files in current repo / current branch
+== FAILED: Commit files in current repo / current branch
+
 
 Ansible Terrateam kit comes with a script that commits files changed in current repository using Terrateam token available in the environment.
 
-```bash
+[source,bash]
+----
 echo "Hello World by Ansible init!" > ${ANSIBLE_ROOT}/hello.txt
 export COMMIT_MSG="hello.txt file updated"
 ${TERRATEAM_ROOT}/.terrateam/shared/commit.sh
-```
+----
 
 To be able to write files to the current repository two configurations must be completed:
 
