@@ -29,3 +29,4 @@ for r in data.get("roles", []):
 data["roles"] = filtered_roles
 
 yaml.dump(data, sys.stdout, sort_keys=False, explicit_start=True)
+
