@@ -93,7 +93,9 @@ fi
 # list collections
 #
 if [ "${PLAN_DEBUG}" == "true" ]; then
-    ansible-galaxy collection list > /tmp/ansible_galaxy_collections.txt
+    echo "ansible-galaxy collection list" > /tmp/ansible_galaxy_collections.txt
+    ansible-galaxy collection --help >> /tmp/ansible_galaxy_collections.txt
+    ansible-galaxy collection list >> /tmp/ansible_galaxy_collections.txt
     plan_debug "Collections list (DEBUG):"
     plan_debug "=========================="
     plan_debug /tmp/ansible_galaxy_collections.txt
