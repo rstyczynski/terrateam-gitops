@@ -56,32 +56,6 @@ dirs:
       file_patterns: ["${DIR}/*"]
       autoplan: true
 
-  # PROBLEM: workspace1 directories are not triggered at all
-  day-2_ops_workspace1: # dir is ok
-    workspaces: 
-      dev: 
-        tags: [DEBUG_code]  # tag is ok
-        when_modified:
-          file_patterns: ["${DIR}/*"]
-          autoplan: true
-      prod: 
-        tags: [ANS_code]  # tag is ok
-        when_modified:
-          file_patterns: ["${DIR}/*"]
-          autoplan: true
-
-  # PROBLEM: workspace2 triggers both workspace workflows
-  day-2_ops_workspace2:
-    when_modified:
-      file_patterns: ["${DIR}/*"]
-      autoplan: true
-
-    workspaces: 
-      dev: 
-        tags: [DEBUG_code]
-      prod: 
-        tags: [ANS_code]
-
   day-2_ops_subdir1/dev: 
     tags: [DEBUG_code]
     when_modified:
@@ -94,7 +68,7 @@ dirs:
       file_patterns: ["${DIR}/*"]
       autoplan: true
 
-  day-2_ops_subdir2/dev: 
+  day-day-2_ops_workspace1/dev: 
     when_modified:
       file_patterns: ["${DIR}/*"]
       autoplan: true
@@ -102,7 +76,7 @@ dirs:
       dev: 
         tags: [DEBUG_code]
 
-  day-2_ops_subdir2/prod: 
+  day-day-2_ops_workspace1/prod: 
     when_modified:
       file_patterns: ["${DIR}/*"]
       autoplan: true
