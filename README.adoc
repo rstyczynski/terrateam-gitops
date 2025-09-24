@@ -39,7 +39,7 @@ toc::[]
 
 * *terraform/day-1_cfg*: Contains the Terraform configuration for initial (Day 1) infrastructure provisioning, such as creating VMs, networks, or storage, which serves as the foundation for subsequent Ansible-driven Day 2 operations.
 
-* *day-2_ops_workspace1*: Demonstrates use of workspaces to run Ansible playbooks. ANSIBLE_ROOT is set to the workspace root.
+* *day-2_ops_workspace1*: Demonstrates use of workspaces to run Ansible playbooks and change of the engine type. ANSIBLE_ROOT is set to the workspace root. DEV workspace uses runs the debug engine. PROD workspace runs the Ansible engine.
 
 <<<
 == Ansible and Terrateam Life Cycle
