@@ -7,4 +7,4 @@
     - role: myorg.publicapi.duckduckgo
 
   vars:
-    duckduckgo_query: "Jan Matejklo"
+    duckduckgo_query: "Jan Sebastian Bach"
