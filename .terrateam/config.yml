@@ -68,7 +68,7 @@ dirs:
       file_patterns: ["${DIR}/*"]
       autoplan: true
 
-  day-day-2_ops_workspace1/dev: 
+  day-2_ops_workspace1/dev: 
     when_modified:
       file_patterns: ["${DIR}/*"]
       autoplan: true
@@ -76,7 +76,7 @@ dirs:
       dev: 
         tags: [DEBUG_code]
 
-  day-day-2_ops_workspace1/prod: 
+  day-2_ops_workspace1/prod: 
     when_modified:
       file_patterns: ["${DIR}/*"]
       autoplan: true
