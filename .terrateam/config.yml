@@ -70,6 +70,7 @@ dirs:
           file_patterns: ["${DIR}/*"]
           autoplan: true
 
+  # PROBLEM: workspace2 triggers both workspace workflows
   day-2_ops_workspace2:
     when_modified:
       file_patterns: ["${DIR}/*"]
@@ -92,6 +93,22 @@ dirs:
     when_modified:
       file_patterns: ["${DIR}/*"]
       autoplan: true
+
+  day-2_ops_subdir2/dev: 
+    when_modified:
+      file_patterns: ["${DIR}/*"]
+      autoplan: true
+    workspaces: 
+      dev: 
+        tags: [DEBUG_code]
+
+  day-2_ops_subdir2/prod: 
+    when_modified:
+      file_patterns: ["${DIR}/*"]
+      autoplan: true
+    workspaces: 
+      prod: 
+        tags: [ANS_code]
 
 # workflows https://docs.terrateam.io/configuration-reference/workflows
 workflows:

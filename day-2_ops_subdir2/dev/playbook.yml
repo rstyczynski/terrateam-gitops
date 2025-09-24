@@ -1,0 +1,31 @@
+---
+- name: Hello World Playbook
+  hosts: localhost
+  gather_facts: false
+  vars_files:
+    - vars.json
+
+  tasks:
+    - name: Display hello message
+      ansible.builtin.debug:
+        msg: "Hello World from Ansible! Message: {{ message }}"
+
+    - name: Display environment info
+      ansible.builtin.debug:
+        msg: "Environment: {{ environment }}, Version: {{ version }}"
+
+    - name: Create a test file
+      ansible.builtin.copy:
+        content: "This file was created by Ansible"
+        dest: "{{ output_file }}"
+        mode: "0644"
+      when: create_file | default(false)
+
+    - name: Show summary
+      ansible.builtin.debug:
+        msg: |
+          Playbook execution completed successfully!
+          - Message: {{ message }}
+          - Environment: {{ environment }}
+          - Version: {{ version }}
+          - File created: {{ create_file | default(false) }}
