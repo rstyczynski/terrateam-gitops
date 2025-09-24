@@ -34,9 +34,13 @@ fi
 if [ "${TERRATEAM_WORKSPACE}" == "default" ]; then
     ANSIBLE_ROOT=${TERRATEAM_ROOT}/${TERRATEAM_DIR}
 else
-    ANSIBLE_ROOT=${TERRATEAM_ROOT}/${TERRATEAM_DIR}/${TERRATEAM_WORKSPACE}
+    # Note: the workspace does not influence working directory
+    # ANSIBLE_ROOT=${TERRATEAM_ROOT}/${TERRATEAM_DIR}/${TERRATEAM_WORKSPACE}
+    ANSIBLE_ROOT=${TERRATEAM_ROOT}/${TERRATEAM_DIR}
 fi
-cd ${ANSIBLE_ROOT}
+cd ${ANSIBLE_ROOT} | exit 2
+PWD
+ls -la
 
 #
 # detect ansible.cfg
