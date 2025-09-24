@@ -39,9 +39,18 @@ test  -f "requirements.yml" && ANSIBLE_CUSTOM_REQUIREMENTS=${ANSIBLE_ROOT}/requi
 if [ ! -z "${ANSIBLE_CUSTOM_REQUIREMENTS}" ]; then
     echo "Requirements file found."
     cat ${ANSIBLE_CUSTOM_REQUIREMENTS}
-    ansible-galaxy install -r ${ANSIBLE_CUSTOM_REQUIREMENTS}
+
+    # apply firewall to requirements.yml to remove public sources
+    $(dirname "$0")/galaxy_firewall.py ${ANSIBLE_CUSTOM_REQUIREMENTS} > requirements_firewall.yml
+    diff ${ANSIBLE_CUSTOM_REQUIREMENTS} requirements_firewall.yml
+    if [ $? -ne 0 ]; then
+        echo "Warning: Requirements file uses public sources. Public sources removed."
+    fi
+
+    # install requirements
+    ansible-galaxy install -r requirements_firewall.yml
 else
-    echo "No requirements to install. Requirements file not found in workspace directory."
+    echo "Info. No requirements to install. Requirements file not found in workspace directory."
 fi
 
 
