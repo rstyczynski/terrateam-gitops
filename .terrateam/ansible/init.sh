@@ -42,7 +42,6 @@ if [ ! -z "${ANSIBLE_CUSTOM_REQUIREMENTS}" ]; then
 
     # apply firewall to requirements.yml to remove public sources
     $(dirname "$0")/galaxy_firewall.py ${ANSIBLE_CUSTOM_REQUIREMENTS} > requirements_firewall.yml
-    diff ${ANSIBLE_CUSTOM_REQUIREMENTS} requirements_firewall.yml
     if [ $? -ne 0 ]; then
         echo "Warning: Requirements file uses public sources. Public sources removed."
     fi

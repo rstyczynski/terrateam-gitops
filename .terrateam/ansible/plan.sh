@@ -61,7 +61,7 @@ test  -f "requirements.yml" && ANSIBLE_CUSTOM_REQUIREMENTS=${ANSIBLE_ROOT}/requi
 
 test  -f "requirements_firewall.yml" && ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE=${ANSIBLE_ROOT}/requirements_firewall.yml || unset ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE
 
-diff ${ANSIBLE_CUSTOM_REQUIREMENTS} ${ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE}
+$(dirname "$0")/galaxy_firewall.sh ${ANSIBLE_CUSTOM_REQUIREMENTS} > /dev/null
 if [ $? -ne 0 ]; then
     ANSIBLE_CUSTOM_REQUIREMENTS_ERROR="Requirements file uses public sources. Public sources removed."
 fi
