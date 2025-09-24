@@ -1,26 +1,25 @@
-= Experimental capabilities
+= Experimental Capabilities
 
-== TODO: Commit files in current repo / new branch from main
+== TODO: Commit Files in Current Repo / New Branch from Main
 
-There may be a need to update file in repository as part of the workflow, that will continue once depended change is approved, applied and merged.
+There may be a need to update files in the repository as part of the workflow, which will continue once the dependent change is approved, applied, and merged.
 
-When there is a need to update file in the same repo or different:
+When there is a need to update a file in the same repo or a different one:
 
-1. checkout repo in new directory
-2. create a branch
-3. change a file
-4. commit the change
-5. create PR
-6. save PR number
+1. Check out the repo in a new directory.
+2. Create a branch.
+3. Change a file.
+4. Commit the change.
+5. Create a PR.
+6. Save the PR number.
 
-== FAILED: Commit files in current repo / new branch form the current one
+== FAILED: Commit Files in Current Repo / New Branch from the Current One
 
-When branch is created from another branch, PR works well, however after secondary PR close, the preliminary is closed as well. It's not expected, however it's a consequence of modifying Terrateam execution context.
+When a branch is created from another branch, the PR works well; however, after the secondary PR is closed, the preliminary one is closed as well. This is not expected, but it is a consequence of modifying the Terrateam execution context.
 
-== FAILED: Commit files in current repo / current branch
+== FAILED: Commit Files in Current Repo / Current Branch
 
-
-Ansible Terrateam kit comes with a script that commits files changed in current repository using Terrateam token available in the environment.
+The Ansible Terrateam kit comes with a script that commits files changed in the current repository using the Terrateam token available in the environment.
 
 [source,bash]
 ----
@@ -29,17 +28,16 @@ export COMMIT_MSG="hello.txt file updated"
 ${TERRATEAM_ROOT}/.terrateam/shared/commit.sh
 ----
 
-To be able to write files to the current repository two configurations must be completed:
+To be able to write files to the current repository, two configurations must be completed:
 
-1. GitHub repository must enable workflow to make changes
+1. The GitHub repository must enable workflows to make changes:
 
-`github.com` → `repository` → `Settings` → `Actions` → `General` → `Workflow permissions`  → **Read and write permissions**
+`github.com` → `repository` → `Settings` → `Actions` → `General` → `Workflow permissions` → **Read and write permissions**
 
-2. Terrateam workflow definition must be updated with write permission for a terraform job
+2. The Terrateam workflow definition must be updated with write permission for the terraform job:
 
 `.github/workflows/terrateam.yml` → `jobs` → `terrateam` → `permissions` → **contents: write**
 
-Problem: changing file in the current PR makes Terrateam engine to run workflow in the same PR, even for different directory. Terrateam seems to be lost with workflows, even assuming that it's a layered run.
+Problem: Changing a file in the current PR causes the Terrateam engine to run the workflow in the same PR, even for a different directory. Terrateam seems to get confused with workflows, even when assuming it is a layered run.
 
-Solution: Create new branch out of main, and create PR for this. Under this new PR changes should be applied.
-
+Solution: Create a new branch out of main, and create a PR for this. Changes should be applied under this new PR.
