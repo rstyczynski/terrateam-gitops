@@ -2,17 +2,30 @@
 
 PLAN_FILE=$1
 
+PLAN_DEBUG=true
+
 echo "⚠️ ================================================" >&2
 echo "START: Ansible plan stage" >&2
 
+touch $PLAN_FILE
+rm -f $PLAN_FILE
+
+function plan_debug() {
+    local debug_msg=$1
+
+    if [ -f "$debug_msg" ]; then
+        cat "$debug_msg" | sed 's/^/# /' >> $PLAN_FILE
+    else
+        echo "# $debug_msg" >> $PLAN_FILE
+    fi
+}
 
 #
 # initialize plan file
 #
 if [ "${PLAN_DEBUG}" == "true" ]; then
-    echo >> $PLAN_FILE
-    echo "Ansible plan (DEBUG)" > $PLAN_FILE
-    echo "===================" >> $PLAN_FILE
+    plan_debug "Ansible plan (DEBUG)"
+    plan_debug "==================="
 fi
 
 #
@@ -32,28 +45,41 @@ test  -f "ansible.cfg" && ANSIBLE_CUSTOM_CFG=${ANSIBLE_ROOT}/ansible.cfg || unse
 
 if [ "${PLAN_DEBUG}" == "true" ]; then
     if [ ! -z  "${ANSIBLE_CUSTOM_CFG}" ]; then
-        echo >> $PLAN_FILE
-        echo "Custom ansible.cfg (DEBUG):" >> $PLAN_FILE
-        echo "===========================" >> $PLAN_FILE
-        cat ${ANSIBLE_CUSTOM_CFG} >> $PLAN_FILE
+        plan_debug
+        plan_debug "Custom ansible.cfg (DEBUG):" 
+        plan_debug "==========================="
+        plan_debug "${ANSIBLE_CUSTOM_CFG}"
     else
-        echo "Default ansible.cfg" >> $PLAN_FILE
+        plan_debug "Default ansible.cfg"
     fi
 fi
 
 #
 # install requirements
 #
-test  -f "requirements_firewall.yml" && ANSIBLE_CUSTOM_REQUIREMENTS=${ANSIBLE_ROOT}/requirements_firewall.yml || unset ANSIBLE_CUSTOM_REQUIREMENTS
+test  -f "requirements.yml" && ANSIBLE_CUSTOM_REQUIREMENTS=${ANSIBLE_ROOT}/requirements.yml || unset ANSIBLE_CUSTOM_REQUIREMENTS
+
+test  -f "requirements_firewall.yml" && ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE=${ANSIBLE_ROOT}/requirements_firewall.yml || unset ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE
+
+$(dirname "$0")/galaxy_firewall.sh ${ANSIBLE_CUSTOM_REQUIREMENTS} > /dev/null
+if [ $? -ne 0 ]; then
+    ANSIBLE_CUSTOM_REQUIREMENTS_ERROR="Requirements file uses public sources. Public sources removed."
+fi
 
 if [ "${PLAN_DEBUG}" == "true" ]; then
-    if [ ! -z "${ANSIBLE_CUSTOM_REQUIREMENTS}" ]; then
-        echo >> $PLAN_FILE
-        echo "Requirements file (DEBUG):" >> $PLAN_FILE
-        echo "==========================" >> $PLAN_FILE
-        cat ${ANSIBLE_CUSTOM_REQUIREMENTS} >> $PLAN_FILE
+    if [ ! -z "${ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE}" ]; then
+        plan_debug
+        plan_debug "Requirements file (DEBUG):"
+        plan_debug "=========================="
+        plan_debug "${ANSIBLE_CUSTOM_REQUIREMENTS}"
+
+        plan_debug
+        plan_debug "Requirements file effective (DEBUG):"
+        plan_debug "=========================="
+        plan_debug "${ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE}"
+
     else
-        echo "No requirements to install." >> $PLAN_FILE
+        plan_debug "No requirements to install."
     fi
 fi
 
@@ -61,7 +87,10 @@ fi
 # list collections
 #
 if [ "${PLAN_DEBUG}" == "true" ]; then
-    ansible-galaxy collection list >> $PLAN_FILE
+    ansible-galaxy collection list > /tmp/ansible_galaxy_collections.txt
+    plan_debug "Collections list (DEBUG):"
+    plan_debug "=========================="
+    plan_debug /tmp/ansible_galaxy_collections.txt
 fi
 
 ANSIBLE_GALAXY_COLLECTIONS=$(ansible-galaxy collection list)
@@ -115,13 +144,13 @@ if [ ! -f "$ANSIBLE_PLAYBOOK" ]; then
 fi
 
 if [ "${PLAN_DEBUG}" == "true" ]; then
-    echo >> $PLAN_FILE
-    echo "Using playbook (DEBUG):" >> $PLAN_FILE
-    echo "=======================" >> $PLAN_FILE
+    plan_debug
+    plan_debug "Using playbook (DEBUG):"
+    plan_debug "======================="
     if [ ! -z "$ANSIBLE_PLAYBOOK_ERROR" ]; then
-        echo $ANSIBLE_PLAYBOOK_ERROR >> $PLAN_FILE
+        plan_debug "$ANSIBLE_PLAYBOOK_ERROR"
     else
-        echo $ANSIBLE_PLAYBOOK >> $PLAN_FILE
+        plan_debug "$ANSIBLE_PLAYBOOK"
     fi
 fi
 
@@ -139,13 +168,13 @@ else
 fi
 
 if [ "${PLAN_DEBUG}" == "true" ]; then
-    echo >> $PLAN_FILE
-    echo "Using inventory (DEBUG):" >> $PLAN_FILE
-    echo "=======================" >> $PLAN_FILE
+    plan_debug
+    plan_debug "Using inventory (DEBUG):"
+    plan_debug "=======================" 
     if [ ! -z "$ANSIBLE_INVENTORY" ]; then
-        echo $ANSIBLE_INVENTORY >> $PLAN_FILE
+        plan_debug "$ANSIBLE_INVENTORY" 
     else
-        echo "(none)" >> $PLAN_FILE
+        plan_debug "(none)"
     fi
 fi
 
@@ -154,7 +183,7 @@ fi
 # 1. ANSIBLE_PLAYBOOK
 # 2. ANSIBLE_PLAYBOOK_ERROR
 # 3. ANSIBLE_CUSTOM_CFG
-# 4. ANSIBLE_CUSTOM_REQUIREMENTS
+# 4. ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE
 
 # Write all relevant variables to the plan file in YAML format
 {
@@ -183,14 +212,27 @@ fi
     fi
     echo "  "
 
-    # If ANSIBLE_CUSTOM_REQUIREMENTS is a file and exists, encode as YAML block scalar
     if [ -f "$ANSIBLE_CUSTOM_REQUIREMENTS" ]; then
+        echo
         echo "  ANSIBLE_CUSTOM_REQUIREMENTS: |"
         sed 's/^/    /' "$ANSIBLE_CUSTOM_REQUIREMENTS"
+        echo "  "
     else
         echo "  ANSIBLE_CUSTOM_REQUIREMENTS:"
     fi
     echo "  "
+
+    # If ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE is a file and exists, encode as YAML block scalar
+    if [ -f "$ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE" ]; then
+        echo
+        echo "  ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE: |"
+        sed 's/^/    /' "$ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE"
+        echo "  "
+    else
+        echo "  ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE:"
+    fi
+    echo "  "
+    echo "  ANSIBLE_CUSTOM_REQUIREMENTS_ERROR: \"${ANSIBLE_CUSTOM_REQUIREMENTS_ERROR}\""
     echo "  "
 
     # Add TERRATEAM_DIR, TERRATEAM_WORKSPACE, and TERRATEAM_ROOT
@@ -202,10 +244,6 @@ fi
 } >> $PLAN_FILE
 
 
-echo "TODO Ansible plan stdout message. 'TODO Ansible plan file content' is sent to $PLAN_FILE"
-
-echo "TERRATEAM_PLAN_FILE (exported): $TERRATEAM_PLAN_FILE" >&2
-echo "TERRATEAM_PLAN_FILE (argumnet): $PLAN_FILE" >&2
 EXIT_CODE=0
 
 
