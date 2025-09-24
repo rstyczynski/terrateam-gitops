@@ -27,8 +27,6 @@ for c in orig_collections:
     else:
         removed_collections.append(c)
 
-data["collections"] = filtered_collections
-
 # Keep only roles with src starting with "git+" or "https://" or type "dir"
 filtered_roles = []
 removed_roles = []
@@ -42,20 +40,28 @@ for r in orig_roles:
     else:
         removed_roles.append(r)
 
-data["roles"] = filtered_roles
-
-# Add galaxy_firewall report to data
 changed = bool(removed_collections or removed_roles)
-data["galaxy_firewall"] = {
-    "status": "BLOCKED" if changed else "OK",
-    "blocked": {
-        "collections": removed_collections,
-        "roles": removed_roles,
-    }
-}
 
-# Write sanitized YAML to STDOUT
-yaml.dump(data, sys.stdout, sort_keys=False, explicit_start=True)
+# Write sanitized YAML to STDOUT (only top-level keys roles and/or collections)
+sanitized_data = {}
+if filtered_collections:
+    sanitized_data["collections"] = filtered_collections
+if filtered_roles:
+    sanitized_data["roles"] = filtered_roles
+
+yaml.dump(sanitized_data, sys.stdout, sort_keys=False, explicit_start=True)
+
+# Write blocked entries as commented YAML lines
+def dump_commented_blocked(prefix, items):
+    for item in items:
+        dumped = yaml.dump(item, sort_keys=False).rstrip()
+        for line in dumped.splitlines():
+            print(f"# BLOCKED by galaxy_firewall: {line}")
+
+if removed_collections:
+    dump_commented_blocked("collections", removed_collections)
+if removed_roles:
+    dump_commented_blocked("roles", removed_roles)
 
 # --- Reporting to STDERR so CI can detect eliminations without relying on YAML reformatting ---
 # Always print a concise summary line first (easy to grep)
