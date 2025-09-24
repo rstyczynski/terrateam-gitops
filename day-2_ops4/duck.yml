@@ -6,4 +6,4 @@
     - role: myorg.publicapi.duckduckgo
 
   vars:
-    duckduckgo_query: "Jan Matejko"
+    duckduckgo_query: "Jan Kazimierz"

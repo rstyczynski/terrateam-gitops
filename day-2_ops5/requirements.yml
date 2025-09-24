@@ -5,4 +5,6 @@ collections:
     source: https://github.com/rstyczynski/ansible-collection-howto.git#/collections/ansible_collections/myorg/publicapi
     version: 0.1.2
   - name: oracle.oci
-  
+    type: galaxy
+    source: https://github.com/oracle/ansible-oci-modules.git
+    version: v2.25.0
