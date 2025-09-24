@@ -44,7 +44,7 @@ fi
 #
 # install requirements
 #
-test  -f "requirements.yml" && ANSIBLE_CUSTOM_REQUIREMENTS=${ANSIBLE_ROOT}/requirements.yml || unset ANSIBLE_CUSTOM_REQUIREMENTS
+test  -f "requirements_firewall.yml" && ANSIBLE_CUSTOM_REQUIREMENTS=${ANSIBLE_ROOT}/requirements_firewall.yml || unset ANSIBLE_CUSTOM_REQUIREMENTS
 
 if [ "${PLAN_DEBUG}" == "true" ]; then
     if [ ! -z "${ANSIBLE_CUSTOM_REQUIREMENTS}" ]; then
