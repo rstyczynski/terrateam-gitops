@@ -56,6 +56,12 @@ dirs:
       file_patterns: ["${DIR}/*"]
       autoplan: true
 
+  day-2_ops5:
+    tags: [ANS_code]
+    when_modified:
+      file_patterns: ["${DIR}/*"]
+      autoplan: true
+
   day-2_ops_subdir1/dev: 
     tags: [DEBUG_code]
     when_modified:
