@@ -13,7 +13,13 @@ if [ "${TERRATEAM_WORKSPACE}" == "default" ]; then
 else
     ANSIBLE_ROOT=${TERRATEAM_ROOT}/${TERRATEAM_DIR}/${TERRATEAM_WORKSPACE}
 fi
+cd ${TERRATEAM_ROOT}/${TERRATEAM_DIR}
+pwd
+ls -la
+
 cd ${ANSIBLE_ROOT}
+pwd
+ls -la
 
 #
 # install ansible. Terrateam checks if ansible is installed 
@@ -42,8 +48,14 @@ if [ ! -z "${ANSIBLE_CUSTOM_REQUIREMENTS}" ]; then
 
     # apply firewall to requirements.yml to remove public sources
     $(dirname "$0")/galaxy_firewall.py ${ANSIBLE_CUSTOM_REQUIREMENTS} > requirements_firewall.yml
-    if [ $? -ne 0 ]; then
+    firewall_exit_code=$?
+    if [ $firewall_exit_code -eq 0 ]; then
+        :
+    elif [ $firewall_exit_code -eq 1 ]; then
         echo "Warning: Requirements file uses public sources. Public sources removed."
+    else
+        echo "Error: galaxy_firewall.py failed with exit code $firewall_exit_code" >&2
+        exit 2
     fi
 
     # install requirements
