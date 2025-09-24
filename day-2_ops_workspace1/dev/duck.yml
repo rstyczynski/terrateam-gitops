@@ -1,0 +1,9 @@
+---
+- name: DuckDuckGo Instant Answer via Ansible (using collection)
+  hosts: duck_api
+
+  roles:
+    - role: myorg.publicapi.duckduckgo
+
+  vars:
+    duckduckgo_query: "Robert Plant"
