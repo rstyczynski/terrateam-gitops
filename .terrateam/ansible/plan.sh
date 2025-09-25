@@ -143,7 +143,6 @@ if [ -f "ANSIBLE_PLAYBOOK" ]; then
 else
     # 2. If there is only one *.yml file (excluding requirements.yml and requirements_firewall.yml), use it.
     # 4. If there are multiple *.yml files, use the one specified in ANSIBLE_PLAYBOOK file.
-    # (Rule 3 is missing, so we skip to 4)
     PLAYBOOKS_FOUND=($(find . -maxdepth 1 -type f -name "*.yml" ! -name "requirements.yml" ! -name "requirements_firewall.yml" ! -name "ansible_piepline.yml"))
     if [ ${#PLAYBOOKS_FOUND[@]} -eq 1 ]; then
         ANSIBLE_PLAYBOOK="${PLAYBOOKS_FOUND[0]#./}"
@@ -265,7 +264,6 @@ fi
 {
     echo
     echo "  ANSIBLE_PING:"
-    echo "    STDOUT: |"
     cd ${ANSIBLE_ROOT}
 
     # Run ansible ping, capture stdout and stderr
@@ -278,17 +276,18 @@ fi
 
     # Indent STDOUT
     if [[ -s /tmp/ansible_ping_stdout.log ]]; then
+        echo "    STDOUT: |"
         sed 's/^/      /' /tmp/ansible_ping_stdout.log
     else
-        echo "      (none)"
+        echo "    STDOUT:"
     fi
 
-    echo "    STDERR: |"
     # Indent STDERR
     if [[ -s /tmp/ansible_ping_stderr.log ]]; then
+        echo "    STDERR: |"
         sed 's/^/      /' /tmp/ansible_ping_stderr.log
     else
-        echo "      (none)"
+    echo "    STDERR:"
     fi
 } >> ${PLAN_FILE}
 
