@@ -71,7 +71,7 @@ collections:
   # BLOCKED by galaxy_firewall: version: v2.25.0
 roles:
   []
-````
+```
 
 === Galaxy install
 
