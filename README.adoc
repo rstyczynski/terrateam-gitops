@@ -153,18 +153,16 @@ Ansible Engine is defined as series of scripts associated to terrateam stages in
       - type: apply
 ----
 
-Note that init is executed before both plan and apply, as Terrateam runs them in separate execution environments.
+* init.sh - builds ANSIBLE_ROOT, applied galaxy-firewall to requirements.yml and executes ansible-galaxy install. The init is executed before both plan and apply, as Terrateam runs them in separate execution environments.
 
-_init.sh_ - builds ANSIBLE_ROOT, applied galaxy-firewall to requirements.yml and executes ansible-galaxy install.
+* plan.sh - discovers the Ansible execution context to document it in a plan file. The plan file is handled by Terrateam to be passed to the apply phase. Note that in this place, potentially dynamic inventory is converted to static form.
 
-_plan.sh_ - discovers the Ansible execution context to document it in a plan file. The plan file is handled by Terrateam to be passed to the apply phase. Note that in this place, potentially dynamic inventory is converted to static form.
+* diff.sh - converts the plan file to a presentable format for the Pull Request conversation.
 
-_diff.sh_ - converts the plan file to a presentable format for the Pull Request conversation.
-
-_apply.sh_ - unloads the plan to the Ansible directory and executes
+* apply.sh - unloads the plan to the Ansible directory and executes
 ansible-playbook. In reality, only the inventory is unloaded, as the rest of the context is carried by the GitHub repository, and the requirements.yml is processed by t he init script.
 
-_output.sh_ - [Not yet implemented] Writes Ansible facts to a well-known
+* output.sh - [Not yet implemented] Writes Ansible facts to a well-known
 location.
 
 == To be done
