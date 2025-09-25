@@ -262,52 +262,55 @@ fi
 #
 # run ping
 #
-echo
-echo "Running ping"
-echo "======================================"
-cd $ANSIBLE_ROOT
+{
+    echo
+    echo "Running ping"
+    echo "======================================"
+    cd $ANSIBLE_ROOT
 
-if [ "$(cat inventory_static.yml)" != null ]; then
-  ansible all -m ping -i inventory_static.yml 2> >(tee /tmp/ansible_stderr.log >&2)
-else
-  rm inventory_static.yml
-  ansible all -m ping -i localhost,  2> >(tee /tmp/ansible_stderr.log >&2)
-fi
+    if [ "$(cat inventory_static.yml)" != null ]; then
+    ansible all -m ping -i inventory_static.yml 2> >(tee /tmp/ansible_stderr.log >&2)
+    else
+    rm inventory_static.yml
+    ansible all -m ping -i localhost,  2> >(tee /tmp/ansible_stderr.log >&2)
+    fi
 
-echo
-echo "Errors and warnings (stderr):"
-echo "============================="
-if [[ -s /tmp/ansible_stderr.log ]]; then
-  cat /tmp/ansible_stderr.log
-else
-  echo "(none)"
-fi
+    echo
+    echo "Errors and warnings (stderr):"
+    echo "============================="
+    if [[ -s /tmp/ansible_stderr.log ]]; then
+    cat /tmp/ansible_stderr.log
+    else
+    echo "(none)"
+    fi
+} >> $PLAN_FILE
+
 
 #
 # run playbook in check mode
 #
+{
+    echo
+    echo "Running ansible-playbook in check mode"
+    echo "======================================"
+    cd $ANSIBLE_ROOT
 
-echo
-echo "Running ansible-playbook in check mode"
-echo "======================================"
-cd $ANSIBLE_ROOT
+    if [ "$(cat inventory_static.yml)" != null ]; then
+    ansible-playbook --check $PLAYBOOK -i inventory_static.yml 2> >(tee /tmp/ansible_stderr.log >&2)
+    else
+    rm inventory_static.yml
+    ansible-playbook --check $PLAYBOOK  2> >(tee /tmp/ansible_stderr.log >&2)
+    fi
 
-if [ "$(cat inventory_static.yml)" != null ]; then
-  ansible-playbook --check $PLAYBOOK -i inventory_static.yml 2> >(tee /tmp/ansible_stderr.log >&2)
-else
-  rm inventory_static.yml
-  ansible-playbook --check $PLAYBOOK  2> >(tee /tmp/ansible_stderr.log >&2)
-fi
-
-echo
-echo "Errors and warnings (stderr):"
-echo "============================="
-if [[ -s /tmp/ansible_stderr.log ]]; then
-  cat /tmp/ansible_stderr.log
-else
-  echo "(none)"
-fi
-
+    echo
+    echo "Errors and warnings (stderr):"
+    echo "============================="
+    if [[ -s /tmp/ansible_stderr.log ]]; then
+    cat /tmp/ansible_stderr.log
+    else
+    echo "(none)"
+    fi
+} >> $PLAN_FILE
 
 EXIT_CODE=0
 
