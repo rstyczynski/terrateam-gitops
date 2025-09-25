@@ -47,13 +47,48 @@ printf "Playbook: %s\n" "${ANSIBLE_PLAYBOOK}"
 if [ -n "${ANSIBLE_PLAYBOOK_ERROR}" ] && [ "${ANSIBLE_PLAYBOOK_ERROR}" != "null" ]; then
   printf "Playbook error: %s\n" "${ANSIBLE_PLAYBOOK_ERROR}"
 fi
+echo
 
-printf "Inventory: %s\n" "${ANSIBLE_INVENTORY}"
-printf "Custom cfg: %s\n" "${ANSIBLE_CUSTOM_CFG}"
-printf "Custom requirements: %s\n" "${ANSIBLE_CUSTOM_REQUIREMENTS}"
-printf "Custom requirements effective: %s\n" "${ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE}"
+echo "— Inventory file —"
+echo "------------------"
+if [ -n "${ANSIBLE_INVENTORY}" ] && [ "${ANSIBLE_INVENTORY}" != "null" ]; then
+  printf "%s\n" "${ANSIBLE_INVENTORY}"
+else
+  echo "(none)"
+fi
+
+echo
+echo "— Custom ansible.cfg file —"
+echo "---------------------------"
+if [ -n "${ANSIBLE_CUSTOM_CFG}" ] && [ "${ANSIBLE_CUSTOM_CFG}" != "null" ]; then
+  printf "%s\n" "${ANSIBLE_CUSTOM_CFG}"
+else
+  echo "(none)"
+fi
+
+echo
+echo "— Custom requirements file —"
+echo "----------------------------"
+if [ -n "${ANSIBLE_CUSTOM_REQUIREMENTS}" ] && [ "${ANSIBLE_CUSTOM_REQUIREMENTS}" != "null" ]; then
+  printf "%s\n" "${ANSIBLE_CUSTOM_REQUIREMENTS}"
+else
+  echo "(none)"
+fi
+
+echo
+echo "— effective requirements file —"
+if [ -n "${ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE}" ] && [ "${ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE}" != "null" ]; then
+  printf "%s\n" "${ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE}"
+else
+  echo "(none)"
+fi
+
+echo
+echo "— warnings & errors —"
 if [ -n "${ANSIBLE_CUSTOM_REQUIREMENTS_ERROR}" ] && [ "${ANSIBLE_CUSTOM_REQUIREMENTS_ERROR}" != "null" ]; then
-  printf "Custom requirements error: %s\n" "${ANSIBLE_CUSTOM_REQUIREMENTS_ERROR}"
+  printf "%s\n" "${ANSIBLE_CUSTOM_REQUIREMENTS_ERROR}"
+else
+  echo "(none)"
 fi
 
 # Output blocks
