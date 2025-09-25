@@ -133,6 +133,9 @@ fi
 
 if [ "${DEBUG_DIFF}" == "true" ]; then
     echo 
+    echo "Plan file (DEBUG):"
+    echo "=================="
+    cat ${TERRATEAM_PLAN_FILE}
     echo 
     echo "Environment variables (DEBUG):"
     echo "=============================="
