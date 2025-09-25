@@ -105,51 +105,25 @@ fi
 ANSIBLE_GALAXY_COLLECTIONS=$(ansible-galaxy collection list)
 
 
-#
-# detect playbook to run
-# Rules:
-# 1. If there is ANSIBLE_PLAYBOOK file, use the one specified in it.
-# 2. If there is only one playbook.yml file, use it.
-# 4. If there are multiple playbook.yml files, use the one specified in ANSIBLE_PLAYBOOK file.
-# 5. If detected playbook file does not exist, error out.
-#
-# ANSIBLE_PLAYBOOK file content is a single line with the name of the playbook to run.
-# ANSIBLE_PLAYBOOK file may be missing.
 
 # Detect playbook to run
 
-# Default to empty
-ANSIBLE_PLAYBOOK=""
-
-# 1. If there is ANSIBLE_PLAYBOOK file, use the one specified in it.
-if [ -f "ANSIBLE_PLAYBOOK" ]; then
-    PLAYBOOK_FILE=$(head -n 1 ANSIBLE_PLAYBOOK | xargs)
-    if [ -z "$PLAYBOOK_FILE" ]; then
-        echo "ERROR: ANSIBLE_PLAYBOOK file is empty." >&2
-        exit 1
-    fi
-    if [ ! -f "$PLAYBOOK_FILE" ]; then
-        echo "ERROR: Playbook specified in ANSIBLE_PLAYBOOK ('$PLAYBOOK_FILE') does not exist." >&2
-        exit 1
-    fi
-    ANSIBLE_PLAYBOOK="$PLAYBOOK_FILE"
-else
-    # 2. If there is only one *.yml file (excluding requirements.yml and requirements_firewall.yml), use it.
-    # 4. If there are multiple *.yml files, use the one specified in ANSIBLE_PLAYBOOK file.
-    # (Rule 3 is missing, so we skip to 4)
+# ansible_playbook may define playbook name via ansible_piepline.yml
+# if not - discover file in the current directory
+if [ -z "$ansible_playbook" ]; then
     PLAYBOOKS_FOUND=($(find . -maxdepth 1 -type f -name "*.yml" ! -name "requirements.yml" ! -name "requirements_firewall.yml" ! -name "ansible_piepline.yml"))
     if [ ${#PLAYBOOKS_FOUND[@]} -eq 1 ]; then
         ANSIBLE_PLAYBOOK="${PLAYBOOKS_FOUND[0]#./}"
     elif [ ${#PLAYBOOKS_FOUND[@]} -gt 1 ]; then
-        ANSIBLE_PLAYBOOK_ERROR="Multiple playbook.yml files found. Please specify which to use in ANSIBLE_PLAYBOOK file."
+        ANSIBLE_PLAYBOOK_ERROR="Multiple playbook.yml files found. Please specify which to use in ansible_piepline file under ansible_piepline.playbook key"
     else
-        ANSIBLE_PLAYBOOK_ERROR="ERROR: No playbook.yml file found and no ANSIBLE_PLAYBOOK file present."
+        ANSIBLE_PLAYBOOK_ERROR="ERROR: No playbook.yml file found and no ansible_piepline.playbook file defined."
     fi
 fi
 
 # 5. If detected playbook file does not exist, error out.
 if [ ! -f "$ANSIBLE_PLAYBOOK" ]; then
-    ANSIBLE_PLAYBOOK_ERROR="ERROR: Detected playbook file '$ANSIBLE_PLAYBOOK' does not exist."
+    ANSIBLE_PLAYBOOK_ERROR="ERROR: Playbook file '$ANSIBLE_PLAYBOOK' does not exist."
 fi
 
 if [ "${debug_plan}" == "true" ]; then

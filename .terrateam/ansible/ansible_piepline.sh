@@ -6,7 +6,7 @@ else
     piepline_ctx="{}"
 fi
 
-playbook=$(echo "$piepline_ctx" | jq -r '.ansible_piepline.playbook // empty')
+ansible_playbook=$(echo "$piepline_ctx" | jq -r '.ansible_piepline.ansible_playbook // empty')
 debug_init=$(echo "$piepline_ctx" | jq -r '.ansible_piepline.debug.init // empty')
 debug_plan=$(echo "$piepline_ctx" | jq -r '.ansible_piepline.debug.plan // empty')
 debug_diff=$(echo "$piepline_ctx" | jq -r '.ansible_piepline.debug.diff // empty')
