@@ -261,69 +261,73 @@ fi
 #
 # run ping
 #
-{
-    echo
-    echo "  ANSIBLE_PING:"
-    cd ${ANSIBLE_ROOT}
+if [ "${SKIP_PING}" != "true" ]; then
+    {
+        echo
+        echo "  ANSIBLE_PING:"
+        cd ${ANSIBLE_ROOT}
 
-    # Run ansible ping, capture stdout and stderr
-    if [ "$(cat inventory_static.yml)" != "" ]; then
-        ansible all -m ping -i inventory_static.yml > /tmp/ansible_ping_stdout.log 2> /tmp/ansible_ping_stderr.log
-    else
-        rm inventory_static.yml
-        ansible all -m ping -i localhost, > /tmp/ansible_ping_stdout.log 2> /tmp/ansible_ping_stderr.log
-    fi
+        # Run ansible ping, capture stdout and stderr
+        if [ "$(cat inventory_static.yml)" != "" ]; then
+            ansible all -m ping -i inventory_static.yml > /tmp/ansible_ping_stdout.log 2> /tmp/ansible_ping_stderr.log
+        else
+            rm inventory_static.yml
+            ansible all -m ping -i localhost, > /tmp/ansible_ping_stdout.log 2> /tmp/ansible_ping_stderr.log
+        fi
 
-    # Indent STDOUT
-    if [[ -s /tmp/ansible_ping_stdout.log ]]; then
-        echo "    STDOUT: |"
-        sed 's/^/      /' /tmp/ansible_ping_stdout.log
-    else
-        echo "    STDOUT:"
-    fi
+        # Indent STDOUT
+        if [[ -s /tmp/ansible_ping_stdout.log ]]; then
+            echo "    STDOUT: |"
+            sed 's/^/      /' /tmp/ansible_ping_stdout.log
+        else
+            echo "    STDOUT:"
+        fi
 
-    # Indent STDERR
-    if [[ -s /tmp/ansible_ping_stderr.log ]]; then
-        echo "    STDERR: |"
-        sed 's/^/      /' /tmp/ansible_ping_stderr.log
-    else
-    echo "    STDERR:"
-    fi
-} >> ${PLAN_FILE}
+        # Indent STDERR
+        if [[ -s /tmp/ansible_ping_stderr.log ]]; then
+            echo "    STDERR: |"
+            sed 's/^/      /' /tmp/ansible_ping_stderr.log
+        else
+        echo "    STDERR:"
+        fi
+    } >> "${PLAN_FILE}"
+fi
 
 
 #
 # run playbook in check mode
 #
-{
-    echo
-    echo "  ANSIBLE_PLAYBOOK_CHECK:"
-    echo "    STDOUT: |"
-    cd ${ANSIBLE_ROOT}
+if [ "${SKIP_CHECK}" != "true" ]; then
+    {
+        echo
+        echo "  ANSIBLE_PLAYBOOK_CHECK:"
+        echo "    STDOUT: |"
+        cd ${ANSIBLE_ROOT}
 
-    # Run ansible-playbook in check mode, capture stdout and stderr
-    if [ "$(cat inventory_static.yml)" != "" ]; then
-        ansible-playbook --check ${ANSIBLE_PLAYBOOK} -i inventory_static.yml > /tmp/ansible_playbook_check_stdout.log 2> /tmp/ansible_playbook_check_stderr.log
-    else
-        rm inventory_static.yml
-        ansible-playbook --check ${ANSIBLE_PLAYBOOK} > /tmp/ansible_playbook_check_stdout.log 2> /tmp/ansible_playbook_check_stderr.log
-    fi
+        # Run ansible-playbook in check mode, capture stdout and stderr
+        if [ "$(cat inventory_static.yml)" != "" ]; then
+            ansible-playbook --check ${ANSIBLE_PLAYBOOK} -i inventory_static.yml > /tmp/ansible_playbook_check_stdout.log 2> /tmp/ansible_playbook_check_stderr.log
+        else
+            rm inventory_static.yml
+            ansible-playbook --check ${ANSIBLE_PLAYBOOK} > /tmp/ansible_playbook_check_stdout.log 2> /tmp/ansible_playbook_check_stderr.log
+        fi
 
-    # Indent STDOUT
-    if [[ -s /tmp/ansible_playbook_check_stdout.log ]]; then
-        sed 's/^/      /' /tmp/ansible_playbook_check_stdout.log
-    else
-        echo "      (none)"
-    fi
+        # Indent STDOUT
+        if [[ -s /tmp/ansible_playbook_check_stdout.log ]]; then
+            sed 's/^/      /' /tmp/ansible_playbook_check_stdout.log
+        else
+            echo "      (none)"
+        fi
 
-    echo "    STDERR: |"
-    # Indent STDERR
-    if [[ -s /tmp/ansible_playbook_check_stderr.log ]]; then
-        sed 's/^/      /' /tmp/ansible_playbook_check_stderr.log
-    else
-        echo "      (none)"
-    fi
-} >> ${PLAN_FILE}
+        echo "    STDERR: |"
+        # Indent STDERR
+        if [[ -s /tmp/ansible_playbook_check_stderr.log ]]; then
+            sed 's/^/      /' /tmp/ansible_playbook_check_stderr.log
+        else
+            echo "      (none)"
+        fi
+    } >> "${PLAN_FILE}"
+fi
 
 EXIT_CODE=0
 
