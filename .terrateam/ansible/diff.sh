@@ -42,12 +42,20 @@ echo "┏━━━━━━━━━━━━━━━━━━━━━━━�
 echo "┃ Ansible Execution Context  ┃"
 echo "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛"
 
-printf "Playbook: %s\n" "${ANSIBLE_PLAYBOOK}"
+echo "— Playbook —"
+echo "------------"
+if [ -n "${ANSIBLE_PLAYBOOK}" ] && [ "${ANSIBLE_PLAYBOOK}" != "null" ]; then
+  printf "%s\n" "${ANSIBLE_PLAYBOOK}"
+else
+  echo "(none)"
+fi
+
 
 if [ -n "${ANSIBLE_PLAYBOOK_ERROR}" ] && [ "${ANSIBLE_PLAYBOOK_ERROR}" != "null" ]; then
-  printf "Playbook error: %s\n" "${ANSIBLE_PLAYBOOK_ERROR}"
+    echo
+    echo "— warnings & errors —"
+    printf "%s\n" "${ANSIBLE_PLAYBOOK_ERROR}"
 fi
-echo
 
 # Output blocks
 echo
@@ -59,12 +67,11 @@ else
   echo "(none)"
 fi
 
-echo
-echo "— warnings & errors —"
+
 if [ -n "${ANSIBLE_PING_STDERR}" ] && [ "${ANSIBLE_PING_STDERR}" != "null" ]; then
-  printf "%s\n" "${ANSIBLE_PING_STDERR}"
-else
-  echo "(none)"
+    echo
+    echo "— warnings & errors —"
+    printf "%s\n" "${ANSIBLE_PING_STDERR}"
 fi
 
 echo
@@ -76,12 +83,11 @@ else
   echo "(none)"
 fi
 
-echo
-echo "— warnings & errors —"
+
 if [ -n "${ANSIBLE_PLAYBOOK_CHECK_STDERR}" ] && [ "${ANSIBLE_PLAYBOOK_CHECK_STDERR}" != "null" ]; then
-  printf "%s\n" "${ANSIBLE_PLAYBOOK_CHECK_STDERR}"
-else
-  echo "(none)"
+    echo
+    echo "— warnings & errors —"
+    printf "%s\n" "${ANSIBLE_PLAYBOOK_CHECK_STDERR}"
 fi
 
 echo
@@ -106,25 +112,23 @@ echo
 echo "— requirements file —"
 echo "----------------------------"
 if [ -n "${ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE}" ] && [ "${ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE}" != "null" ]; then
-  printf "%s\n" "${ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE}"
+    printf "%s\n" "${ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE}"
+    echo
+    echo "— provided —"
+    if [ -n "${ANSIBLE_CUSTOM_REQUIREMENTS}" ] && [ "${ANSIBLE_CUSTOM_REQUIREMENTS}" != "null" ]; then
+    printf "%s\n" "${ANSIBLE_CUSTOM_REQUIREMENTS}"
+    else
+    echo "(none)"
+    fi
+
 else
   echo "(none)"
 fi
 
-echo
-echo "— provided —"
-if [ -n "${ANSIBLE_CUSTOM_REQUIREMENTS}" ] && [ "${ANSIBLE_CUSTOM_REQUIREMENTS}" != "null" ]; then
-  printf "%s\n" "${ANSIBLE_CUSTOM_REQUIREMENTS}"
-else
-  echo "(none)"
-fi
-
-echo
-echo "— warnings & errors —"
 if [ -n "${ANSIBLE_CUSTOM_REQUIREMENTS_ERROR}" ] && [ "${ANSIBLE_CUSTOM_REQUIREMENTS_ERROR}" != "null" ]; then
-  printf "%s\n" "${ANSIBLE_CUSTOM_REQUIREMENTS_ERROR}"
-else
-  echo "(none)"
+    echo
+    echo "— warnings & errors —"
+    printf "%s\n" "${ANSIBLE_CUSTOM_REQUIREMENTS_ERROR}"
 fi
 
 
