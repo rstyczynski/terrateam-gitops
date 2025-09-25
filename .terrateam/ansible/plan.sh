@@ -291,7 +291,7 @@ fi
 #
 {
     echo
-    echo "Running ansible-playbook in check mode"
+    echo "::group::Running ansible-playbook in check mode"
     echo "======================================"
     cd $ANSIBLE_ROOT
 
@@ -306,10 +306,11 @@ fi
     echo "Errors and warnings (stderr):"
     echo "============================="
     if [[ -s /tmp/ansible_stderr.log ]]; then
-    cat /tmp/ansible_stderr.log
+        cat /tmp/ansible_stderr.log
     else
-    echo "(none)"
+        echo "(none)"
     fi
+    echo "::endgroup::"
 } >> $PLAN_FILE
 
 EXIT_CODE=0
