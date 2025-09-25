@@ -3,6 +3,9 @@
 echo "⚠️ ================================================" >&2
 echo "START: Ansible init stage" >&2
 
+# load pipeline execution context from the file ansible_piepline.yml
+source "$(dirname "$0")/ansible_piepline.sh"
+
 echo "Ansible init"
 
 #
@@ -62,11 +65,9 @@ else
     echo "Info. No requirements to install. Requirements file not found in workspace directory."
 fi
 
-
-
 EXIT_CODE=0
 
-TERRATEAM_DEBUG=false
+
 source "$(dirname "$0")/../shared/debug.sh" >&2
 echo "⚠️ ================================================" >&2
 echo "STOP: Ansible init stage" >&2

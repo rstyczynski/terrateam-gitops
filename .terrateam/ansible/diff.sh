@@ -5,13 +5,14 @@ PLAN_FILE=$1
 echo "⚠️ ================================================" >&2
 echo "START: Ansible diff stage" >&2
 
+# load pipeline execution context from the file ansible_piepline.yml
+source "$(dirname "$0")/ansible_piepline.sh"
+
 echo "Ansible will be executed in the following context:"
 cat $TERRATEAM_PLAN_FILE
 EXIT_CODE=0
 
-
-TERRATEAM_DEBUG=false
-if [ "${TERRATEAM_DEBUG}" == "true" ]; then
+if [ "${debug_diff}" == "true" ]; then
     echo 
     echo 
     echo "Environment variables (DEBUG):"
@@ -44,6 +45,8 @@ if [ "${TERRATEAM_DEBUG}" == "true" ]; then
     echo "ANSIBLE_ROOT: $ANSIBLE_ROOT"
 
 fi
+
+source "$(dirname "$0")/../shared/debug.sh" >&2
 
 echo "END: Ansible diff stage" >&2
 echo "⚠️ ================================================" >&2

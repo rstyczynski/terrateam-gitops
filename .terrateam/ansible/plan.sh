@@ -2,14 +2,11 @@
 
 PLAN_FILE=$1
 
-
-source "$(dirname "$0")/ansible_piepline.sh"
-
-debug_plan=true
-
-
 echo "⚠️ ================================================" >&2
 echo "START: Ansible plan stage" >&2
+
+# load pipeline execution context from the file ansible_piepline.yml
+source "$(dirname "$0")/ansible_piepline.sh"
 
 touch $PLAN_FILE
 rm -f $PLAN_FILE
@@ -256,7 +253,6 @@ fi
 
 
 EXIT_CODE=0
-
 
 source "$(dirname "$0")/../shared/debug.sh" >&2
 

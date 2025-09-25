@@ -3,6 +3,9 @@
 echo "⚠️ ================================================" >&2
 echo "START: Ansible apply stage" >&2
 
+# load pipeline execution context from the file ansible_piepline.yml
+source "$(dirname "$0")/ansible_piepline.sh"
+
 echo 
 echo "Environment variables (debug):" >&2
 echo "======================" >&2
@@ -34,10 +37,6 @@ else
   ansible-playbook $PLAYBOOK  2> >(tee /tmp/ansible_stderr.log >&2)
 fi
 
-# echo "Hello World by Ansible init no.5!" > ${ANSIBLE_ROOT}/../terraform/trigger.txt
-# export COMMIT_MSG="Hello! file updated"
-# ${TERRATEAM_ROOT}/.terrateam/shared/commit.sh
-
 echo
 echo "Errors and warnings (stderr):"
 echo "============================="
@@ -48,7 +47,6 @@ else
 fi
 
 
-TERRATEAM_DEBUG=false
 source "$(dirname "$0")/../shared/debug.sh" >&2
 
 echo "END: Ansible apply stage" >&2
