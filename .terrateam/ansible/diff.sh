@@ -38,9 +38,9 @@ ANSIBLE_ROOT=$(echo "${CTX_JSON}" | jq -r '.ansible_execution_context.ENV.ANSIBL
 # Present plan in human readable format
 #
 echo
-echo "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "┃ Ansible Execution Context"
-echo "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓"
+echo "┃ Ansible Execution Context  ┃"
+echo "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛"
 
 printf "Playbook: %s\n" "${ANSIBLE_PLAYBOOK}"
 
@@ -58,7 +58,8 @@ fi
 
 # Output blocks
 echo
-echo "— Ping STDOUT —"
+echo "— Ansible Ping —"
+echo "----------------"
 if [ -n "${ANSIBLE_PING_STDOUT}" ] && [ "${ANSIBLE_PING_STDOUT}" != "null" ]; then
   printf "%s\n" "${ANSIBLE_PING_STDOUT}" | sed 's/^/  /'
 else
@@ -66,13 +67,15 @@ else
 fi
 
 echo
-echo "— Ping STDERR —"
+echo "— Ansible Ping warnings & errors —"
+echo "----------------------------------"
 if [ -n "${ANSIBLE_PING_STDERR}" ] && [ "${ANSIBLE_PING_STDERR}" != "null" ]; then
   printf "%s\n" "${ANSIBLE_PING_STDERR}" | sed 's/^/  /'
 fi
 
 echo
-echo "— Playbook Check STDOUT —"
+echo "— Ansible Playbook Check —"
+echo "--------------------------"
 if [ -n "${ANSIBLE_PLAYBOOK_CHECK_STDOUT}" ] && [ "${ANSIBLE_PLAYBOOK_CHECK_STDOUT}" != "null" ]; then
   printf "%s\n" "${ANSIBLE_PLAYBOOK_CHECK_STDOUT}" | sed 's/^/  /'
 else
@@ -80,7 +83,8 @@ else
 fi
 
 echo
-echo "— Playbook Check STDERR —"
+echo "— Playbook Check warnings & errors —"
+echo "------------------------------------"
 if [ -n "${ANSIBLE_PLAYBOOK_CHECK_STDERR}" ] && [ "${ANSIBLE_PLAYBOOK_CHECK_STDERR}" != "null" ]; then
   printf "%s\n" "${ANSIBLE_PLAYBOOK_CHECK_STDERR}" | sed 's/^/  /'
 fi
