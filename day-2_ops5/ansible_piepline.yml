@@ -3,8 +3,8 @@ ansible_piepline:
   ansible_playbook: duck_ledzeppelin.yml
   debug:
     init: true
-    plan: false
-    diff: false
+    plan: true
+    diff: true
     apply: false
     output: false
     shared: false
