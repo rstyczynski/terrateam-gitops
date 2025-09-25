@@ -9,9 +9,9 @@ EXIT_CODE=0
 # load pipeline execution context from the file ansible_piepline.yml
 source "$(dirname "$0")/ansible_piepline.sh"
 
-echo "Ansible will be executed in the following context:"
-# cat ${TERRATEAM_PLAN_FILE}
-
+#
+# unload data from plan file
+#
 CTX_JSON=$(python3 -c 'import sys,yaml,json; print(json.dumps(yaml.safe_load(open(sys.argv[1]))))' ${TERRATEAM_PLAN_FILE})
 ANSIBLE_PLAYBOOK=$(echo "${CTX_JSON}" | jq -r '.ansible_execution_context.ANSIBLE_PLAYBOOK')
 ANSIBLE_PLAYBOOK_ERROR=$(echo "${CTX_JSON}" | jq -r '.ansible_execution_context.ANSIBLE_PLAYBOOK_ERROR')
@@ -34,27 +34,56 @@ TERRATEAM_DIR=$(echo "${CTX_JSON}" | jq -r '.ansible_execution_context.ENV.TERRA
 TERRATEAM_WORKSPACE=$(echo "${CTX_JSON}" | jq -r '.ansible_execution_context.ENV.TERRATEAM_WORKSPACE')
 ANSIBLE_ROOT=$(echo "${CTX_JSON}" | jq -r '.ansible_execution_context.ENV.ANSIBLE_ROOT')
 
-echo "Playbook: ${ANSIBLE_PLAYBOOK}"
-echo "Playbook error: ${ANSIBLE_PLAYBOOK_ERROR}"
+#
+# Present plan in human readable format
+#
+echo
+echo "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "┃ Ansible Execution Context"
+echo "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
-echo "Inventory: ${ANSIBLE_INVENTORY}"
+printf "Playbook: %s\n" "${ANSIBLE_PLAYBOOK}"
 
-echo "Custom cfg: ${ANSIBLE_CUSTOM_CFG}"
+if [ -n "${ANSIBLE_PLAYBOOK_ERROR}" ] && [ "${ANSIBLE_PLAYBOOK_ERROR}" != "null" ]; then
+  printf "Playbook error: %s\n" "${ANSIBLE_PLAYBOOK_ERROR}"
+fi
 
-echo "Custom requirements: ${ANSIBLE_CUSTOM_REQUIREMENTS}"
-echo "Custom requirements effective: ${ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE}"
-echo "Custom requirements error: ${ANSIBLE_CUSTOM_REQUIREMENTS_ERROR}"
+printf "Inventory: %s\n" "${ANSIBLE_INVENTORY}"
+printf "Custom cfg: %s\n" "${ANSIBLE_CUSTOM_CFG}"
+printf "Custom requirements: %s\n" "${ANSIBLE_CUSTOM_REQUIREMENTS}"
+printf "Custom requirements effective: %s\n" "${ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE}"
+if [ -n "${ANSIBLE_CUSTOM_REQUIREMENTS_ERROR}" ] && [ "${ANSIBLE_CUSTOM_REQUIREMENTS_ERROR}" != "null" ]; then
+  printf "Custom requirements error: %s\n" "${ANSIBLE_CUSTOM_REQUIREMENTS_ERROR}"
+fi
 
-echo "Ping stdout: ${ANSIBLE_PING_STDOUT}"
-echo "Ping stderr: ${ANSIBLE_PING_STDERR}"
+# Output blocks
+echo
+echo "— Ping STDOUT —"
+if [ -n "${ANSIBLE_PING_STDOUT}" ] && [ "${ANSIBLE_PING_STDOUT}" != "null" ]; then
+  printf "%s\n" "${ANSIBLE_PING_STDOUT}" | sed 's/^/  /'
+else
+  echo "  (empty)"
+fi
 
-echo "Playbook check stdout: ${ANSIBLE_PLAYBOOK_CHECK_STDOUT}"
-echo "Playbook check stderr: ${ANSIBLE_PLAYBOOK_CHECK_STDERR}"
+echo
+echo "— Ping STDERR —"
+if [ -n "${ANSIBLE_PING_STDERR}" ] && [ "${ANSIBLE_PING_STDERR}" != "null" ]; then
+  printf "%s\n" "${ANSIBLE_PING_STDERR}" | sed 's/^/  /'
+fi
 
-echo "Root: ${TERRATEAM_ROOT}"
-echo "Dir: ${TERRATEAM_DIR}"
-echo "Workspace: ${TERRATEAM_WORKSPACE}"
-echo "Ansible root: ${ANSIBLE_ROOT}"
+echo
+echo "— Playbook Check STDOUT —"
+if [ -n "${ANSIBLE_PLAYBOOK_CHECK_STDOUT}" ] && [ "${ANSIBLE_PLAYBOOK_CHECK_STDOUT}" != "null" ]; then
+  printf "%s\n" "${ANSIBLE_PLAYBOOK_CHECK_STDOUT}" | sed 's/^/  /'
+else
+  echo "  (empty)"
+fi
+
+echo
+echo "— Playbook Check STDERR —"
+if [ -n "${ANSIBLE_PLAYBOOK_CHECK_STDERR}" ] && [ "${ANSIBLE_PLAYBOOK_CHECK_STDERR}" != "null" ]; then
+  printf "%s\n" "${ANSIBLE_PLAYBOOK_CHECK_STDERR}" | sed 's/^/  /'
+fi
 
 
 
