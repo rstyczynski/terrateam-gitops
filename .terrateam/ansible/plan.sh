@@ -67,14 +67,16 @@ test  -f "requirements.yml" && ANSIBLE_CUSTOM_REQUIREMENTS=${ANSIBLE_ROOT}/requi
 
 test  -f "requirements_firewall.yml" && ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE=${ANSIBLE_ROOT}/requirements_firewall.yml || unset ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE
 
-$(dirname "$0")/galaxy_firewall.py ${ANSIBLE_CUSTOM_REQUIREMENTS} > /dev/null
-firewall_exit_code=$?
-if [ $firewall_exit_code -eq 0 ]; then
-    unset ANSIBLE_CUSTOM_REQUIREMENTS_ERROR
-elif [ $firewall_exit_code -eq 1 ]; then
-    ANSIBLE_CUSTOM_REQUIREMENTS_ERROR="Warning: Requirements file uses public sources. Public sources removed."
-else
-    ANSIBLE_CUSTOM_REQUIREMENTS_ERROR="Error: galaxy_firewall.py failed with exit code $firewall_exit_code" >&2
+if [ -f ${ANSIBLE_CUSTOM_REQUIREMENTS} ]; then
+    $(dirname "$0")/galaxy_firewall.py ${ANSIBLE_CUSTOM_REQUIREMENTS} > /dev/null
+    firewall_exit_code=$?
+    if [ $firewall_exit_code -eq 0 ]; then
+        unset ANSIBLE_CUSTOM_REQUIREMENTS_ERROR
+    elif [ $firewall_exit_code -eq 1 ]; then
+        ANSIBLE_CUSTOM_REQUIREMENTS_ERROR="Warning: Requirements file uses public sources. Public sources removed."
+    else
+        ANSIBLE_CUSTOM_REQUIREMENTS_ERROR="Error: galaxy_firewall.py failed with exit code $firewall_exit_code" >&2
+    fi
 fi
 
 if [ "${debug_plan}" == "true" ]; then
