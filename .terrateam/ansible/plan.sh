@@ -296,10 +296,10 @@ fi
     cd $ANSIBLE_ROOT
 
     if [ "$(cat inventory_static.yml)" != null ]; then
-    ansible-playbook --check $PLAYBOOK -i inventory_static.yml 2> >(tee /tmp/ansible_stderr.log >&2)
+        ansible-playbook --check $ANSIBLE_PLAYBOOK -i inventory_static.yml 2> >(tee /tmp/ansible_stderr.log >&2)
     else
-    rm inventory_static.yml
-    ansible-playbook --check $PLAYBOOK  2> >(tee /tmp/ansible_stderr.log >&2)
+        rm inventory_static.yml
+        ansible-playbook --check $ANSIBLE_PLAYBOOK  2> >(tee /tmp/ansible_stderr.log >&2)
     fi
 
     echo
