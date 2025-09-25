@@ -2,15 +2,6 @@
 
 PLAN_FILE=$1
 
-echo "⚠️ ================================================" >&2
-echo "START: Ansible plan stage" >&2
-
-# load pipeline execution context from the file ansible_piepline.yml
-source "$(dirname "$0")/ansible_piepline.sh"
-
-touch $PLAN_FILE
-rm -f $PLAN_FILE
-
 function plan_debug() {
     local debug_msg=$1
 
@@ -20,6 +11,16 @@ function plan_debug() {
         echo "# $debug_msg" >> $PLAN_FILE
     fi
 }
+
+echo "⚠️ ================================================" >&2
+echo "START: Ansible plan stage" >&2
+
+# load pipeline execution context from the file ansible_piepline.yml
+source "$(dirname "$0")/ansible_piepline.sh"
+
+touch $PLAN_FILE
+rm -f $PLAN_FILE
+
 
 #
 # initialize plan file
@@ -136,7 +137,7 @@ else
     # 2. If there is only one *.yml file (excluding requirements.yml and requirements_firewall.yml), use it.
     # 4. If there are multiple *.yml files, use the one specified in ANSIBLE_PLAYBOOK file.
     # (Rule 3 is missing, so we skip to 4)
-    PLAYBOOKS_FOUND=($(find . -maxdepth 1 -type f -name "*.yml" ! -name "requirements.yml" ! -name "requirements_firewall.yml"))
+    PLAYBOOKS_FOUND=($(find . -maxdepth 1 -type f -name "*.yml" ! -name "requirements.yml" ! -name "requirements_firewall.yml" ! -name "ansible_piepline.yml"))
     if [ ${#PLAYBOOKS_FOUND[@]} -eq 1 ]; then
         ANSIBLE_PLAYBOOK="${PLAYBOOKS_FOUND[0]#./}"
     elif [ ${#PLAYBOOKS_FOUND[@]} -gt 1 ]; then
