@@ -63,14 +63,15 @@ echo "----------------"
 if [ -n "${ANSIBLE_PING_STDOUT}" ] && [ "${ANSIBLE_PING_STDOUT}" != "null" ]; then
   printf "%s\n" "${ANSIBLE_PING_STDOUT}" | sed 's/^/  /'
 else
-  echo "  (empty)"
+  echo "  (none)"
 fi
 
 echo
-echo "— Ansible Ping warnings & errors —"
-echo "----------------------------------"
+echo "— warnings & errors —"
 if [ -n "${ANSIBLE_PING_STDERR}" ] && [ "${ANSIBLE_PING_STDERR}" != "null" ]; then
   printf "%s\n" "${ANSIBLE_PING_STDERR}" | sed 's/^/  /'
+else
+  echo "  (none)"
 fi
 
 echo
@@ -79,16 +80,16 @@ echo "--------------------------"
 if [ -n "${ANSIBLE_PLAYBOOK_CHECK_STDOUT}" ] && [ "${ANSIBLE_PLAYBOOK_CHECK_STDOUT}" != "null" ]; then
   printf "%s\n" "${ANSIBLE_PLAYBOOK_CHECK_STDOUT}" | sed 's/^/  /'
 else
-  echo "  (empty)"
+  echo "  (none)"
 fi
 
 echo
-echo "— Playbook Check warnings & errors —"
-echo "------------------------------------"
+echo "— warnings & errors —"
 if [ -n "${ANSIBLE_PLAYBOOK_CHECK_STDERR}" ] && [ "${ANSIBLE_PLAYBOOK_CHECK_STDERR}" != "null" ]; then
   printf "%s\n" "${ANSIBLE_PLAYBOOK_CHECK_STDERR}" | sed 's/^/  /'
+else
+  echo "  (none)"
 fi
-
 
 
 if [ "${DEBUG_DIFF}" == "true" ]; then
