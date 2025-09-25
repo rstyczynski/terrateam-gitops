@@ -25,7 +25,7 @@ rm -f $PLAN_FILE
 #
 # initialize plan file
 #
-if [ "${debug_plan}" == "true" ]; then
+if [ "${DEBUG_PLAN}" == "true" ]; then
     plan_debug "Ansible plan (DEBUG)"
     plan_debug "==================="
 fi
@@ -49,7 +49,7 @@ ls -la
 #
 test  -f "ansible.cfg" && ANSIBLE_CUSTOM_CFG=${ANSIBLE_ROOT}/ansible.cfg || unset ANSIBLE_CUSTOM_CFG
 
-if [ "${debug_plan}" == "true" ]; then
+if [ "${DEBUG_PLAN}" == "true" ]; then
     if [ ! -z  "${ANSIBLE_CUSTOM_CFG}" ]; then
         plan_debug
         plan_debug "Custom ansible.cfg (DEBUG):" 
@@ -74,7 +74,7 @@ else
     unset ANSIBLE_CUSTOM_REQUIREMENTS_ERROR
 fi
 
-if [ "${debug_plan}" == "true" ]; then
+if [ "${DEBUG_PLAN}" == "true" ]; then
     if [ ! -z "${ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE}" ]; then
         plan_debug
         plan_debug "Requirements file (DEBUG):"
@@ -94,7 +94,7 @@ fi
 #
 # list collections
 #
-if [ "${debug_plan}" == "true" ]; then
+if [ "${DEBUG_PLAN}" == "true" ]; then
 
     ansible-galaxy collection list > /tmp/ansible_galaxy_collections.txt 2>&1
     plan_debug "Collections list (DEBUG):"
@@ -108,32 +108,34 @@ ANSIBLE_GALAXY_COLLECTIONS=$(ansible-galaxy collection list)
 
 # Detect playbook to run
 
-# ansible_playbook may define playbook name via ansible_piepline.yml
+# ANSIBLE_PLAYBOOK may define playbook name via ansible_piepline.yml
 # if not - discover file in the current directory
-if [ -z "$ansible_playbook" ]; then
+if [ -z "$ANSIBLE_PLAYBOOK" ]; then
     playbooks_found=($(find . -maxdepth 1 -type f -name "*.yml" ! -name "requirements.yml" ! -name "requirements_firewall.yml" ! -name "ansible_piepline.yml"))
     if [ ${#playbooks_found[@]} -eq 1 ]; then
-        ansible_playbook="${playbooks_found[0]#./}"
+        ANSIBLE_PLAYBOOK="${playbooks_found[0]#./}"
     elif [ ${#playbooks_found[@]} -gt 1 ]; then
-        ansible_playbook_ERROR="Multiple playbook.yml files found. Please specify which to use in ansible_piepline file under ansible_piepline.playbook key"
+        ANSIBLE_PLAYBOOK_ERROR="Multiple playbook.yml files found. Please specify which to use in ansible_piepline file under ansible_piepline.playbook key"
     else
-        ansible_playbook_ERROR="ERROR: No playbook.yml file found and no ansible_piepline.playbook file defined."
+        ANSIBLE_PLAYBOOK_ERROR="ERROR: No playbook.yml file found and no ansible_piepline.playbook file defined."
     fi
 fi
 
 # 5. If detected playbook file does not exist, error out.
-if [ ! -f "$ansible_playbook" ]; then
-    ansible_playbook_ERROR="ERROR: Playbook file '$ansible_playbook' does not exist."
+if [ ! -f "$ANSIBLE_PLAYBOOK" ]; then
+    ANSIBLE_PLAYBOOK_ERROR="ERROR: Playbook file '$ANSIBLE_PLAYBOOK' does not exist."
 fi
+ANSIBLE_PLAYBOOK=${ANSIBLE_PLAYBOOK}
+ANSIBLE_PLAYBOOK_ERROR=${ANSIBLE_PLAYBOOK_ERROR}
 
-if [ "${debug_plan}" == "true" ]; then
+if [ "${DEBUG_PLAN}" == "true" ]; then
     plan_debug
     plan_debug "Using playbook (DEBUG):"
     plan_debug "======================="
-    if [ ! -z "$ansible_playbook_ERROR" ]; then
-        plan_debug "$ansible_playbook_ERROR"
+    if [ ! -z "$ANSIBLE_PLAYBOOK_ERROR" ]; then
+        plan_debug "$ANSIBLE_PLAYBOOK_ERROR"
     else
-        plan_debug "$ansible_playbook"
+        plan_debug "$ANSIBLE_PLAYBOOK"
     fi
 fi
 
@@ -150,7 +152,7 @@ else
     unset ANSIBLE_INVENTORY
 fi
 
-if [ "${debug_plan}" == "true" ]; then
+if [ "${DEBUG_PLAN}" == "true" ]; then
     plan_debug
     plan_debug "Using inventory (DEBUG):"
     plan_debug "=======================" 
@@ -163,8 +165,8 @@ fi
 
 #
 # write all variables to plan file in yml format
-# 1. ansible_playbook
-# 2. ansible_playbook_ERROR
+# 1. ANSIBLE_PLAYBOOK
+# 2. ANSIBLE_PLAYBOOK_ERROR
 # 3. ANSIBLE_CUSTOM_CFG
 # 4. ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE
 
@@ -172,9 +174,9 @@ fi
 {
     echo "---"
     echo "ansible_execution_context:"
-    echo "  ansible_playbook: \"${ansible_playbook}\""
+    echo "  ANSIBLE_PLAYBOOK: \"${ANSIBLE_PLAYBOOK}\""
     echo "  "
-    echo "  ansible_playbook_ERROR: \"${ansible_playbook_ERROR}\""
+    echo "  ANSIBLE_PLAYBOOK_ERROR: \"${ANSIBLE_PLAYBOOK_ERROR}\""
     echo "  "
 
 
