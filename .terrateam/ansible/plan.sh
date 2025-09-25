@@ -272,7 +272,7 @@ if [ "${SKIP_PING}" != "true" ]; then
             ansible all -m ping -i inventory_static.yml > /tmp/ansible_ping_stdout.log 2> /tmp/ansible_ping_stderr.log
         else
             rm inventory_static.yml
-            ansible all -m ping -i localhost, > /tmp/ansible_ping_stdout.log 2> /tmp/ansible_ping_stderr.log
+            touch /tmp/ansible_ping_stdout.log
         fi
 
         # Indent STDOUT
@@ -309,7 +309,7 @@ if [ "${SKIP_CHECK}" != "true" ]; then
             ansible-playbook --check ${ANSIBLE_PLAYBOOK} -i inventory_static.yml > /tmp/ansible_playbook_check_stdout.log 2> /tmp/ansible_playbook_check_stderr.log
         else
             rm inventory_static.yml
-            rm /tmp/ansible_playbook_check_stdout.log
+            ansible-playbook --check ${ANSIBLE_PLAYBOOK} > /tmp/ansible_playbook_check_stdout.log 2> /tmp/ansible_playbook_check_stderr.log
         fi
 
         # Indent STDOUT
