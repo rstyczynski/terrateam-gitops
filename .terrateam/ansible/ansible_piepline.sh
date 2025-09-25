@@ -5,11 +5,10 @@ if [ -f "ansible_piepline.yml" ]; then
 else
     piepline_ctx="{}"
 fi
-
-playbook=$(echo "$piepline_ctx" | jq -r '.ansible_piepline.playbook // empty')
-debug_init=$(echo "$piepline_ctx" | jq -r '.ansible_piepline.debug.init // empty')
-debug_plan=$(echo "$piepline_ctx" | jq -r '.ansible_piepline.debug.plan // empty')
-debug_diff=$(echo "$piepline_ctx" | jq -r '.ansible_piepline.debug.diff // empty')
-debug_apply=$(echo "$piepline_ctx" | jq -r '.ansible_piepline.debug.apply // empty')
-debug_output=$(echo "$piepline_ctx" | jq -r '.ansible_piepline.debug.output // empty')
-debug_shared=$(echo "$piepline_ctx" | jq -r '.ansible_piepline.debug.shared // empty')
+ANSIBLE_PLAYBOOK=$(echo "$piepline_ctx" | jq -r '.ansible_piepline.ansible_playbook // empty')
+DEBUG_INIT=$(echo "$piepline_ctx" | jq -r '.ansible_piepline.debug.init // empty')
+DEBUG_PLAN=$(echo "$piepline_ctx" | jq -r '.ansible_piepline.debug.plan // empty')
+DEBUG_DIFF=$(echo "$piepline_ctx" | jq -r '.ansible_piepline.debug.diff // empty')
+DEBUG_APPLY=$(echo "$piepline_ctx" | jq -r '.ansible_piepline.debug.apply // empty')
+DEBUG_OUTPUT=$(echo "$piepline_ctx" | jq -r '.ansible_piepline.debug.output // empty')
+DEBUG_SHARED=$(echo "$piepline_ctx" | jq -r '.ansible_piepline.debug.shared // empty')

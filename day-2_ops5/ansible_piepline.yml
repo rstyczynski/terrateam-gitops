@@ -1,6 +1,6 @@
 ---
 ansible_piepline:
-  ansible_playbook:
+  ansible_playbook: duck_ledzeppelin.yml
   debug:
     init: true
     plan: false

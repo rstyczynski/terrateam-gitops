@@ -1,10 +1,9 @@
 ---
 - name: DuckDuckGo Instant Answer via Ansible (using collection)
-  hosts: localhost
-  gather_facts: false
+  hosts: duck_api
 
   roles:
     - role: myorg.publicapi.duckduckgo
 
   vars:
-    duckduckgo_query: "Mozart"
+    duckduckgo_query: "Led Zeppelin"

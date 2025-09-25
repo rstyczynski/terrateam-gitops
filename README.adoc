@@ -1,7 +1,7 @@
 :author: Ryszard Styczynski
-:revnumber: 0.2
+:revnumber: 0.3
 :revremark: DRAFT
-:revdate: 2025-09-24
+:revdate: 2025-09-25
 
 :toc: macro
 :toc-title: 
@@ -15,9 +15,10 @@ This project integrates Ansible automation into the Terrateam infrastructure-as-
 Preliminary capabilities include:
 
 * Support for Ansible playbooks, config, inventory, and galaxy install to enable use of roles and collections
-* Support for working directory adjusted to workspace root
 * Galaxy firewall to remove public sources from requirements.yml
+* Ansible play creates static execution context e.g. inventory.yml 
 * Ansible apply uses static context discovered during the plan phase
+* Pipeline control file to control, and debug Ansible execution context
 
 This setup is designed to help teams automate complex infrastructure and configuration management tasks, leveraging both Terraform and Ansible in a unified, auditable pipeline.
 
@@ -35,7 +36,7 @@ toc::[]
 
 * *day-2_ops4*: Demonstrates use of ansible.cfg to control Ansible execution context.
 
-* *day-2_ops5*: Demonstrates use of galaxy firewall to remove public sources from requirements.yml.
+* *day-2_ops5*: Demonstrates use of galaxy firewall to remove public sources from requirements.yml. Moreover presents ansible_piepline.yml file to control Ansible execution context - here the playbook name is defined to select one out of multiple playbooks.
 
 * *terraform/day-1_cfg*: Contains the Terraform configuration for initial (Day 1) infrastructure provisioning, such as creating VMs, networks, or storage, which serves as the foundation for subsequent Ansible-driven Day 2 operations.
 
@@ -52,13 +53,13 @@ Finally, apply executes ansible-playbook in the context presented in plan. Outpu
 
 The workflow creates a native Ansible execution environment, allowing the operator to run the playbook with the full context of settings from the CLI to ensure that exactly the same will be executed by the pipeline.
 
-== Working Directory
-
-Terrateam configured with workspaces keeps the current directory at the repo root level, which does not fit well with Ansible, which works best with the working directory at the level of the playbook and accompanying files. All operations are always done from the playbook’s directory.
-
 == ansible.cfg File Detection
 
-An ansible.cfg configuration file placed in the playbook directory will be used, as it is one of the regular locations Ansible checks. The operator may use ansible.cfg to configure the playbook’s execution context.
+An ansible.cfg configuration file placed in the playbook directory will be used, as it is one of the regular locations Ansible checks. The operator may use ansible.cfg to configure the playbook's execution context.
+
+== Galaxy firewall
+
+Pipeline is extended by a galaxy_firewall.py script to remove public sources from requirements.yml. In case of public sources detection, the requirements.yml is cleared out of forbidden sources, and the user is informed about it in the plan.
 
 == Galaxy Install
 
@@ -80,7 +81,7 @@ The conversion to a static form is performed using the standard Ansible method.
 ansible-inventory -i inventory.yml --list --export --yaml --output inventory_static.yml
 ----
 
-=== Playbook Execution
+== Playbook Execution
 
 The plan phase detects the playbook to be executed. When more than one file is found, the plan looks into the ANSIBLE_PLAYBOOK file for a playbook filename. Once the name is determined, the apply phase executes the playbook from its directory with the static inventory file, and captures stderr to a separate file.
 
@@ -92,7 +93,9 @@ cd $ANSIBLE_ROOT
 ansible-playbook $PLAYBOOK -i inventory_static.yml 2> >(tee /tmp/ansible_stderr.log >&2)
 ----
 
-Note that ANSIBLE_ROOT is built out of the active directory and a workspace name.
+== Pipelione control 
+
+Pipeline detects ansible_piepline.yml file in the playbook directory. The file is used to control the execution context of the Ansible engine. On this stage debug flags, and playbook name are defined.
 
 == Discover Ansible Neighbors
 
