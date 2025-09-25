@@ -81,7 +81,7 @@ The conversion to a static form is performed using the standard Ansible method.
 ansible-inventory -i inventory.yml --list --export --yaml --output inventory_static.yml
 ----
 
-=== Playbook Execution
+== Playbook Execution
 
 The plan phase detects the playbook to be executed. When more than one file is found, the plan looks into the ANSIBLE_PLAYBOOK file for a playbook filename. Once the name is determined, the apply phase executes the playbook from its directory with the static inventory file, and captures stderr to a separate file.
 
