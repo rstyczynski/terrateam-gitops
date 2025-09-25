@@ -309,7 +309,7 @@ if [ "${SKIP_CHECK}" != "true" ]; then
             ansible-playbook --check ${ANSIBLE_PLAYBOOK} -i inventory_static.yml > /tmp/ansible_playbook_check_stdout.log 2> /tmp/ansible_playbook_check_stderr.log
         else
             rm inventory_static.yml
-            ansible-playbook --check ${ANSIBLE_PLAYBOOK} > /tmp/ansible_playbook_check_stdout.log 2> /tmp/ansible_playbook_check_stderr.log
+            rm /tmp/ansible_playbook_check_stdout.log
         fi
 
         # Indent STDOUT
