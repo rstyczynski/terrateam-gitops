@@ -67,10 +67,19 @@ localhost                  : ok=4    changed=0    unreachable=0    failed=0    s
 
 Now let's run the same in the pipeline:
 
-1. create a branch with name: $your_name/day-2_ops1
-2. add trigger file: $yourname
+1. Create a branch with name: $your_name/day-2_ops1
+
+2. Change variable file
+
+```bash
+MESSAGE="Hello World at $(date)"
+jq --arg msg "$MESSAGE" '.message = $msg' vars.json > tmp.json && mv tmp.json vars.json 
+```
+
 3. commit with message "trigger day-2_ops1"
+
 4. push branch
+
 5. create pul request
 
 Open pull request at GitHub to notice that plan operation is being executed.

@@ -1,14 +1,14 @@
 #!/bin/bash
 
-PLAN_FILE=$1
+PLAN_FILE=${1}
 
 function plan_debug() {
-    local debug_msg=$1
+    local DEBUG_MSG=${1}
 
-    if [ -f "$debug_msg" ]; then
-        cat "$debug_msg" | sed 's/^/# /' >> $PLAN_FILE
+    if [ -f "${DEBUG_MSG}" ]; then
+        cat "${DEBUG_MSG}" | sed 's/^/# /' >> ${PLAN_FILE}
     else
-        echo "# $debug_msg" >> $PLAN_FILE
+        echo "# ${DEBUG_MSG}" >> ${PLAN_FILE}
     fi
 }
 
@@ -18,14 +18,14 @@ echo "START: Ansible plan stage" >&2
 # load pipeline execution context from the file ansible_piepline.yml
 source "$(dirname "$0")/ansible_piepline.sh"
 
-touch $PLAN_FILE
-rm -f $PLAN_FILE
+touch ${PLAN_FILE}
+rm -f ${PLAN_FILE}
 
 
 #
 # initialize plan file
 #
-if [ "${debug_plan}" == "true" ]; then
+if [ "${DEBUG_PLAN}" == "true" ]; then
     plan_debug "Ansible plan (DEBUG)"
     plan_debug "==================="
 fi
@@ -49,7 +49,7 @@ ls -la
 #
 test  -f "ansible.cfg" && ANSIBLE_CUSTOM_CFG=${ANSIBLE_ROOT}/ansible.cfg || unset ANSIBLE_CUSTOM_CFG
 
-if [ "${debug_plan}" == "true" ]; then
+if [ "${DEBUG_PLAN}" == "true" ]; then
     if [ ! -z  "${ANSIBLE_CUSTOM_CFG}" ]; then
         plan_debug
         plan_debug "Custom ansible.cfg (DEBUG):" 
@@ -69,19 +69,19 @@ test  -f "requirements_firewall.yml" && ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE=${
 
 if [ -f "${ANSIBLE_CUSTOM_REQUIREMENTS}" ]; then
     $(dirname "$0")/galaxy_firewall.py ${ANSIBLE_CUSTOM_REQUIREMENTS} > /dev/null
-    firewall_exit_code=$?
-    if [ $firewall_exit_code -eq 0 ]; then
+    FIREWALL_EXIT_CODE=$?
+    if [ ${FIREWALL_EXIT_CODE} -eq 0 ]; then
         unset ANSIBLE_CUSTOM_REQUIREMENTS_ERROR
-    elif [ $firewall_exit_code -eq 1 ]; then
+    elif [ ${FIREWALL_EXIT_CODE} -eq 1 ]; then
         ANSIBLE_CUSTOM_REQUIREMENTS_ERROR="Error: requirements file does not exist, but firewall executed."
-    elif [ $firewall_exit_code -eq 2 ]; then
+    elif [ ${FIREWALL_EXIT_CODE} -eq 2 ]; then
         ANSIBLE_CUSTOM_REQUIREMENTS_ERROR="Warning: Requirements file uses public sources. Public sources removed."
     else
-        ANSIBLE_CUSTOM_REQUIREMENTS_ERROR="Error: galaxy_firewall.py failed with exit code $firewall_exit_code" >&2
+        ANSIBLE_CUSTOM_REQUIREMENTS_ERROR="Error: galaxy_firewall.py failed with exit code ${FIREWALL_EXIT_CODE}" >&2
     fi
 fi
 
-if [ "${debug_plan}" == "true" ]; then
+if [ "${DEBUG_PLAN}" == "true" ]; then
     if [ ! -z "${ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE}" ]; then
         plan_debug
         plan_debug "Requirements file (DEBUG):"
@@ -101,7 +101,7 @@ fi
 #
 # list collections
 #
-if [ "${debug_plan}" == "true" ]; then
+if [ "${DEBUG_PLAN}" == "true" ]; then
 
     ansible-galaxy collection list > /tmp/ansible_galaxy_collections.txt 2>&1
     plan_debug "Collections list (DEBUG):"
@@ -131,19 +131,18 @@ ANSIBLE_PLAYBOOK=""
 # 1. If there is ANSIBLE_PLAYBOOK file, use the one specified in it.
 if [ -f "ANSIBLE_PLAYBOOK" ]; then
     PLAYBOOK_FILE=$(head -n 1 ANSIBLE_PLAYBOOK | xargs)
-    if [ -z "$PLAYBOOK_FILE" ]; then
+    if [ -z "${PLAYBOOK_FILE}" ]; then
         echo "ERROR: ANSIBLE_PLAYBOOK file is empty." >&2
         exit 1
     fi
-    if [ ! -f "$PLAYBOOK_FILE" ]; then
-        echo "ERROR: Playbook specified in ANSIBLE_PLAYBOOK ('$PLAYBOOK_FILE') does not exist." >&2
+    if [ ! -f "${PLAYBOOK_FILE}" ]; then
+        echo "ERROR: Playbook specified in ANSIBLE_PLAYBOOK ('${PLAYBOOK_FILE}') does not exist." >&2
         exit 1
     fi
-    ANSIBLE_PLAYBOOK="$PLAYBOOK_FILE"
+    ANSIBLE_PLAYBOOK="${PLAYBOOK_FILE}"
 else
     # 2. If there is only one *.yml file (excluding requirements.yml and requirements_firewall.yml), use it.
     # 4. If there are multiple *.yml files, use the one specified in ANSIBLE_PLAYBOOK file.
-    # (Rule 3 is missing, so we skip to 4)
     PLAYBOOKS_FOUND=($(find . -maxdepth 1 -type f -name "*.yml" ! -name "requirements.yml" ! -name "requirements_firewall.yml" ! -name "ansible_piepline.yml"))
     if [ ${#PLAYBOOKS_FOUND[@]} -eq 1 ]; then
         ANSIBLE_PLAYBOOK="${PLAYBOOKS_FOUND[0]#./}"
@@ -155,18 +154,18 @@ else
 fi
 
 # 5. If detected playbook file does not exist, error out.
-if [ ! -f "$ANSIBLE_PLAYBOOK" ]; then
-    ANSIBLE_PLAYBOOK_ERROR="ERROR: Detected playbook file '$ANSIBLE_PLAYBOOK' does not exist."
+if [ ! -f "${ANSIBLE_PLAYBOOK}" ]; then
+    ANSIBLE_PLAYBOOK_ERROR="ERROR: Detected playbook file '${ANSIBLE_PLAYBOOK}' does not exist."
 fi
 
-if [ "${debug_plan}" == "true" ]; then
+if [ "${DEBUG_PLAN}" == "true" ]; then
     plan_debug
     plan_debug "Using playbook (DEBUG):"
     plan_debug "======================="
-    if [ ! -z "$ANSIBLE_PLAYBOOK_ERROR" ]; then
-        plan_debug "$ANSIBLE_PLAYBOOK_ERROR"
+    if [ ! -z "${ANSIBLE_PLAYBOOK_ERROR}" ]; then
+        plan_debug "${ANSIBLE_PLAYBOOK_ERROR}"
     else
-        plan_debug "$ANSIBLE_PLAYBOOK"
+        plan_debug "${ANSIBLE_PLAYBOOK}"
     fi
 fi
 
@@ -183,12 +182,12 @@ else
     unset ANSIBLE_INVENTORY
 fi
 
-if [ "${debug_plan}" == "true" ]; then
+if [ "${DEBUG_PLAN}" == "true" ]; then
     plan_debug
     plan_debug "Using inventory (DEBUG):"
     plan_debug "=======================" 
-    if [ ! -z "$ANSIBLE_INVENTORY" ]; then
-        plan_debug "$ANSIBLE_INVENTORY" 
+    if [ ! -z "${ANSIBLE_INVENTORY}" ]; then
+        plan_debug "${ANSIBLE_INVENTORY}" 
     else
         plan_debug "(none)"
     fi
@@ -211,7 +210,7 @@ fi
     echo "  "
 
 
-    if [ -f "$ANSIBLE_INVENTORY" ]; then
+    if [ -f "${ANSIBLE_INVENTORY}" ]; then
         echo "  ANSIBLE_INVENTORY: |"
         sed 's/^/    /' "${ANSIBLE_INVENTORY}"
     else
@@ -220,18 +219,18 @@ fi
     echo "  "
 
     # If ANSIBLE_CUSTOM_CFG is a file and exists, encode as YAML block scalar
-    if [ -f "$ANSIBLE_CUSTOM_CFG" ]; then
+    if [ -f "${ANSIBLE_CUSTOM_CFG}" ]; then
         echo "  ANSIBLE_CUSTOM_CFG: |"
-        sed 's/^/    /' "$ANSIBLE_CUSTOM_CFG"
+        sed 's/^/    /' "${ANSIBLE_CUSTOM_CFG}"
     else
         echo "  ANSIBLE_CUSTOM_CFG:"
     fi
     echo "  "
 
-    if [ -f "$ANSIBLE_CUSTOM_REQUIREMENTS" ]; then
+    if [ -f "${ANSIBLE_CUSTOM_REQUIREMENTS}" ]; then
         echo
         echo "  ANSIBLE_CUSTOM_REQUIREMENTS: |"
-        sed 's/^/    /' "$ANSIBLE_CUSTOM_REQUIREMENTS"
+        sed 's/^/    /' "${ANSIBLE_CUSTOM_REQUIREMENTS}"
         echo "  "
     else
         echo "  ANSIBLE_CUSTOM_REQUIREMENTS:"
@@ -239,10 +238,10 @@ fi
     echo "  "
 
     # If ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE is a file and exists, encode as YAML block scalar
-    if [ -f "$ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE" ]; then
+    if [ -f "${ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE}" ]; then
         echo
         echo "  ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE: |"
-        sed 's/^/    /' "$ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE"
+        sed 's/^/    /' "${ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE}"
         echo "  "
     else
         echo "  ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE:"
@@ -257,57 +256,78 @@ fi
     echo "    TERRATEAM_DIR: \"${TERRATEAM_DIR}\""
     echo "    TERRATEAM_WORKSPACE: \"${TERRATEAM_WORKSPACE}\""
     echo "    TERRATEAM_ROOT: \"${TERRATEAM_ROOT}\""
-} >> $PLAN_FILE
+} >> ${PLAN_FILE}
 
 #
 # run ping
 #
-echo
-echo "Running ping"
-echo "======================================"
-cd $ANSIBLE_ROOT
+if [ "${SKIP_PING}" != "true" ]; then
+    {
+        echo
+        echo "  ANSIBLE_PING:"
+        cd ${ANSIBLE_ROOT}
 
-if [ "$(cat inventory_static.yml)" != null ]; then
-  ansible all -m ping -i inventory_static.yml 2> >(tee /tmp/ansible_stderr.log >&2)
-else
-  rm inventory_static.yml
-  ansible all -m ping -i localhost,  2> >(tee /tmp/ansible_stderr.log >&2)
+        # Run ansible ping, capture stdout and stderr
+        if [ "$(cat inventory_static.yml)" != "" ]; then
+            ansible all -m ping -i inventory_static.yml > /tmp/ansible_ping_stdout.log 2> /tmp/ansible_ping_stderr.log
+        else
+            rm inventory_static.yml
+            touch /tmp/ansible_ping_stdout.log
+        fi
+
+        # Indent STDOUT
+        if [[ -s /tmp/ansible_ping_stdout.log ]]; then
+            echo "    STDOUT: |"
+            sed 's/^/      /' /tmp/ansible_ping_stdout.log
+        else
+            echo "    STDOUT:"
+        fi
+
+        # Indent STDERR
+        if [[ -s /tmp/ansible_ping_stderr.log ]]; then
+            echo "    STDERR: |"
+            sed 's/^/      /' /tmp/ansible_ping_stderr.log
+        else
+        echo "    STDERR:"
+        fi
+    } >> "${PLAN_FILE}"
 fi
 
-echo
-echo "Errors and warnings (stderr):"
-echo "============================="
-if [[ -s /tmp/ansible_stderr.log ]]; then
-  cat /tmp/ansible_stderr.log
-else
-  echo "(none)"
-fi
 
 #
 # run playbook in check mode
 #
+if [ "${SKIP_CHECK}" != "true" ]; then
+    {
+        echo
+        echo "  ANSIBLE_PLAYBOOK_CHECK:"
+        echo "    STDOUT: |"
+        cd ${ANSIBLE_ROOT}
 
-echo
-echo "Running ansible-playbook in check mode"
-echo "======================================"
-cd $ANSIBLE_ROOT
+        # Run ansible-playbook in check mode, capture stdout and stderr
+        if [ "$(cat inventory_static.yml)" != "" ]; then
+            ansible-playbook --check ${ANSIBLE_PLAYBOOK} -i inventory_static.yml > /tmp/ansible_playbook_check_stdout.log 2> /tmp/ansible_playbook_check_stderr.log
+        else
+            rm inventory_static.yml
+            ansible-playbook --check ${ANSIBLE_PLAYBOOK} > /tmp/ansible_playbook_check_stdout.log 2> /tmp/ansible_playbook_check_stderr.log
+        fi
 
-if [ "$(cat inventory_static.yml)" != null ]; then
-  ansible-playbook --check $PLAYBOOK -i inventory_static.yml 2> >(tee /tmp/ansible_stderr.log >&2)
-else
-  rm inventory_static.yml
-  ansible-playbook --check $PLAYBOOK  2> >(tee /tmp/ansible_stderr.log >&2)
+        # Indent STDOUT
+        if [[ -s /tmp/ansible_playbook_check_stdout.log ]]; then
+            sed 's/^/      /' /tmp/ansible_playbook_check_stdout.log
+        else
+            echo "      (none)"
+        fi
+
+        echo "    STDERR: |"
+        # Indent STDERR
+        if [[ -s /tmp/ansible_playbook_check_stderr.log ]]; then
+            sed 's/^/      /' /tmp/ansible_playbook_check_stderr.log
+        else
+            echo "      (none)"
+        fi
+    } >> "${PLAN_FILE}"
 fi
-
-echo
-echo "Errors and warnings (stderr):"
-echo "============================="
-if [[ -s /tmp/ansible_stderr.log ]]; then
-  cat /tmp/ansible_stderr.log
-else
-  echo "(none)"
-fi
-
 
 EXIT_CODE=0
 
@@ -317,10 +337,9 @@ echo "END: Ansible plan stage" >&2
 echo "⚠️ ================================================" >&2
 
 echo "⚠️ ================================================" >&2
-echo ">>TERRATEAM_PLAN_FILE: $TERRATEAM_PLAN_FILE" >&2
-cat $TERRATEAM_PLAN_FILE >&2
+echo ">>TERRATEAM_PLAN_FILE: ${TERRATEAM_PLAN_FILE}" >&2
+cat ${TERRATEAM_PLAN_FILE} >&2
 echo "<<TERRATEAM_PLAN_FILE" >&2
 echo "⚠️ ================================================" >&2
 
-exit $EXIT_CODE
-
+exit ${EXIT_CODE}
