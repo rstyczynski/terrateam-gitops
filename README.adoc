@@ -169,7 +169,7 @@ location.
 
 == To be done
 
-[] Discover Ansible neighbors
-[] Get Terraform properties
-[] Get Terraform outputs
-[] Ansible output persistence
+* Discover Ansible neighbors
+* Get Terraform properties
+* Get Terraform outputs
+* Ansible output persistence
