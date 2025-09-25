@@ -268,7 +268,7 @@ fi
     echo "======================================"
     cd $ANSIBLE_ROOT
 
-    if [ "$(cat inventory_static.yml)" != null ]; then
+    if [ "$(cat inventory_static.yml)" != "" ]; then
     ansible all -m ping -i inventory_static.yml 2> >(tee /tmp/ansible_stderr.log >&2)
     else
     rm inventory_static.yml
@@ -295,7 +295,7 @@ fi
     echo "======================================"
     cd $ANSIBLE_ROOT
 
-    if [ "$(cat inventory_static.yml)" != null ]; then
+    if [ "$(cat inventory_static.yml)" != "" ]; then
         ansible-playbook --check $ANSIBLE_PLAYBOOK -i inventory_static.yml 2> >(tee /tmp/ansible_stderr.log >&2)
     else
         rm inventory_static.yml

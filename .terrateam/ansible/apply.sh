@@ -40,7 +40,7 @@ echo "Running ansible-playbook"
 echo "========================"
 cd $ANSIBLE_ROOT
 
-if [ "$(cat inventory_static.yml)" != null ]; then
+if [ "$(cat inventory_static.yml)" != "" ]; then
   ansible-playbook $PLAYBOOK -i inventory_static.yml 2> >(tee /tmp/ansible_stderr.log >&2)
 else
   rm inventory_static.yml
