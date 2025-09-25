@@ -25,7 +25,7 @@ rm -f $PLAN_FILE
 #
 # initialize plan file
 #
-if [ "${DEBUG_PLAN}" == "true" ]; then
+if [ "${debug_plan}" == "true" ]; then
     plan_debug "Ansible plan (DEBUG)"
     plan_debug "==================="
 fi
@@ -49,7 +49,7 @@ ls -la
 #
 test  -f "ansible.cfg" && ANSIBLE_CUSTOM_CFG=${ANSIBLE_ROOT}/ansible.cfg || unset ANSIBLE_CUSTOM_CFG
 
-if [ "${DEBUG_PLAN}" == "true" ]; then
+if [ "${debug_plan}" == "true" ]; then
     if [ ! -z  "${ANSIBLE_CUSTOM_CFG}" ]; then
         plan_debug
         plan_debug "Custom ansible.cfg (DEBUG):" 
@@ -67,14 +67,21 @@ test  -f "requirements.yml" && ANSIBLE_CUSTOM_REQUIREMENTS=${ANSIBLE_ROOT}/requi
 
 test  -f "requirements_firewall.yml" && ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE=${ANSIBLE_ROOT}/requirements_firewall.yml || unset ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE
 
-$(dirname "$0")/galaxy_firewall.py ${ANSIBLE_CUSTOM_REQUIREMENTS} > /dev/null
-if [ $? -ne 0 ]; then
-    ANSIBLE_CUSTOM_REQUIREMENTS_ERROR="Requirements file uses public sources. Public sources removed."
-else
-    unset ANSIBLE_CUSTOM_REQUIREMENTS_ERROR
+if [ -f "${ANSIBLE_CUSTOM_REQUIREMENTS}" ]; then
+    $(dirname "$0")/galaxy_firewall.py ${ANSIBLE_CUSTOM_REQUIREMENTS} > /dev/null
+    firewall_exit_code=$?
+    if [ $firewall_exit_code -eq 0 ]; then
+        unset ANSIBLE_CUSTOM_REQUIREMENTS_ERROR
+    elif [ $firewall_exit_code -eq 1 ]; then
+        ANSIBLE_CUSTOM_REQUIREMENTS_ERROR="Error: requirements file does not exist, but firewall executed."
+    elif [ $firewall_exit_code -eq 2 ]; then
+        ANSIBLE_CUSTOM_REQUIREMENTS_ERROR="Warning: Requirements file uses public sources. Public sources removed."
+    else
+        ANSIBLE_CUSTOM_REQUIREMENTS_ERROR="Error: galaxy_firewall.py failed with exit code $firewall_exit_code" >&2
+    fi
 fi
 
-if [ "${DEBUG_PLAN}" == "true" ]; then
+if [ "${debug_plan}" == "true" ]; then
     if [ ! -z "${ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE}" ]; then
         plan_debug
         plan_debug "Requirements file (DEBUG):"
@@ -94,7 +101,7 @@ fi
 #
 # list collections
 #
-if [ "${DEBUG_PLAN}" == "true" ]; then
+if [ "${debug_plan}" == "true" ]; then
 
     ansible-galaxy collection list > /tmp/ansible_galaxy_collections.txt 2>&1
     plan_debug "Collections list (DEBUG):"
@@ -105,30 +112,54 @@ fi
 ANSIBLE_GALAXY_COLLECTIONS=$(ansible-galaxy collection list)
 
 
+#
+# detect playbook to run
+# Rules:
+# 1. If there is ANSIBLE_PLAYBOOK file, use the one specified in it.
+# 2. If there is only one playbook.yml file, use it.
+# 4. If there are multiple playbook.yml files, use the one specified in ANSIBLE_PLAYBOOK file.
+# 5. If detected playbook file does not exist, error out.
+#
+# ANSIBLE_PLAYBOOK file content is a single line with the name of the playbook to run.
+# ANSIBLE_PLAYBOOK file may be missing.
 
 # Detect playbook to run
 
-# ANSIBLE_PLAYBOOK may define playbook name via ansible_piepline.yml
-# if not - discover file in the current directory
-if [ -z "$ANSIBLE_PLAYBOOK" ]; then
-    playbooks_found=($(find . -maxdepth 1 -type f -name "*.yml" ! -name "requirements.yml" ! -name "requirements_firewall.yml" ! -name "ansible_piepline.yml"))
-    if [ ${#playbooks_found[@]} -eq 1 ]; then
-        ANSIBLE_PLAYBOOK="${playbooks_found[0]#./}"
-    elif [ ${#playbooks_found[@]} -gt 1 ]; then
-        ANSIBLE_PLAYBOOK_ERROR="Multiple playbook.yml files found. Please specify which to use in ansible_piepline file under ansible_piepline.playbook key"
+# Default to empty
+ANSIBLE_PLAYBOOK=""
+
+# 1. If there is ANSIBLE_PLAYBOOK file, use the one specified in it.
+if [ -f "ANSIBLE_PLAYBOOK" ]; then
+    PLAYBOOK_FILE=$(head -n 1 ANSIBLE_PLAYBOOK | xargs)
+    if [ -z "$PLAYBOOK_FILE" ]; then
+        echo "ERROR: ANSIBLE_PLAYBOOK file is empty." >&2
+        exit 1
+    fi
+    if [ ! -f "$PLAYBOOK_FILE" ]; then
+        echo "ERROR: Playbook specified in ANSIBLE_PLAYBOOK ('$PLAYBOOK_FILE') does not exist." >&2
+        exit 1
+    fi
+    ANSIBLE_PLAYBOOK="$PLAYBOOK_FILE"
+else
+    # 2. If there is only one *.yml file (excluding requirements.yml and requirements_firewall.yml), use it.
+    # 4. If there are multiple *.yml files, use the one specified in ANSIBLE_PLAYBOOK file.
+    # (Rule 3 is missing, so we skip to 4)
+    PLAYBOOKS_FOUND=($(find . -maxdepth 1 -type f -name "*.yml" ! -name "requirements.yml" ! -name "requirements_firewall.yml" ! -name "ansible_piepline.yml"))
+    if [ ${#PLAYBOOKS_FOUND[@]} -eq 1 ]; then
+        ANSIBLE_PLAYBOOK="${PLAYBOOKS_FOUND[0]#./}"
+    elif [ ${#PLAYBOOKS_FOUND[@]} -gt 1 ]; then
+        ANSIBLE_PLAYBOOK_ERROR="Multiple playbook.yml files found. Please specify which to use in ANSIBLE_PLAYBOOK file."
     else
-        ANSIBLE_PLAYBOOK_ERROR="ERROR: No playbook.yml file found and no ansible_piepline.playbook file defined."
+        ANSIBLE_PLAYBOOK_ERROR="ERROR: No playbook.yml file found and no ANSIBLE_PLAYBOOK file present."
     fi
 fi
 
 # 5. If detected playbook file does not exist, error out.
 if [ ! -f "$ANSIBLE_PLAYBOOK" ]; then
-    ANSIBLE_PLAYBOOK_ERROR="ERROR: Playbook file '$ANSIBLE_PLAYBOOK' does not exist."
+    ANSIBLE_PLAYBOOK_ERROR="ERROR: Detected playbook file '$ANSIBLE_PLAYBOOK' does not exist."
 fi
-ANSIBLE_PLAYBOOK=${ANSIBLE_PLAYBOOK}
-ANSIBLE_PLAYBOOK_ERROR=${ANSIBLE_PLAYBOOK_ERROR}
 
-if [ "${DEBUG_PLAN}" == "true" ]; then
+if [ "${debug_plan}" == "true" ]; then
     plan_debug
     plan_debug "Using playbook (DEBUG):"
     plan_debug "======================="
@@ -152,7 +183,7 @@ else
     unset ANSIBLE_INVENTORY
 fi
 
-if [ "${DEBUG_PLAN}" == "true" ]; then
+if [ "${debug_plan}" == "true" ]; then
     plan_debug
     plan_debug "Using inventory (DEBUG):"
     plan_debug "=======================" 

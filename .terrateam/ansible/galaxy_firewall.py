@@ -78,7 +78,7 @@ if changed:
         f"galaxy_firewall: removed {len(removed_collections)} collections and {len(removed_roles)} roles",
         file=sys.stderr,
     )
-    exit(1)
+    exit(2)
 else:
     print("galaxy_firewall: no eliminations", file=sys.stderr)
     exit(0)
