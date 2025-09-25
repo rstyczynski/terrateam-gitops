@@ -6,4 +6,4 @@
     - role: myorg.publicapi.duckduckgo
 
   vars:
-    duckduckgo_query: "Robert Plant"
+    duckduckgo_query: "Adam Smith"
