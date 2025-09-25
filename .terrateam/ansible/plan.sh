@@ -73,6 +73,8 @@ if [ -f "${ANSIBLE_CUSTOM_REQUIREMENTS}" ]; then
     if [ $firewall_exit_code -eq 0 ]; then
         unset ANSIBLE_CUSTOM_REQUIREMENTS_ERROR
     elif [ $firewall_exit_code -eq 1 ]; then
+        ANSIBLE_CUSTOM_REQUIREMENTS_ERROR="Error: requirements file does not exist, but firewall executed."
+    elif [ $firewall_exit_code -eq 2 ]; then
         ANSIBLE_CUSTOM_REQUIREMENTS_ERROR="Warning: Requirements file uses public sources. Public sources removed."
     else
         ANSIBLE_CUSTOM_REQUIREMENTS_ERROR="Error: galaxy_firewall.py failed with exit code $firewall_exit_code" >&2
