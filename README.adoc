@@ -20,6 +20,12 @@ Preliminary capabilities include:
 * Ansible apply uses static context discovered during the plan phase
 * Pipeline control file to control, and debug Ansible execution context
 
+Moreover inheriting capabilities from Terrateam:
+
+* Layered run to handover Terraform to Ansible layer
+* GitHub pull request based approval and deployment process
+* etc.
+
 This setup is designed to help teams automate complex infrastructure and configuration management tasks, leveraging both Terraform and Ansible in a unified, auditable pipeline.
 
 == Contents
