@@ -97,22 +97,6 @@ ansible-playbook $PLAYBOOK -i inventory_static.yml 2> >(tee /tmp/ansible_stderr.
 
 Pipeline detects ansible_piepline.yml file in the playbook directory. The file is used to control the execution context of the Ansible engine. On this stage debug flags, and playbook name are defined.
 
-== Discover Ansible Neighbors
-
-TBI
-
-== Get Terraform Properties
-
-TBI
-
-== Get Terraform Outputs
-
-TBI
-
-== Ansible Output Persistence
-
-TBI
-
 == Ansible Engine definition
 
 Ansible Engine is defined as series of scripts associated to terrateam stages in `.terrateam/config.yml`.
@@ -149,4 +133,20 @@ ansible-playbook. In reality, only the inventory is unloaded, as the rest of the
 _output.sh_ - [Not yet implemented] Writes Ansible facts to a well-known
 location.
 
+== To be done
 
+=== Discover Ansible Neighbors
+
+TBI
+
+=== Get Terraform Properties
+
+TBI
+
+=== Get Terraform Outputs
+
+TBI
+
+=== Ansible Output Persistence
+
+TBI
