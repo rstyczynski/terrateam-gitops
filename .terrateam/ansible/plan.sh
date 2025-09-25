@@ -128,8 +128,7 @@ ANSIBLE_GALAXY_COLLECTIONS=$(ansible-galaxy collection list)
 # 1. If there is ANSIBLE_PLAYBOOK file, use the one specified in it.
 if [ ! -z "${ANSIBLE_PLAYBOOK}" ]; then
     if [ ! -f "${ANSIBLE_PLAYBOOK}" ]; then
-        echo "ERROR: Playbook specified in ANSIBLE_PLAYBOOK does not exist." >&2
-        exit 1
+        ANSIBLE_PLAYBOOK_ERROR="Playbook specified in ANSIBLE_PLAYBOOK does not exist." >&2
     fi
 else
     # 2. If there is only one *.yml file (excluding requirements.yml and requirements_firewall.yml), use it.
@@ -138,9 +137,9 @@ else
     if [ ${#PLAYBOOKS_FOUND[@]} -eq 1 ]; then
         ANSIBLE_PLAYBOOK="${PLAYBOOKS_FOUND[0]#./}"
     elif [ ${#PLAYBOOKS_FOUND[@]} -gt 1 ]; then
-        ANSIBLE_PLAYBOOK_ERROR="Multiple playbook.yml files found. Please specify which to use in ANSIBLE_PLAYBOOK file."
+        ANSIBLE_PLAYBOOK_ERROR="Multiple playbook.yml files found. Please specify which to use in ANSIBLE_PLAYBOOK argument of ansible_piepline.yml file."
     else
-        ANSIBLE_PLAYBOOK_ERROR="ERROR: No playbook.yml file found and no ANSIBLE_PLAYBOOK file present."
+        ANSIBLE_PLAYBOOK_ERROR="Playbook file not found."
     fi
 fi
 
@@ -292,7 +291,6 @@ if [ "${SKIP_CHECK}" != "true" ]; then
     {
         echo
         echo "  ANSIBLE_PLAYBOOK_CHECK:"
-        echo "    STDOUT: |"
         cd ${ANSIBLE_ROOT}
 
         # Run ansible-playbook in check mode, capture stdout and stderr
@@ -305,17 +303,18 @@ if [ "${SKIP_CHECK}" != "true" ]; then
 
         # Indent STDOUT
         if [[ -s /tmp/ansible_playbook_check_stdout.log ]]; then
+            echo "    STDOUT: |"
             sed 's/^/      /' /tmp/ansible_playbook_check_stdout.log
         else
-            echo "      (none)"
+            echo "    STDOUT:"
         fi
 
-        echo "    STDERR: |"
         # Indent STDERR
         if [[ -s /tmp/ansible_playbook_check_stderr.log ]]; then
+            echo "    STDERR: |"
             sed 's/^/      /' /tmp/ansible_playbook_check_stderr.log
         else
-            echo "      (none)"
+            echo "    STDERR:"
         fi
     } >> "${PLAN_FILE}"
 fi
