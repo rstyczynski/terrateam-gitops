@@ -67,7 +67,7 @@ test  -f "requirements.yml" && ANSIBLE_CUSTOM_REQUIREMENTS=${ANSIBLE_ROOT}/requi
 
 test  -f "requirements_firewall.yml" && ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE=${ANSIBLE_ROOT}/requirements_firewall.yml || unset ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE
 
-if [ -f ${ANSIBLE_CUSTOM_REQUIREMENTS} ]; then
+if [ -f "${ANSIBLE_CUSTOM_REQUIREMENTS}" ]; then
     $(dirname "$0")/galaxy_firewall.py ${ANSIBLE_CUSTOM_REQUIREMENTS} > /dev/null
     firewall_exit_code=$?
     if [ $firewall_exit_code -eq 0 ]; then
