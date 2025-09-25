@@ -1,0 +1,10 @@
+---
+ansible_piepline:
+  playbook: playbook.yml
+  debug:
+    init: true
+    plan: true
+    diff: true
+    apply: false
+    output: false
+    shared: true

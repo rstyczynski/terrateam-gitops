@@ -2,7 +2,11 @@
 
 PLAN_FILE=$1
 
-PLAN_DEBUG=true
+
+source "$(dirname "$0")/ansible_piepline.sh"
+
+debug_plan=true
+
 
 echo "⚠️ ================================================" >&2
 echo "START: Ansible plan stage" >&2
@@ -23,7 +27,7 @@ function plan_debug() {
 #
 # initialize plan file
 #
-if [ "${PLAN_DEBUG}" == "true" ]; then
+if [ "${debug_plan}" == "true" ]; then
     plan_debug "Ansible plan (DEBUG)"
     plan_debug "==================="
 fi
@@ -47,7 +51,7 @@ ls -la
 #
 test  -f "ansible.cfg" && ANSIBLE_CUSTOM_CFG=${ANSIBLE_ROOT}/ansible.cfg || unset ANSIBLE_CUSTOM_CFG
 
-if [ "${PLAN_DEBUG}" == "true" ]; then
+if [ "${debug_plan}" == "true" ]; then
     if [ ! -z  "${ANSIBLE_CUSTOM_CFG}" ]; then
         plan_debug
         plan_debug "Custom ansible.cfg (DEBUG):" 
@@ -72,7 +76,7 @@ else
     unset ANSIBLE_CUSTOM_REQUIREMENTS_ERROR
 fi
 
-if [ "${PLAN_DEBUG}" == "true" ]; then
+if [ "${debug_plan}" == "true" ]; then
     if [ ! -z "${ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE}" ]; then
         plan_debug
         plan_debug "Requirements file (DEBUG):"
@@ -92,7 +96,7 @@ fi
 #
 # list collections
 #
-if [ "${PLAN_DEBUG}" == "true" ]; then
+if [ "${debug_plan}" == "true" ]; then
 
     ansible-galaxy collection list > /tmp/ansible_galaxy_collections.txt 2>&1
     plan_debug "Collections list (DEBUG):"
@@ -150,7 +154,7 @@ if [ ! -f "$ANSIBLE_PLAYBOOK" ]; then
     ANSIBLE_PLAYBOOK_ERROR="ERROR: Detected playbook file '$ANSIBLE_PLAYBOOK' does not exist."
 fi
 
-if [ "${PLAN_DEBUG}" == "true" ]; then
+if [ "${debug_plan}" == "true" ]; then
     plan_debug
     plan_debug "Using playbook (DEBUG):"
     plan_debug "======================="
@@ -174,7 +178,7 @@ else
     unset ANSIBLE_INVENTORY
 fi
 
-if [ "${PLAN_DEBUG}" == "true" ]; then
+if [ "${debug_plan}" == "true" ]; then
     plan_debug
     plan_debug "Using inventory (DEBUG):"
     plan_debug "=======================" 
@@ -254,7 +258,6 @@ fi
 EXIT_CODE=0
 
 
-TERRATEAM_DEBUG=false
 source "$(dirname "$0")/../shared/debug.sh" >&2
 
 echo "END: Ansible plan stage" >&2
