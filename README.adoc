@@ -44,7 +44,7 @@ toc::[]
 
 * *day-2_ops5*: Demonstrates use of galaxy firewall to remove public sources from requirements.yml. Moreover presents ansible_piepline.yml file to control Ansible execution context - here the playbook name is defined to select one out of multiple playbooks.
 
-* *terraform/day-1_cfg*: Contains the Terraform configuration for initial (Day 1) infrastructure provisioning, such as creating VMs, networks, or storage, which serves as the foundation for subsequent Ansible-driven Day 2 operations.
+* *terraform/day-1_cfg*: Contains the Terraform configuration for initial infrastructure provisioning, such as creating VMs, networks, or storage, which is concluded with Ansible based configuration.
 
 * *day-2_ops_workspace1*: Demonstrates use of workspaces to run Ansible playbooks and change of the engine type. ANSIBLE_ROOT is set to the workspace root. DEV workspace uses runs the debug engine. PROD workspace runs the Ansible engine.
 
