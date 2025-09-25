@@ -15,9 +15,9 @@ This project integrates Ansible automation into the Terrateam infrastructure-as-
 Preliminary capabilities include:
 
 * Support for Ansible playbooks, config, inventory, and galaxy install to enable use of roles and collections
-* Support for working directory adjusted to workspace root
 * Galaxy firewall to remove public sources from requirements.yml
 * Ansible apply uses static context discovered during the plan phase
+* Pipeline control file to control, and debug Ansible execution context
 
 This setup is designed to help teams automate complex infrastructure and configuration management tasks, leveraging both Terraform and Ansible in a unified, auditable pipeline.
 
