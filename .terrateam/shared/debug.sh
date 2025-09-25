@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Debug script for Ansible engine diagnostics
-if [ "$TERRATEAM_DEBUG" == "true" ]; then
+if [ "$debug_shared" == "true" ]; then
 
     echo "🔍 START: Diagnostic dump ================================"
 

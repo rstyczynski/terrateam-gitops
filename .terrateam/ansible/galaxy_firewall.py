@@ -42,26 +42,34 @@ for r in orig_roles:
 
 changed = bool(removed_collections or removed_roles)
 
-# Write sanitized YAML to STDOUT (only top-level keys roles and/or collections)
-sanitized_data = {}
+
+# Emit YAML manually so we can place comments under the right keys
+print("---")
+
+# collections
+print("collections:")
 if filtered_collections:
-    sanitized_data["collections"] = filtered_collections
+    dumped = yaml.safe_dump(filtered_collections, sort_keys=False).rstrip()
+    # indent each line by two spaces
+    print("\n".join("  " + ln for ln in dumped.splitlines()))
+else:
+    print("  []")
+for item in removed_collections:
+    dumped = yaml.safe_dump(item, sort_keys=False).rstrip()
+    for line in dumped.splitlines():
+        print("  # BLOCKED by galaxy_firewall: " + line)
+
+# roles
+print("roles:")
 if filtered_roles:
-    sanitized_data["roles"] = filtered_roles
-
-yaml.dump(sanitized_data, sys.stdout, sort_keys=False, explicit_start=True)
-
-# Write blocked entries as commented YAML lines
-def dump_commented_blocked(prefix, items):
-    for item in items:
-        dumped = yaml.dump(item, sort_keys=False).rstrip()
-        for line in dumped.splitlines():
-            print(f"# BLOCKED by galaxy_firewall: {line}")
-
-if removed_collections:
-    dump_commented_blocked("collections", removed_collections)
-if removed_roles:
-    dump_commented_blocked("roles", removed_roles)
+    dumped = yaml.safe_dump(filtered_roles, sort_keys=False).rstrip()
+    print("\n".join("  " + ln for ln in dumped.splitlines()))
+else:
+    print("  []")
+for item in removed_roles:
+    dumped = yaml.safe_dump(item, sort_keys=False).rstrip()
+    for line in dumped.splitlines():
+        print("  # BLOCKED by galaxy_firewall: " + line)
 
 # --- Reporting to STDERR so CI can detect eliminations without relying on YAML reformatting ---
 # Always print a concise summary line first (easy to grep)

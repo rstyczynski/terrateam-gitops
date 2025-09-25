@@ -3,6 +3,9 @@
 echo "⚠️ ================================================" >&2
 echo "START: Ansible init stage" >&2
 
+# load pipeline execution context from the file ansible_piepline.yml
+source "$(dirname "$0")/ansible_piepline.sh"
+
 echo "Ansible init"
 
 #
@@ -11,9 +14,13 @@ echo "Ansible init"
 if [ "${TERRATEAM_WORKSPACE}" == "default" ]; then
     ANSIBLE_ROOT=${TERRATEAM_ROOT}/${TERRATEAM_DIR}
 else
-    ANSIBLE_ROOT=${TERRATEAM_ROOT}/${TERRATEAM_DIR}/${TERRATEAM_WORKSPACE}
+    # Note: the workspace does not influence working directory
+    # ANSIBLE_ROOT=${TERRATEAM_ROOT}/${TERRATEAM_DIR}/${TERRATEAM_WORKSPACE}
+    ANSIBLE_ROOT=${TERRATEAM_ROOT}/${TERRATEAM_DIR}
 fi
-cd ${ANSIBLE_ROOT}
+cd ${ANSIBLE_ROOT} | exit 2
+PWD
+ls -la
 
 #
 # install ansible. Terrateam checks if ansible is installed 
@@ -42,8 +49,14 @@ if [ ! -z "${ANSIBLE_CUSTOM_REQUIREMENTS}" ]; then
 
     # apply firewall to requirements.yml to remove public sources
     $(dirname "$0")/galaxy_firewall.py ${ANSIBLE_CUSTOM_REQUIREMENTS} > requirements_firewall.yml
-    if [ $? -ne 0 ]; then
+    firewall_exit_code=$?
+    if [ $firewall_exit_code -eq 0 ]; then
+        :
+    elif [ $firewall_exit_code -eq 1 ]; then
         echo "Warning: Requirements file uses public sources. Public sources removed."
+    else
+        echo "Error: galaxy_firewall.py failed with exit code $firewall_exit_code" >&2
+        exit 2
     fi
 
     # install requirements
@@ -52,11 +65,9 @@ else
     echo "Info. No requirements to install. Requirements file not found in workspace directory."
 fi
 
-
-
 EXIT_CODE=0
 
-TERRATEAM_DEBUG=false
+
 source "$(dirname "$0")/../shared/debug.sh" >&2
 echo "⚠️ ================================================" >&2
 echo "STOP: Ansible init stage" >&2
