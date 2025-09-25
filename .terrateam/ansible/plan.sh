@@ -125,21 +125,12 @@ ANSIBLE_GALAXY_COLLECTIONS=$(ansible-galaxy collection list)
 
 # Detect playbook to run
 
-# Default to empty
-ANSIBLE_PLAYBOOK=""
-
 # 1. If there is ANSIBLE_PLAYBOOK file, use the one specified in it.
-if [ -f "ANSIBLE_PLAYBOOK" ]; then
-    PLAYBOOK_FILE=$(head -n 1 ANSIBLE_PLAYBOOK | xargs)
-    if [ -z "${PLAYBOOK_FILE}" ]; then
-        echo "ERROR: ANSIBLE_PLAYBOOK file is empty." >&2
+if [ ! -z "${ANSIBLE_PLAYBOOK}" ]; then
+    if [ ! -f "${ANSIBLE_PLAYBOOK}" ]; then
+        echo "ERROR: Playbook specified in ANSIBLE_PLAYBOOK does not exist." >&2
         exit 1
     fi
-    if [ ! -f "${PLAYBOOK_FILE}" ]; then
-        echo "ERROR: Playbook specified in ANSIBLE_PLAYBOOK ('${PLAYBOOK_FILE}') does not exist." >&2
-        exit 1
-    fi
-    ANSIBLE_PLAYBOOK="${PLAYBOOK_FILE}"
 else
     # 2. If there is only one *.yml file (excluding requirements.yml and requirements_firewall.yml), use it.
     # 4. If there are multiple *.yml files, use the one specified in ANSIBLE_PLAYBOOK file.
