@@ -111,29 +111,29 @@ ANSIBLE_GALAXY_COLLECTIONS=$(ansible-galaxy collection list)
 # ansible_playbook may define playbook name via ansible_piepline.yml
 # if not - discover file in the current directory
 if [ -z "$ansible_playbook" ]; then
-    PLAYBOOKS_FOUND=($(find . -maxdepth 1 -type f -name "*.yml" ! -name "requirements.yml" ! -name "requirements_firewall.yml" ! -name "ansible_piepline.yml"))
-    if [ ${#PLAYBOOKS_FOUND[@]} -eq 1 ]; then
-        ANSIBLE_PLAYBOOK="${PLAYBOOKS_FOUND[0]#./}"
-    elif [ ${#PLAYBOOKS_FOUND[@]} -gt 1 ]; then
-        ANSIBLE_PLAYBOOK_ERROR="Multiple playbook.yml files found. Please specify which to use in ansible_piepline file under ansible_piepline.playbook key"
+    playbooks_found=($(find . -maxdepth 1 -type f -name "*.yml" ! -name "requirements.yml" ! -name "requirements_firewall.yml" ! -name "ansible_piepline.yml"))
+    if [ ${#playbooks_found[@]} -eq 1 ]; then
+        ansible_playbook="${playbooks_found[0]#./}"
+    elif [ ${#playbooks_found[@]} -gt 1 ]; then
+        ansible_playbook_ERROR="Multiple playbook.yml files found. Please specify which to use in ansible_piepline file under ansible_piepline.playbook key"
     else
-        ANSIBLE_PLAYBOOK_ERROR="ERROR: No playbook.yml file found and no ansible_piepline.playbook file defined."
+        ansible_playbook_ERROR="ERROR: No playbook.yml file found and no ansible_piepline.playbook file defined."
     fi
 fi
 
 # 5. If detected playbook file does not exist, error out.
-if [ ! -f "$ANSIBLE_PLAYBOOK" ]; then
-    ANSIBLE_PLAYBOOK_ERROR="ERROR: Playbook file '$ANSIBLE_PLAYBOOK' does not exist."
+if [ ! -f "$ansible_playbook" ]; then
+    ansible_playbook_ERROR="ERROR: Playbook file '$ansible_playbook' does not exist."
 fi
 
 if [ "${debug_plan}" == "true" ]; then
     plan_debug
     plan_debug "Using playbook (DEBUG):"
     plan_debug "======================="
-    if [ ! -z "$ANSIBLE_PLAYBOOK_ERROR" ]; then
-        plan_debug "$ANSIBLE_PLAYBOOK_ERROR"
+    if [ ! -z "$ansible_playbook_ERROR" ]; then
+        plan_debug "$ansible_playbook_ERROR"
     else
-        plan_debug "$ANSIBLE_PLAYBOOK"
+        plan_debug "$ansible_playbook"
     fi
 fi
 
@@ -163,8 +163,8 @@ fi
 
 #
 # write all variables to plan file in yml format
-# 1. ANSIBLE_PLAYBOOK
-# 2. ANSIBLE_PLAYBOOK_ERROR
+# 1. ansible_playbook
+# 2. ansible_playbook_ERROR
 # 3. ANSIBLE_CUSTOM_CFG
 # 4. ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE
 
@@ -172,9 +172,9 @@ fi
 {
     echo "---"
     echo "ansible_execution_context:"
-    echo "  ANSIBLE_PLAYBOOK: \"${ANSIBLE_PLAYBOOK}\""
+    echo "  ansible_playbook: \"${ansible_playbook}\""
     echo "  "
-    echo "  ANSIBLE_PLAYBOOK_ERROR: \"${ANSIBLE_PLAYBOOK_ERROR}\""
+    echo "  ansible_playbook_ERROR: \"${ansible_playbook_ERROR}\""
     echo "  "
 
 
