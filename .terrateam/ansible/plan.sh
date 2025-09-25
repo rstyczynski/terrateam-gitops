@@ -213,7 +213,7 @@ fi
 
     if [ -f "$ANSIBLE_INVENTORY" ]; then
         echo "  ANSIBLE_INVENTORY: |"
-        sed 's/^/    /' "$ANSIBLE_INVENTORY"
+        sed 's/^/    /' "${ANSIBLE_INVENTORY}"
     else
         echo "  ANSIBLE_INVENTORY:"
     fi
@@ -258,6 +258,55 @@ fi
     echo "    TERRATEAM_WORKSPACE: \"${TERRATEAM_WORKSPACE}\""
     echo "    TERRATEAM_ROOT: \"${TERRATEAM_ROOT}\""
 } >> $PLAN_FILE
+
+#
+# run ping
+#
+echo
+echo "Running ping"
+echo "======================================"
+cd $ANSIBLE_ROOT
+
+if [ "$(cat inventory_static.yml)" != null ]; then
+  ansible all -m ping -i inventory_static.yml 2> >(tee /tmp/ansible_stderr.log >&2)
+else
+  rm inventory_static.yml
+  ansible all -m ping -i localhost,  2> >(tee /tmp/ansible_stderr.log >&2)
+fi
+
+echo
+echo "Errors and warnings (stderr):"
+echo "============================="
+if [[ -s /tmp/ansible_stderr.log ]]; then
+  cat /tmp/ansible_stderr.log
+else
+  echo "(none)"
+fi
+
+#
+# run playbook in check mode
+#
+
+echo
+echo "Running ansible-playbook in check mode"
+echo "======================================"
+cd $ANSIBLE_ROOT
+
+if [ "$(cat inventory_static.yml)" != null ]; then
+  ansible-playbook --check $PLAYBOOK -i inventory_static.yml 2> >(tee /tmp/ansible_stderr.log >&2)
+else
+  rm inventory_static.yml
+  ansible-playbook --check $PLAYBOOK  2> >(tee /tmp/ansible_stderr.log >&2)
+fi
+
+echo
+echo "Errors and warnings (stderr):"
+echo "============================="
+if [[ -s /tmp/ansible_stderr.log ]]; then
+  cat /tmp/ansible_stderr.log
+else
+  echo "(none)"
+fi
 
 
 EXIT_CODE=0
