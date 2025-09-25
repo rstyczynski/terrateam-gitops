@@ -23,10 +23,46 @@ pip install ansible
 
 ## day-2_ops1
 
-Execute the playbook at the command line. Playbook just reads variable file and outputs some information.
+Execute the playbook at the command line.
 
 ```bash
 ansible-playbook playbook.yml 
+```
+
+Playbook just reads variable file and outputs some information.
+
+```text
+[WARNING]: No inventory was parsed, only implicit localhost is available
+[WARNING]: provided hosts list is empty, only localhost is available. Note that the implicit localhost does not match 'all'
+[WARNING]: Found variable using reserved name 'environment'.
+Origin: <unknown>
+
+environment
+
+
+PLAY [Hello World Playbook] ********************************************************************************
+
+TASK [Display hello message] *******************************************************************************
+ok: [localhost] => {
+    "msg": "Hello World from Ansible! Message: Welcome to Terrateam Ansible Integration!"
+}
+
+TASK [Display environment info] ****************************************************************************
+ok: [localhost] => {
+    "msg": "Environment: [], Version: 1.0.36"
+}
+
+TASK [Create a test file] **********************************************************************************
+ok: [localhost]
+
+TASK [Show summary] ****************************************************************************************
+ok: [localhost] => {
+    "msg": "Playbook execution completed successfully!\n- Message: Welcome to Terrateam Ansible Integration!\n- Environment: []\n- Version: 1.0.36\n- File created: True\n"
+}
+
+PLAY RECAP *************************************************************************************************
+localhost                  : ok=4    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
 ```
 
 Now let's run the same in the pipeline:
