@@ -14,7 +14,7 @@ This project integrates Ansible automation into the Terrateam infrastructure-as-
 
 Preliminary capabilities include:
 
-* Support for Ansible playbooks, config, inventory, and galaxy install to enable use of roles and collections
+* Support for Ansible playbooks, ansible.cfg, inventory, and galaxy install to enable use of roles and collections
 * Galaxy firewall to remove public sources from requirements.yml
 * Ansible play creates static execution context e.g. inventory.yml 
 * Ansible apply uses static context discovered during the plan phase
