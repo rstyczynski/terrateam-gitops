@@ -38,9 +38,8 @@ ANSIBLE_ROOT=$(echo "${CTX_JSON}" | jq -r '.ansible_execution_context.ENV.ANSIBL
 # Present plan in human readable format
 #
 echo
-echo "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓"
-echo "┃ Ansible Execution Context  ┃"
-echo "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛"
+echo "Ansible Execution Context"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━"
 
 echo "— Playbook —"
 echo "------------"
