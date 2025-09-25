@@ -43,7 +43,7 @@ Open pull request at GitHub to notice that plan operation is being executed.
 terrateam plan: day-2_ops1 defaultWaiting for status to be reported — Running
 ```
 
-Once completed click in comments on `Expand for plan output details` under `Terrateam Plan Output` to see ansible execution plan. 
+Once completed click in comments on `Expand for plan output details` under `Terrateam Plan Output` to see ansible execution plan.
 
 ```text
 Ansible will be executed in the following context:
@@ -114,3 +114,4 @@ the implicit localhost does not match 'all'
 [WARNING]: Found variable using reserved name: environment
 ```
 
+Now you can merge and delete the branch. Your setting are now in the main branch.
