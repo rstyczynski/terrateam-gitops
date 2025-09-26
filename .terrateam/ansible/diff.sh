@@ -56,10 +56,22 @@ if [ -n "${ANSIBLE_PLAYBOOK_ERROR}" ] && [ "${ANSIBLE_PLAYBOOK_ERROR}" != "null"
     printf "%s\n" "${ANSIBLE_PLAYBOOK_ERROR}"
 fi
 
+# echo "🌟 #star  ✅ #check  ❌ #cross  ⚠️ #warning  🚀 #rocket  🔒 #lock  🔓 #unlock"
+# echo "📦 #package  📄 #document  📝 #memo  🔍 #search  💡 #idea  🔧 #wrench  🛠️ #tools"
+# echo "📊 #bar_chart  📈 #chart_up  📉 #chart_down  🕒 #clock  🔗 #link  🎯 #target  💾 #save"
+# echo "🗑️ #trash  🖥️ #computer  📡 #antenna  🌐 #globe  🛡️ #shield  🎉 #tada  🔥 #fire"
+# echo "💥 #boom  🧩 #puzzle  🔑 #key  🧭 #compass  📬 #mailbox  📢 #loudspeaker  🔔 #bell"
+# echo "🛎️ #service_bell  🧰 #toolbox  🗂️ #folders  🗃️ #card_file_box  🗄️ #file_cabinet"
+# echo "🧮 #abacus  🧱 #bricks  🧲 #magnet  🧪 #test_tube  🧬 #dna  🧫 #petri_dish"
+# echo "🧯 #extinguisher  🧹 #broom  🧺 #basket  🧻 #roll_paper  🧼 #soap  🧽 #sponge  🧴 #lotion"
+# echo "🧷 #safety_pin  🧸 #teddy_bear  🧊 #ice  🧋 #bubble_tea  🧃 #juice  🧁 #cupcake  🧂 #salt"
+# echo "🧀 #cheese  🧉 #mate"
+
+
 # Output blocks
 echo
-echo "— Ansible Ping —"
-echo "----------------"
+echo "✅ Ansible Ping"
+echo "---------------"
 if [ -n "${ANSIBLE_PING_STDOUT}" ] && [ "${ANSIBLE_PING_STDOUT}" != "null" ]; then
   printf "%s\n" "${ANSIBLE_PING_STDOUT}"
 else
@@ -69,12 +81,12 @@ fi
 
 if [ -n "${ANSIBLE_PING_STDERR}" ] && [ "${ANSIBLE_PING_STDERR}" != "null" ]; then
     echo
-    echo "— warnings & errors —"
+    echo "⚠️ warnings & errors"
     printf "%s\n" "${ANSIBLE_PING_STDERR}"
 fi
 
 echo
-echo "— Ansible Playbook Check —"
+echo "✅ Ansible Playbook Check —"
 echo "--------------------------"
 if [ -n "${ANSIBLE_PLAYBOOK_CHECK_STDOUT}" ] && [ "${ANSIBLE_PLAYBOOK_CHECK_STDOUT}" != "null" ]; then
   printf "%s\n" "${ANSIBLE_PLAYBOOK_CHECK_STDOUT}"
@@ -85,12 +97,12 @@ fi
 
 if [ -n "${ANSIBLE_PLAYBOOK_CHECK_STDERR}" ] && [ "${ANSIBLE_PLAYBOOK_CHECK_STDERR}" != "null" ]; then
     echo
-    echo "— warnings & errors —"
+    echo "⚠️ warnings & errors"
     printf "%s\n" "${ANSIBLE_PLAYBOOK_CHECK_STDERR}"
 fi
 
 echo
-echo "— Inventory file —"
+echo "🗄️ Inventory file —"
 echo "------------------"
 if [ -n "${ANSIBLE_INVENTORY}" ] && [ "${ANSIBLE_INVENTORY}" != "null" ]; then
   printf "%s\n" "${ANSIBLE_INVENTORY}"
@@ -99,7 +111,7 @@ else
 fi
 
 echo
-echo "— ansible.cfg file —"
+echo "🗄️ ansible.cfg file —"
 echo "---------------------------"
 if [ -n "${ANSIBLE_CUSTOM_CFG}" ] && [ "${ANSIBLE_CUSTOM_CFG}" != "null" ]; then
   printf "%s\n" "${ANSIBLE_CUSTOM_CFG}"
@@ -108,25 +120,24 @@ else
 fi
 
 echo
-echo "— requirements file —"
+echo "🗄️ requirements file —"
 echo "----------------------------"
 if [ -n "${ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE}" ] && [ "${ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE}" != "null" ]; then
     printf "%s\n" "${ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE}"
-    echo
-    echo "— provided —"
-    if [ -n "${ANSIBLE_CUSTOM_REQUIREMENTS}" ] && [ "${ANSIBLE_CUSTOM_REQUIREMENTS}" != "null" ]; then
-    printf "%s\n" "${ANSIBLE_CUSTOM_REQUIREMENTS}"
-    else
-    echo "(none)"
-    fi
-
+    # echo
+    # echo "— provided —"
+    # if [ -n "${ANSIBLE_CUSTOM_REQUIREMENTS}" ] && [ "${ANSIBLE_CUSTOM_REQUIREMENTS}" != "null" ]; then
+    # printf "%s\n" "${ANSIBLE_CUSTOM_REQUIREMENTS}"
+    # else
+    # echo "(none)"
+    # fi
 else
   echo "(none)"
 fi
 
 if [ -n "${ANSIBLE_CUSTOM_REQUIREMENTS_ERROR}" ] && [ "${ANSIBLE_CUSTOM_REQUIREMENTS_ERROR}" != "null" ]; then
     echo
-    echo "— warnings & errors —"
+    echo "⚠️ warnings & errors"
     printf "%s\n" "${ANSIBLE_CUSTOM_REQUIREMENTS_ERROR}"
 fi
 
