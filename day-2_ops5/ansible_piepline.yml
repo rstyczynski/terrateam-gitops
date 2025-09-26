@@ -4,7 +4,7 @@ ansible_piepline:
   debug:
     init: true
     plan: true
-    diff: true
+    diff: false
     apply: false
     output: false
     shared: false

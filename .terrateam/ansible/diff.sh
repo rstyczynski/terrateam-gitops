@@ -41,7 +41,8 @@ echo
 echo "Ansible Execution Context"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━"
 
-echo "✅  Playbook"
+echo "✅ Playbook"
+echo "   ━━━━━━━━"
 if [ -n "${ANSIBLE_PLAYBOOK}" ] && [ "${ANSIBLE_PLAYBOOK}" != "null" ]; then
   printf "%s\n" "${ANSIBLE_PLAYBOOK}"
 else
@@ -59,6 +60,7 @@ fi
 # Output blocks
 echo
 echo "✅ Ansible Ping"
+echo "  ━━━━━━━━━━━━━"
 if [ -n "${ANSIBLE_PING_STDOUT}" ] && [ "${ANSIBLE_PING_STDOUT}" != "null" ]; then
   printf "%s\n" "${ANSIBLE_PING_STDOUT}"
 else
@@ -74,6 +76,7 @@ fi
 
 echo
 echo "✅ Ansible Playbook Check"
+echo "   ━━━━━━━━━━━━━━━━━━━━━━"
 if [ -n "${ANSIBLE_PLAYBOOK_CHECK_STDOUT}" ] && [ "${ANSIBLE_PLAYBOOK_CHECK_STDOUT}" != "null" ]; then
   printf "%s\n" "${ANSIBLE_PLAYBOOK_CHECK_STDOUT}"
 else
@@ -89,6 +92,7 @@ fi
 
 echo
 echo "🗄️ Inventory file"
+echo "   ━━━━━━━━━━━━━━"
 if [ -n "${ANSIBLE_INVENTORY}" ] && [ "${ANSIBLE_INVENTORY}" != "null" ]; then
   printf "%s\n" "${ANSIBLE_INVENTORY}"
 else
@@ -97,6 +101,7 @@ fi
 
 echo
 echo "🗄️ ansible.cfg file"
+echo "   ━━━━━━━━━━━━━━━━"
 if [ -n "${ANSIBLE_CUSTOM_CFG}" ] && [ "${ANSIBLE_CUSTOM_CFG}" != "null" ]; then
   printf "%s\n" "${ANSIBLE_CUSTOM_CFG}"
 else
@@ -105,6 +110,7 @@ fi
 
 echo
 echo "🗄️ requirements file"
+echo "   ━━━━━━━━━━━━━━━━━"
 if [ -n "${ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE}" ] && [ "${ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE}" != "null" ]; then
     printf "%s\n" "${ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE}"
     # echo
