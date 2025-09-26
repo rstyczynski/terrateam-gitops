@@ -42,7 +42,7 @@ echo "Ansible Execution Context"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━"
 
 echo "✅ Playbook"
-echo "   ━━━━━━━━"
+echo "━━━━━━━━━━━"
 if [ -n "${ANSIBLE_PLAYBOOK}" ] && [ "${ANSIBLE_PLAYBOOK}" != "null" ]; then
   printf "%s\n" "${ANSIBLE_PLAYBOOK}"
 else
@@ -60,7 +60,7 @@ fi
 # Output blocks
 echo
 echo "✅ Ansible Ping"
-echo "  ━━━━━━━━━━━━━"
+echo "━━━━━━━━━━━━━━━"
 if [ -n "${ANSIBLE_PING_STDOUT}" ] && [ "${ANSIBLE_PING_STDOUT}" != "null" ]; then
   printf "%s\n" "${ANSIBLE_PING_STDOUT}"
 else
@@ -76,7 +76,7 @@ fi
 
 echo
 echo "✅ Ansible Playbook Check"
-echo "   ━━━━━━━━━━━━━━━━━━━━━━"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━"
 if [ -n "${ANSIBLE_PLAYBOOK_CHECK_STDOUT}" ] && [ "${ANSIBLE_PLAYBOOK_CHECK_STDOUT}" != "null" ]; then
   printf "%s\n" "${ANSIBLE_PLAYBOOK_CHECK_STDOUT}"
 else
@@ -92,7 +92,7 @@ fi
 
 echo
 echo "🗄️ Inventory file"
-echo "   ━━━━━━━━━━━━━━"
+echo "━━━━━━━━━━━━━━━━━"
 if [ -n "${ANSIBLE_INVENTORY}" ] && [ "${ANSIBLE_INVENTORY}" != "null" ]; then
   printf "%s\n" "${ANSIBLE_INVENTORY}"
 else
@@ -101,7 +101,7 @@ fi
 
 echo
 echo "🗄️ ansible.cfg file"
-echo "   ━━━━━━━━━━━━━━━━"
+echo "━━━━━━━━━━━━━━━━━━━"
 if [ -n "${ANSIBLE_CUSTOM_CFG}" ] && [ "${ANSIBLE_CUSTOM_CFG}" != "null" ]; then
   printf "%s\n" "${ANSIBLE_CUSTOM_CFG}"
 else
@@ -110,7 +110,7 @@ fi
 
 echo
 echo "🗄️ requirements file"
-echo "   ━━━━━━━━━━━━━━━━━"
+echo "━━━━━━━━━━━━━━━━━━━━"
 if [ -n "${ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE}" ] && [ "${ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE}" != "null" ]; then
     printf "%s\n" "${ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE}"
     # echo
@@ -132,13 +132,16 @@ fi
 
 
 if [ "${DEBUG_DIFF}" == "true" ]; then
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "      🔍 DEBUG SECTION"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo 
     echo "Plan file (DEBUG):"
-    echo "=================="
+    echo "━━━━━━━━━━━━━━━━━━"
     cat ${TERRATEAM_PLAN_FILE}
     echo 
     echo "Environment variables (DEBUG):"
-    echo "=============================="
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo "CWD: ${PWD}"
     echo "TERRATEAM_DIR: ${TERRATEAM_DIR}"
     echo "TERRATEAM_WORKSPACE: ${TERRATEAM_WORKSPACE}"
@@ -147,7 +150,7 @@ if [ "${DEBUG_DIFF}" == "true" ]; then
     echo 
     echo 
     echo "Other tests (DEBUG):"
-    echo "=============================="
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     which ansible-galaxy
     which yq
     which jq
