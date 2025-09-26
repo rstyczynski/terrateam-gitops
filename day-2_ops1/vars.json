@@ -1,21 +1,5 @@
 {
   "message": "Hello World at Fri Sep 26 09:33:24 CEST 2025",
-  "environment": "development",
-  "version": "1.0.37",
   "create_file": true,
   "output_file": "/tmp/ansible_test_output.txt",
-  "app_config": {
-    "name": "terrateam-ansible-demo",
-    "description": "Basic Ansible playbook for Terrateam integration",
-    "tags": [
-      "demo",
-      "hello-world",
-      "terrateam"
-    ]
-  },
-  "server_config": {
-    "hostname": "localhost",
-    "port": 8080,
-    "timeout": 30
-  }
 }

@@ -1,8 +1,21 @@
 # title
 
-Working with ansible you will use the repository directory from your command line to execute exactly the same by the pipeline. All the exercises work on localhost, so you do not need to configure any machines to spin the playbooks.
+Working with ansible you will use the repository from your command line to execute exactly the same by the pipeline. All the exercises work on a localhost, so you do not need to configure any machines to spin the playbooks.
 
-## Configure yu environment
+Exercises aims to familiarize you with the following Ansible Engine capabilities:
+
+* CLI / pipeline user experience
+* pipeline plan with ansible-playbook check mode and ping
+* pipeline control for debug purposes
+* pipeline control to disable ping or check
+* collection install from dir/git sources
+* collection install blocking public galaxy sources
+* work with inventory hosts and variables
+* work with ansible.cfg
+* GitHub ansible engine outputs for plan stage - plan-of-work
+* GitHub ansible engine outputs for apply stage - proof-of-work
+
+## Configure your environment
 
 As exercises use ansible on you computer, you need to install python, and Ansible packages. It's always the good practice to install packages in python virtual environment.
 
@@ -23,78 +36,96 @@ pip install ansible
 
 ## day-2_ops1
 
-Goals:
+### Goals
 
 * execute simple playbook
+* familiarize with CLI / pipeline user experience
 * familiarize with GitHub ansible engine outputs for plan stage
 * familiarize with GitHub ansible engine outputs for apply stage
 
-Execute the playbook at the command line.
+### CLI
+
+In the first step execute the playbook at the command line in a check mode.
 
 ```bash
-ansible-playbook playbook.yml 
+cd day-2_ops1
+rm -f /tmp/ansible_test_output.txt
+ansible-playbook playbook.yml --check
 ```
 
-Playbook just reads variable file and outputs some information.
+to receive the following output:
 
 ```text
 [WARNING]: No inventory was parsed, only implicit localhost is available
 [WARNING]: provided hosts list is empty, only localhost is available. Note that the implicit localhost does not match 'all'
-[WARNING]: Found variable using reserved name 'environment'.
-Origin: <unknown>
-
-environment
-
 
 PLAY [Hello World Playbook] ********************************************************************************
 
 TASK [Display hello message] *******************************************************************************
 ok: [localhost] => {
-    "msg": "Hello World from Ansible! Message: Welcome to Terrateam Ansible Integration!"
-}
-
-TASK [Display environment info] ****************************************************************************
-ok: [localhost] => {
-    "msg": "Environment: [], Version: 1.0.36"
+    "msg": "Hello World from Ansible! Message: Hello World at Fri Sep 26 09:33:24 CEST 2025"
 }
 
 TASK [Create a test file] **********************************************************************************
-ok: [localhost]
-
-TASK [Show summary] ****************************************************************************************
-ok: [localhost] => {
-    "msg": "Playbook execution completed successfully!\n- Message: Welcome to Terrateam Ansible Integration!\n- Environment: []\n- Version: 1.0.36\n- File created: True\n"
-}
+changed: [localhost]
 
 PLAY RECAP *************************************************************************************************
-localhost                  : ok=4    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
-
+localhost                  : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0  
 ```
 
-Now let's run the same in the pipeline:
+You see from the check that the playbook is going to create file. Let's execute the play.
 
-1. Create a branch with name: $your_name/day-2_ops1
+```bash
+ansible-playbook playbook.yml 
+```
+
+to find out that the play indeed created the file:
+
+```text
+[WARNING]: No inventory was parsed, only implicit localhost is available
+[WARNING]: provided hosts list is empty, only localhost is available. Note that the implicit localhost does not match 'all'
+
+PLAY [Hello World Playbook] ********************************************************************************
+
+TASK [Display hello message] *******************************************************************************
+ok: [localhost] => {
+    "msg": "Hello World from Ansible! Message: Hello World at Fri Sep 26 09:33:24 CEST 2025"
+}
+
+TASK [Create a test file] **********************************************************************************
+changed: [localhost]
+
+PLAY RECAP *************************************************************************************************
+localhost                  : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+```
+
+As you see the playbook just reads variable file and outputs some information, reporting warnings to stderr. The fact of changing the target system is reported by a check mode. This capability us used in a plan-of-work at the pipeline.
+
+### pipeline
+
+Now let's run the same in the pipeline. The pipeline is triggered by a file change under a branch and a pull request, what is controlled by a Terrateram GitHub extension. To trigger the pipeline execute following steps:
+
+1. Create a branch with name: your_name/day-2_ops1. Add your name or other unique string the branch name.
 
 2. Change variable file
 
 ```bash
-MESSAGE="Hello World at $(date)"
+MESSAGE="Hello World at $(date)!"
 jq --arg msg "$MESSAGE" '.message = $msg' vars.json > /tmp/tmp.json && mv /tmp/tmp.json vars.json 
 ```
-
 3. commit with message "trigger day-2_ops1"
 
 4. push branch
 
-5. create pul request
+5. create a pull request
 
-Open pull request at GitHub to notice that the plan operation is being executed.
+Open the pull request at https://github.com/rstyczynski/terrateam-gitops to notice that the plan operation is being executed.
 
-```
+```text
 terrateam plan: day-2_ops1 default Waiting for status to be reported — Running
 ```
 
-Once completed click on `Expand for plan output details` under pull request conversation comment's `Terrateam Plan Output` to see ansible execution plan.
+Once it's completed click on `Expand for plan output details` under pull request conversation comment's `Terrateam Plan Output` to see ansible execution plan.
 
 ```text
 Ansible Execution Context
@@ -117,27 +148,16 @@ ok: [localhost] => {
     "msg": "Hello World from Ansible! Message: Hello World at Fri Sep 26 09:33:24 CEST 2025"
 }
 
-TASK [Display environment info] ************************************************
-ok: [localhost] => {
-    "msg": "Environment: [], Version: 1.0.37"
-}
-
 TASK [Create a test file] ******************************************************
 changed: [localhost]
 
-TASK [Show summary] ************************************************************
-ok: [localhost] => {
-    "msg": "Playbook execution completed successfully!\n- Message: Hello World at Fri Sep 26 09:33:24 CEST 2025\n- Environment: []\n- Version: 1.0.37\n- File created: True\n"
-}
-
 PLAY RECAP *********************************************************************
-localhost                  : ok=4    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+localhost                  : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
 
 ⚠️ warnings & errors
 [WARNING]: No inventory was parsed, only implicit localhost is available
 [WARNING]: provided hosts list is empty, only localhost is available. Note that
 the implicit localhost does not match 'all'
-[WARNING]: Found variable using reserved name: environment
 
 🗄️ Inventory file
 ━━━━━━━━━━━━━━━━━
@@ -152,17 +172,19 @@ the implicit localhost does not match 'all'
 (none)
 ```
 
-At the plan you see playbook name, ping test of target hosts. Playbook execution in check mode - special mode in Ansible that shows changes to be done at the target host, without actually making them at this stage. Check mode informs what will be done during apply. Moreover you see inventory, ansible.,dfg, and galaxy install's requirements file. This example just executes simple playbook creating one file. Notice `warning` sections that may appear to inform about warning and error messages reported by each element of the plan stage.
+At the plan you see playbook name, ping test of target hosts. Playbook execution in the check mode is a special mode in Ansible that shows changes to be done at the target host, without actually making them at this stage. Check mode informs what will be done during apply. Here you see that check mode output is exactly the same as from CLI.
 
-Accept the execution by adding `terrateam apply` to pull request conversation comment to notice that operation is being executed.
+Moreover you see inventory, ansible.cfg, and galaxy install's requirements file. This example just executes simple playbook, so all other elements are presented as `(none)`. Notice `warning` sections that may appear to inform about warning and error messages reported by each element of the plan stage. For playbooks this information is collected from stdout, and is presented at another section, what is the only difference from CLI execution.
 
-```
-terrateam apply: day-2_ops1 defaul tWaiting for status to be reported — Running
+After review of the plan-of-work, accept the execution by adding `terrateam apply` to pull request conversation comment to notice that operation is being executed.
+
+```text
+terrateam apply: day-2_ops1 default Waiting for status to be reported — Running
 ```
 
 Once the apply is completed click on`Expand for apply output details` under `Terrateam Apply Output` to see the playbook execution output.
 
-```
+```text
 ✅ Running ansible-playbook
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -173,24 +195,24 @@ ok: [localhost] => {
     "msg": "Hello World from Ansible! Message: Hello World at Fri Sep 26 09:33:24 CEST 2025"
 }
 
-TASK [Display environment info] ************************************************
-ok: [localhost] => {
-    "msg": "Environment: [], Version: 1.0.37"
-}
-
 TASK [Create a test file] ******************************************************
 changed: [localhost]
 
-TASK [Show summary] ************************************************************
-ok: [localhost] => {
-    "msg": "Playbook execution completed successfully!\n- Message: Hello World at Fri Sep 26 09:33:24 CEST 2025\n- Environment: []\n- Version: 1.0.37\n- File created: True\n"
-}
-
 PLAY RECAP *********************************************************************
-localhost                  : ok=4    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+localhost                  : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
 
 ⚠️ warnings & errors
-[WARNING]: Found variable using reserved name: environment
+[WARNING]: No inventory was parsed, only implicit localhost is available
+[WARNING]: provided hosts list is empty, only localhost is available. Note that the implicit localhost does not match 'all'
 ```
 
-Now you can merge and delete the branch. Your playbook applied changes at target systems, and all execution context is stored in Terrateam server, and all related files are in the main branch.
+Now you can merge and delete the branch. Your playbook applied changes at target systems, the execution context is stored at the Terrateam server, and all related files are in the main branch.
+
+### summary
+
+You executed simple playbook using check based approach. You did the same form a CLI and the pipeline.
+
+Note that variable and the playbook itself are not presented at the plan document being part of the repository. Reviewer looking at the plan in case of required verification should validate content of the playbook and variables. Variables are of course partially visible in the check execution output. 
+
+## day-2_ops2
+

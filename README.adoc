@@ -1,7 +1,7 @@
 :author: Ryszard Styczynski
-:revnumber: 0.3
+:revnumber: 0.4
 :revremark: DRAFT
-:revdate: 2025-09-25
+:revdate: 2025-09-26
 
 :toc: macro
 :toc-title: 
@@ -14,7 +14,7 @@ This project integrates Ansible automation into the Terrateam infrastructure-as-
 
 Preliminary capabilities include:
 
-* Support for Ansible playbooks, ansible.cfg, inventory, check mode, ping and galaxy install
+* Support for Ansible playbooks, inventory, check mode, ping, ansible.cfg, and galaxy install
 * Ansible plan creates static execution context e.g. inventory.yml 
 * Ansible plan runs ping and ansible-playbook in check mode to validate the static context
 * Ansible diff presents the static context at the Pull Request conversation.
@@ -38,17 +38,23 @@ toc::[]
 
 * *day-2_ops1*: Demonstrates a basic Ansible playbook that performs a series of simple tasks on a localhost host, reading parameters from a variable file.
 
-* *day-2_ops2*: Demonstrates gathering collections from a git source using requirements files. Moreover presents ansible_piepline.yml file to control Ansible execution context.
+* *day-2_ops2*: Demonstrates gathering collections from a git source using requirements files. Moreover presents `ansible_piepline.yml` file to control Ansible execution context.
 
-* *day-2_ops3*: Demonstrates use of inventory.ini to provide host names and play variables.
+* *day-2_ops3*: Demonstrates use of `inventory.ini` to provide host names and play variables.
 
-* *day-2_ops4*: Demonstrates use of ansible.cfg to control Ansible execution context.
+* *day-2_ops4*: Demonstrates use of `ansible.cfg` to control Ansible execution context.
 
-* *day-2_ops5*: Demonstrates use of galaxy firewall to remove public sources from requirements.yml. Moreover presents ansible_piepline.yml file to control Ansible execution context - here the playbook name is defined to select one out of multiple playbooks.
+* *day-2_ops5*: Demonstrates use of galaxy firewall to remove public sources from requirements.yml. Moreover presents `ansible_piepline.yml` file to control Ansible execution context - here the playbook name is defined to select one out of multiple playbooks.
 
 * *terraform/day-1_cfg*: Contains the Terraform configuration for initial infrastructure provisioning, such as creating VMs, networks, or storage, which is concluded with Ansible based configuration.
 
-* *day-2_ops_workspace1*: Demonstrates use of workspaces to run Ansible playbooks. Covers change of the engine type: DEV workspace uses runs the debug engine, and PROD workspace runs the Ansible engine.
+* *day-2_ops_workspace1*: Demonstrates use of workspaces to run Ansible playbooks. Covers change of the engine type: `DEV` workspace uses runs the debug engine, and `PROD` workspace runs the Ansible engine.
+
+== Ansible Engine philosophy
+
+Ansible Engine brings Ansible to IaC pipeline extending it by CaC capabilities. Pipeline integration extends typical Ansible flow by GitOps elements as the review and approval process. As it may sounds weird for Ansible, it extends regular Ansible approach to enterprise level by providing plan-of-work that converts into proof-of-work. The plan-of-work contains static form of Ansible execution context that may be by definition dynamic e.g. when dynamic inventory plugin is used. The pipeline executes inventory converting it to a static file, that is attached to plan-of-work and used during actual Ansible playbook execution. Once `apply` is executed the plan-of-work becomes proof-of-work.
+
+As you see Ansible adopts terraform deployment style based on `init → plan → apply` what combined with GitOps ideally fits into enterprise requirements.
 
 == Ansible Engine capabilities
 
@@ -97,9 +103,9 @@ ansible-inventory -i inventory.yml --list --export --yaml --output inventory_sta
 
 === Playbook execution
 
-The plan phase detects the playbook to be executed. When more than one file is found, the plan looks into the ANSIBLE_PLAYBOOK file for a playbook filename. Once the name is determined, the apply phase executes the playbook from its directory with the static inventory file, and captures stderr to a separate file.
+The plan phase detects the playbook to be executed. When more than one file is found, the plan looks into the ansible_piepline file for a playbook filename. Once the name is determined, the apply phase executes the playbook from its directory with the static inventory file, and captures stderr to a separate file.
 
-Variable files are not applied via the CLI—the playbook should load variable files as required.
+Variable files are not applied via the CLI - the playbook should load variable files as required.
 
 [source,bash]
 ----
@@ -127,7 +133,7 @@ ansible_piepline:
 
 Terrateam implements a Terraform-style lifecycle based on *init → plan → apply → output*, and applies the same model to Ansible. This approach aligns well with enterprise environments where execution requires plan approval, making Ansible workflows auditable and predictable in the same way as Terraform.
 
-Ansible init detects the requirements.yml file and installs defined dependencies using ansible-galaxy. Plan executes ansible-inventory to transform potentially dynamic data generated by plugins into a static file. This step ensures the approver sees exactly what will be executed.
+Ansible init detects the `requirements.yml` file and installs defined dependencies using ansible-galaxy. Plan executes ansible-inventory to transform potentially dynamic data generated by plugins into a static file. This step ensures the approver sees exactly what will be executed.
 
 Finally, apply executes ansible-playbook in the context presented in plan. Output writes specified facts into output storage.
 
@@ -155,16 +161,16 @@ Ansible Engine is defined as series of scripts associated to terrateam stages in
       - type: apply
 ----
 
-* init.sh - builds ANSIBLE_ROOT, applied galaxy-firewall to requirements.yml and executes ansible-galaxy install. The init is executed before both plan and apply, as Terrateam runs them in separate execution environments.
+* `init.sh` - builds ANSIBLE_ROOT, applied galaxy-firewall to requirements.yml and executes ansible-galaxy install. The init is executed before both plan and apply, as Terrateam runs them in separate execution environments.
 
-* plan.sh - discovers the Ansible execution context to document it in a plan file. The plan file is handled by Terrateam to be passed to the apply phase. Note that in this place, potentially dynamic inventory is converted to static form.
+* `plan.sh` - discovers the Ansible execution context to document it in a plan file. The plan file is handled by Terrateam to be passed to the apply phase. Note that in this place, potentially dynamic inventory is converted to static form.
 
-* diff.sh - converts the plan file to a presentable format for the Pull Request conversation.
+* `diff.sh` - converts the plan file to a presentable format for the Pull Request conversation.
 
-* apply.sh - unloads the plan to the Ansible directory and executes
+* `apply.sh` - unloads the plan to the Ansible directory and executes
 ansible-playbook. In reality, only the inventory is unloaded, as the rest of the context is carried by the GitHub repository, and the requirements.yml is processed by t he init script.
 
-* output.sh - [Not yet implemented] Writes Ansible facts to a well-known
+* `output.sh` - [Not yet implemented] Writes Ansible facts to a well-known
 location.
 
 == To be done
