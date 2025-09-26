@@ -82,7 +82,7 @@ jq --arg msg "$MESSAGE" '.message = $msg' vars.json > /tmp/tmp.json && mv /tmp/t
 
 5. create pul request
 
-Open pull request at GitHub to notice that plan operation is being executed.
+Open pull request at GitHub to notice that the plan operation is being executed.
 
 ```
 terrateam plan: day-2_ops1 defaultWaiting for status to be reported — Running
