@@ -23,6 +23,12 @@ pip install ansible
 
 ## day-2_ops1
 
+Goals:
+
+* execute simple playbook
+* familiarize with GitHub ansible engine outputs for plan stage
+* familiarize with GitHub ansible engine outputs for apply stage
+
 Execute the playbook at the command line.
 
 ```bash
@@ -88,7 +94,7 @@ Open pull request at GitHub to notice that the plan operation is being executed.
 terrateam plan: day-2_ops1 default Waiting for status to be reported — Running
 ```
 
-Once completed click in comments on `Expand for plan output details` under `Terrateam Plan Output` to see ansible execution plan.
+Once completed click on `Expand for plan output details` under pull request conversation comment's `Terrateam Plan Output` to see ansible execution plan.
 
 ```text
 Ansible Execution Context
@@ -151,25 +157,25 @@ At the plan you see playbook name, ping test of target hosts. Playbook execution
 Accept the execution by adding `terrateam apply` to pull request conversation comment to notice that operation is being executed.
 
 ```
-terrateam apply: day-2_ops1 default - running
+terrateam apply: day-2_ops1 defaul tWaiting for status to be reported — Running
 ```
 
-Once the apply is completed click in comments on `Expand for apply output details` under `Terrateam Apply Output` to see playbook output and section with stderr output.
+Once the apply is completed click on`Expand for apply output details` under `Terrateam Apply Output` to see the playbook execution output.
 
 ```
-Running ansible-playbook
-========================
+✅ Running ansible-playbook
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 PLAY [Hello World Playbook] ****************************************************
 
 TASK [Display hello message] ***************************************************
 ok: [localhost] => {
-    "msg": "Hello World from Ansible! Message: Welcome to Terrateam Ansible Integration!"
+    "msg": "Hello World from Ansible! Message: Hello World at Fri Sep 26 09:33:24 CEST 2025"
 }
 
 TASK [Display environment info] ************************************************
 ok: [localhost] => {
-    "msg": "Environment: [], Version: 1.0.36"
+    "msg": "Environment: [], Version: 1.0.37"
 }
 
 TASK [Create a test file] ******************************************************
@@ -177,19 +183,14 @@ changed: [localhost]
 
 TASK [Show summary] ************************************************************
 ok: [localhost] => {
-    "msg": "Playbook execution completed successfully!\n- Message: Welcome to Terrateam Ansible Integration!\n- Environment: []\n- Version: 1.0.36\n- File created: True\n"
+    "msg": "Playbook execution completed successfully!\n- Message: Hello World at Fri Sep 26 09:33:24 CEST 2025\n- Environment: []\n- Version: 1.0.37\n- File created: True\n"
 }
 
 PLAY RECAP *********************************************************************
 localhost                  : ok=4    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
 
-
-Errors and warnings (stderr):
-=============================
-[WARNING]: No inventory was parsed, only implicit localhost is available
-[WARNING]: provided hosts list is empty, only localhost is available. Note that
-the implicit localhost does not match 'all'
+⚠️ warnings & errors
 [WARNING]: Found variable using reserved name: environment
 ```
 
-Now you can merge and delete the branch. Your setting are now in the main branch.
+Now you can merge and delete the branch. Your playbook applied changes at target systems, and all execution context is stored in Terrateam server, and all related files are in the main branch.
