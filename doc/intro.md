@@ -85,37 +85,70 @@ jq --arg msg "$MESSAGE" '.message = $msg' vars.json > /tmp/tmp.json && mv /tmp/t
 Open pull request at GitHub to notice that the plan operation is being executed.
 
 ```
-terrateam plan: day-2_ops1 defaultWaiting for status to be reported — Running
+terrateam plan: day-2_ops1 default Waiting for status to be reported — Running
 ```
 
 Once completed click in comments on `Expand for plan output details` under `Terrateam Plan Output` to see ansible execution plan.
 
 ```text
-Ansible will be executed in the following context:
----
-ansible_execution_context:
-  ANSIBLE_PLAYBOOK: "playbook.yml"
-  
-  ANSIBLE_PLAYBOOK_ERROR: ""
-  
-  ANSIBLE_INVENTORY:
-  
-  ANSIBLE_CUSTOM_CFG:
-  
-  ANSIBLE_CUSTOM_REQUIREMENTS:
-  
-  ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE:
-  
-  ANSIBLE_CUSTOM_REQUIREMENTS_ERROR: ""
-  
-  ENV:
-    ANSIBLE_ROOT: "/github/workspace/day-2_ops1"
-    TERRATEAM_DIR: "day-2_ops1"
-    TERRATEAM_WORKSPACE: "default"
-    TERRATEAM_ROOT: "/github/workspace"
+Ansible Execution Context
+━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ Playbook
+━━━━━━━━━━━
+playbook.yml
+
+✅ Ansible Ping
+━━━━━━━━━━━━━━━
+(none)
+
+✅ Ansible Playbook Check
+━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PLAY [Hello World Playbook] ****************************************************
+
+TASK [Display hello message] ***************************************************
+ok: [localhost] => {
+    "msg": "Hello World from Ansible! Message: Hello World at Fri Sep 26 09:33:24 CEST 2025"
+}
+
+TASK [Display environment info] ************************************************
+ok: [localhost] => {
+    "msg": "Environment: [], Version: 1.0.37"
+}
+
+TASK [Create a test file] ******************************************************
+changed: [localhost]
+
+TASK [Show summary] ************************************************************
+ok: [localhost] => {
+    "msg": "Playbook execution completed successfully!\n- Message: Hello World at Fri Sep 26 09:33:24 CEST 2025\n- Environment: []\n- Version: 1.0.37\n- File created: True\n"
+}
+
+PLAY RECAP *********************************************************************
+localhost                  : ok=4    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+⚠️ warnings & errors
+[WARNING]: No inventory was parsed, only implicit localhost is available
+[WARNING]: provided hosts list is empty, only localhost is available. Note that
+the implicit localhost does not match 'all'
+[WARNING]: Found variable using reserved name: environment
+
+🗄️ Inventory file
+━━━━━━━━━━━━━━━━━
+(none)
+
+🗄️ ansible.cfg file
+━━━━━━━━━━━━━━━━━━━
+(none)
+
+🗄️ requirements file
+━━━━━━━━━━━━━━━━━━━━
+(none)
 ```
 
-At the plan you see that `playbook.yml` will be executed in `/github/workspace/day-2_ops1` directory. Accept execution by adding `terrateam apply` to pull request conversation comment to notice that operation is being executed.
+At the plan you see playbook name, ping test of target hosts. Playbook execution in check mode - special mode in Ansible that shows changes to be done at the target host, without actually making them at this stage. Check mode informs what will be done during apply. Moreover you see inventory, ansible.,dfg, and galaxy install's requirements file. This example just executes simple playbook creating one file.
+
+Accept the execution by adding `terrateam apply` to pull request conversation comment to notice that operation is being executed.
 
 ```
 terrateam apply: day-2_ops1 default - running
