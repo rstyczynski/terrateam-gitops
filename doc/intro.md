@@ -73,7 +73,7 @@ Now let's run the same in the pipeline:
 
 ```bash
 MESSAGE="Hello World at $(date)"
-jq --arg msg "$MESSAGE" '.message = $msg' vars.json > tmp.json && mv tmp.json vars.json 
+jq --arg msg "$MESSAGE" '.message = $msg' vars.json > /tmp/tmp.json && mv /tmp/tmp.json vars.json 
 ```
 
 3. commit with message "trigger day-2_ops1"
