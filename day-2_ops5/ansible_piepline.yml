@@ -8,3 +8,5 @@ ansible_piepline:
     apply: false
     output: false
     shared: false
+    skip_ping: true
+    skip_check: false
