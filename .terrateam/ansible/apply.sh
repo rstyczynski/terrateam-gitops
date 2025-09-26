@@ -36,8 +36,8 @@ fi
 
 
 echo
-echo "Running ansible-playbook"
-echo "========================"
+echo "✅ Running ansible-playbook"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 cd $ANSIBLE_ROOT
 
 if [ "$(cat inventory_static.yml)" != "" ]; then
@@ -47,15 +47,10 @@ else
   ansible-playbook $PLAYBOOK  2> >(tee /tmp/ansible_stderr.log >&2)
 fi
 
-echo
-echo "Errors and warnings (stderr):"
-echo "============================="
 if [[ -s /tmp/ansible_stderr.log ]]; then
-  cat /tmp/ansible_stderr.log
-else
-  echo "(none)"
+    echo "⚠️ warnings & errors"
+    cat /tmp/ansible_stderr.log
 fi
-
 
 source "$(dirname "$0")/../shared/debug.sh" >&2
 

@@ -146,7 +146,7 @@ the implicit localhost does not match 'all'
 (none)
 ```
 
-At the plan you see playbook name, ping test of target hosts. Playbook execution in check mode - special mode in Ansible that shows changes to be done at the target host, without actually making them at this stage. Check mode informs what will be done during apply. Moreover you see inventory, ansible.,dfg, and galaxy install's requirements file. This example just executes simple playbook creating one file.
+At the plan you see playbook name, ping test of target hosts. Playbook execution in check mode - special mode in Ansible that shows changes to be done at the target host, without actually making them at this stage. Check mode informs what will be done during apply. Moreover you see inventory, ansible.,dfg, and galaxy install's requirements file. This example just executes simple playbook creating one file. Notice `warning` sections that may appear to inform about warning and error messages reported by each element of the plan stage.
 
 Accept the execution by adding `terrateam apply` to pull request conversation comment to notice that operation is being executed.
 
