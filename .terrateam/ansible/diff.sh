@@ -41,8 +41,8 @@ echo
 echo "Ansible Execution Context"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━"
 
-echo "— Playbook —"
-echo "------------"
+echo "✅ Playbook"
+echo "━━━━━━━━━━━"
 if [ -n "${ANSIBLE_PLAYBOOK}" ] && [ "${ANSIBLE_PLAYBOOK}" != "null" ]; then
   printf "%s\n" "${ANSIBLE_PLAYBOOK}"
 else
@@ -56,22 +56,11 @@ if [ -n "${ANSIBLE_PLAYBOOK_ERROR}" ] && [ "${ANSIBLE_PLAYBOOK_ERROR}" != "null"
     printf "%s\n" "${ANSIBLE_PLAYBOOK_ERROR}"
 fi
 
-# echo "🌟 #star  ✅ #check  ❌ #cross  ⚠️ #warning  🚀 #rocket  🔒 #lock  🔓 #unlock"
-# echo "📦 #package  📄 #document  📝 #memo  🔍 #search  💡 #idea  🔧 #wrench  🛠️ #tools"
-# echo "📊 #bar_chart  📈 #chart_up  📉 #chart_down  🕒 #clock  🔗 #link  🎯 #target  💾 #save"
-# echo "🗑️ #trash  🖥️ #computer  📡 #antenna  🌐 #globe  🛡️ #shield  🎉 #tada  🔥 #fire"
-# echo "💥 #boom  🧩 #puzzle  🔑 #key  🧭 #compass  📬 #mailbox  📢 #loudspeaker  🔔 #bell"
-# echo "🛎️ #service_bell  🧰 #toolbox  🗂️ #folders  🗃️ #card_file_box  🗄️ #file_cabinet"
-# echo "🧮 #abacus  🧱 #bricks  🧲 #magnet  🧪 #test_tube  🧬 #dna  🧫 #petri_dish"
-# echo "🧯 #extinguisher  🧹 #broom  🧺 #basket  🧻 #roll_paper  🧼 #soap  🧽 #sponge  🧴 #lotion"
-# echo "🧷 #safety_pin  🧸 #teddy_bear  🧊 #ice  🧋 #bubble_tea  🧃 #juice  🧁 #cupcake  🧂 #salt"
-# echo "🧀 #cheese  🧉 #mate"
-
 
 # Output blocks
 echo
 echo "✅ Ansible Ping"
-echo "---------------"
+echo "━━━━━━━━━━━━━━━"
 if [ -n "${ANSIBLE_PING_STDOUT}" ] && [ "${ANSIBLE_PING_STDOUT}" != "null" ]; then
   printf "%s\n" "${ANSIBLE_PING_STDOUT}"
 else
@@ -86,8 +75,8 @@ if [ -n "${ANSIBLE_PING_STDERR}" ] && [ "${ANSIBLE_PING_STDERR}" != "null" ]; th
 fi
 
 echo
-echo "✅ Ansible Playbook Check —"
-echo "--------------------------"
+echo "✅ Ansible Playbook Check"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━"
 if [ -n "${ANSIBLE_PLAYBOOK_CHECK_STDOUT}" ] && [ "${ANSIBLE_PLAYBOOK_CHECK_STDOUT}" != "null" ]; then
   printf "%s\n" "${ANSIBLE_PLAYBOOK_CHECK_STDOUT}"
 else
@@ -102,8 +91,8 @@ if [ -n "${ANSIBLE_PLAYBOOK_CHECK_STDERR}" ] && [ "${ANSIBLE_PLAYBOOK_CHECK_STDE
 fi
 
 echo
-echo "🗄️ Inventory file —"
-echo "------------------"
+echo "🗄️ Inventory file"
+echo "━━━━━━━━━━━━━━━━━"
 if [ -n "${ANSIBLE_INVENTORY}" ] && [ "${ANSIBLE_INVENTORY}" != "null" ]; then
   printf "%s\n" "${ANSIBLE_INVENTORY}"
 else
@@ -111,8 +100,8 @@ else
 fi
 
 echo
-echo "🗄️ ansible.cfg file —"
-echo "---------------------------"
+echo "🗄️ ansible.cfg file"
+echo "━━━━━━━━━━━━━━━━━━━"
 if [ -n "${ANSIBLE_CUSTOM_CFG}" ] && [ "${ANSIBLE_CUSTOM_CFG}" != "null" ]; then
   printf "%s\n" "${ANSIBLE_CUSTOM_CFG}"
 else
@@ -120,8 +109,8 @@ else
 fi
 
 echo
-echo "🗄️ requirements file —"
-echo "----------------------------"
+echo "🗄️ requirements file"
+echo "━━━━━━━━━━━━━━━━━━━━"
 if [ -n "${ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE}" ] && [ "${ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE}" != "null" ]; then
     printf "%s\n" "${ANSIBLE_CUSTOM_REQUIREMENTS_EFFECTIVE}"
     # echo
@@ -143,13 +132,16 @@ fi
 
 
 if [ "${DEBUG_DIFF}" == "true" ]; then
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    echo "      🔍 DEBUG SECTION"
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo 
     echo "Plan file (DEBUG):"
-    echo "=================="
+    echo "━━━━━━━━━━━━━━━━━━"
     cat ${TERRATEAM_PLAN_FILE}
     echo 
     echo "Environment variables (DEBUG):"
-    echo "=============================="
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     echo "CWD: ${PWD}"
     echo "TERRATEAM_DIR: ${TERRATEAM_DIR}"
     echo "TERRATEAM_WORKSPACE: ${TERRATEAM_WORKSPACE}"
@@ -158,7 +150,7 @@ if [ "${DEBUG_DIFF}" == "true" ]; then
     echo 
     echo 
     echo "Other tests (DEBUG):"
-    echo "=============================="
+    echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
     which ansible-galaxy
     which yq
     which jq
