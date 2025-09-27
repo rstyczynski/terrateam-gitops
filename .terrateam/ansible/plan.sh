@@ -10,6 +10,8 @@ require_cmd() {
         echo "ERROR: required command not found: $cmd"
         MISSING_CMDS+=("$cmd")
         return 1
+    else
+        echo "OK: required command found: $cmd"
     fi
 }
 
@@ -24,7 +26,7 @@ for _cmd in ansible ansible-galaxy ansible-inventory; do
 done
 
 if [ ${#MISSING_CMDS[@]} -gt 0 ]; then
-    echo "FATAL: missing required commands: ${MISSING_CMDS[*]}" >&2
+    echo "FATAL: missing required commands: ${MISSING_CMDS[*]}"
     exit 1
 fi
 
