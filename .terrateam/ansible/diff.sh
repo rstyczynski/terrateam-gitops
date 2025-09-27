@@ -142,7 +142,7 @@ if [ "${DEBUG_DIFF}" == "true" ]; then
     echo 
     echo "Environment variables (DEBUG):"
     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-    echo "CWD: ${PWD}"
+    echo "CWD: ${pwd}"
     echo "TERRATEAM_DIR: ${TERRATEAM_DIR}"
     echo "TERRATEAM_WORKSPACE: ${TERRATEAM_WORKSPACE}"
     echo "TERRATEAM_ROOT: ${TERRATEAM_ROOT}"

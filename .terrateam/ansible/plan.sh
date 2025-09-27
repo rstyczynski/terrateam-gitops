@@ -1,5 +1,36 @@
 #!/bin/bash
 
+# Collect missing commands to evaluate after all checks
+MISSING_CMDS=()
+
+# Verify required utilities are available; abort early if missing
+require_cmd() {
+    local cmd="$1"
+    if ! command -v "$cmd" >/dev/null 2>&1; then
+        echo "ERROR: required command not found: $cmd"
+        MISSING_CMDS+=("$cmd")
+        return 1
+    else
+        echo "OK: required command found: $cmd"
+    fi
+}
+
+# Minimal POSIX coreutils we rely on
+for _cmd in tee sed find cat touch rm ls pwd; do
+    require_cmd "$_cmd"
+done
+
+# Ansible toolchain
+for _cmd in ansible ansible-galaxy ansible-inventory; do
+    require_cmd "$_cmd"
+done
+
+if [ ${#MISSING_CMDS[@]} -gt 0 ]; then
+    echo "FATAL: missing required commands: ${MISSING_CMDS[*]}"
+    exit 1
+fi
+
+
 PLAN_FILE=${1}
 
 function plan_debug() {
@@ -41,7 +72,7 @@ else
     ANSIBLE_ROOT=${TERRATEAM_ROOT}/${TERRATEAM_DIR}
 fi
 cd ${ANSIBLE_ROOT} | exit 2
-PWD
+pwd
 ls -la
 
 #
@@ -258,10 +289,10 @@ if [ "${SKIP_PING}" != "true" ]; then
         cd ${ANSIBLE_ROOT}
 
         # Run ansible ping, capture stdout and stderr
-        if [ "$(cat inventory_static.yml)" != "" ]; then
+        if [ -s inventory_static.yml ]; then
             ansible all -m ping -i inventory_static.yml > /tmp/ansible_ping_stdout.log 2> /tmp/ansible_ping_stderr.log
         else
-            rm inventory_static.yml
+            rm -f inventory_static.yml
             touch /tmp/ansible_ping_stdout.log
         fi
 
@@ -294,15 +325,17 @@ if [ "${SKIP_CHECK}" != "true" ]; then
         cd ${ANSIBLE_ROOT}
 
         # Run ansible-playbook in check mode, capture stdout and stderr
+        # DO NOT USE tee here, as whole stdout and stderr are captured by the pipeline
+
         if [ "$(cat inventory_static.yml)" != "" ]; then
             ansible-playbook --check "${ANSIBLE_PLAYBOOK}" -i inventory_static.yml \
-                > >(tee /tmp/ansible_playbook_check_stdout.log) \
-                2> >(tee /tmp/ansible_playbook_check_stderr.log >&2)
+                > /tmp/ansible_playbook_check_stdout.log \
+                2> /tmp/ansible_playbook_check_stderr.log
         else
             rm -f inventory_static.yml
             ansible-playbook --check "${ANSIBLE_PLAYBOOK}" \
-                > >(tee /tmp/ansible_playbook_check_stdout.log) \
-                2> >(tee /tmp/ansible_playbook_check_stderr.log >&2)
+                > /tmp/ansible_playbook_check_stdout.log \
+                2> /tmp/ansible_playbook_check_stderr.log
         fi
 
         # Indent STDOUT
@@ -335,5 +368,6 @@ echo ">>TERRATEAM_PLAN_FILE: ${TERRATEAM_PLAN_FILE}" >&2
 cat ${TERRATEAM_PLAN_FILE} >&2
 echo "<<TERRATEAM_PLAN_FILE" >&2
 echo "⚠️ ================================================" >&2
+
 
 exit ${EXIT_CODE}

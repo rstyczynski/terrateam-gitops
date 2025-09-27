@@ -1,4 +1,10 @@
 ---
 ansible_piepline:
+  debug:
+    plan: true
+    diff: true
+    apply: true
+    output: true
+    shared: true
   control:
-    skip_check: true
+    skip_check: false
