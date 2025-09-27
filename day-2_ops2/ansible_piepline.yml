@@ -1,4 +1,4 @@
 ---
 ansible_piepline:
   control:
-    skip_check: true
+    skip_check: false
