@@ -289,10 +289,10 @@ if [ "${SKIP_PING}" != "true" ]; then
         cd ${ANSIBLE_ROOT}
 
         # Run ansible ping, capture stdout and stderr
-        if [ "$(cat inventory_static.yml)" != "" ]; then
+        if [ -s inventory_static.yml ]; then
             ansible all -m ping -i inventory_static.yml > /tmp/ansible_ping_stdout.log 2> /tmp/ansible_ping_stderr.log
         else
-            rm inventory_static.yml
+            rm -f inventory_static.yml
             touch /tmp/ansible_ping_stdout.log
         fi
 
