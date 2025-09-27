@@ -1,12 +1,15 @@
-
 #!/bin/bash
+
+# Collect missing commands to evaluate after all checks
+MISSING_CMDS=()
 
 # Verify required utilities are available; abort early if missing
 require_cmd() {
     local cmd="$1"
     if ! command -v "$cmd" >/dev/null 2>&1; then
         echo "ERROR: required command not found: $cmd"
-        exit 127
+        MISSING_CMDS+=("$cmd")
+        return 1
     fi
 }
 
@@ -19,6 +22,12 @@ done
 for _cmd in ansible ansible-galaxy ansible-inventory; do
     require_cmd "$_cmd"
 done
+
+if [ ${#MISSING_CMDS[@]} -gt 0 ]; then
+    echo "FATAL: missing required commands: ${MISSING_CMDS[*]}" >&2
+    exit 1
+fi
+
 
 PLAN_FILE=${1}
 
@@ -355,5 +364,6 @@ echo ">>TERRATEAM_PLAN_FILE: ${TERRATEAM_PLAN_FILE}" >&2
 cat ${TERRATEAM_PLAN_FILE} >&2
 echo "<<TERRATEAM_PLAN_FILE" >&2
 echo "⚠️ ================================================" >&2
+
 
 exit ${EXIT_CODE}
