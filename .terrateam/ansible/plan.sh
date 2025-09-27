@@ -5,7 +5,7 @@
 require_cmd() {
     local cmd="$1"
     if ! command -v "$cmd" >/dev/null 2>&1; then
-        echo "ERROR: required command not found: $cmd" >&2
+        echo "ERROR: required command not found: $cmd"
         exit 127
     fi
 }
