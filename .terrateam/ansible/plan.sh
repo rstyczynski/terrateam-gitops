@@ -1,4 +1,24 @@
+
 #!/bin/bash
+
+# Verify required utilities are available; abort early if missing
+require_cmd() {
+    local cmd="$1"
+    if ! command -v "$cmd" >/dev/null 2>&1; then
+        echo "ERROR: required command not found: $cmd" >&2
+        exit 127
+    fi
+}
+
+# Minimal POSIX coreutils we rely on
+for _cmd in tee sed find cat touch rm ls pwd; do
+    require_cmd "$_cmd"
+done
+
+# Ansible toolchain
+for _cmd in ansible ansible-galaxy ansible-inventory; do
+    require_cmd "$_cmd"
+done
 
 PLAN_FILE=${1}
 
