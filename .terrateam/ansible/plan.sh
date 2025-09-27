@@ -16,15 +16,19 @@ require_cmd() {
 }
 
 # Minimal POSIX coreutils we rely on
-CHECK_ERRORS=0
-for _cmd in tee sed find cat touch rm ls pwd mkfifo; do
-    require_cmd "$_cmd" || CHECK_ERRORS=1
+for _cmd in tee sed find cat touch rm ls pwd; do
+    require_cmd "$_cmd"
 done
 
 # Ansible toolchain
 for _cmd in ansible ansible-galaxy ansible-inventory; do
-    require_cmd "$_cmd" || CHECK_ERRORS=1
+    require_cmd "$_cmd"
 done
+
+if [ ${#MISSING_CMDS[@]} -gt 0 ]; then
+    echo "FATAL: missing required commands: ${MISSING_CMDS[*]}"
+    exit 1
+fi
 
 
 PLAN_FILE=${1}
@@ -321,35 +325,18 @@ if [ "${SKIP_CHECK}" != "true" ]; then
         cd ${ANSIBLE_ROOT}
 
         # Run ansible-playbook in check mode, capture stdout and stderr
-        # Use FIFOs + tee (portable; avoids bash process substitution issues in Docker)
-        OUT_FIFO="/tmp/ap_check_out.$$"
-        ERR_FIFO="/tmp/ap_check_err.$$"
-        : >/tmp/ansible_playbook_check_stdout.log
-        : >/tmp/ansible_playbook_check_stderr.log
-        rm -f "${OUT_FIFO}" "${ERR_FIFO}"
-        mkfifo "${OUT_FIFO}" "${ERR_FIFO}"
-
-        # Spawn tee readers in background
-        tee /tmp/ansible_playbook_check_stdout.log < "${OUT_FIFO}" &
-        TEE_OUT_PID=$!
-        tee /tmp/ansible_playbook_check_stderr.log >&2 < "${ERR_FIFO}" &
-        TEE_ERR_PID=$!
+        # DO NOT USE tee here, as whole stdout and stderr are captured by the pipeline
 
         if [ "$(cat inventory_static.yml)" != "" ]; then
             ansible-playbook --check "${ANSIBLE_PLAYBOOK}" -i inventory_static.yml \
-                > "${OUT_FIFO}" \
-                2> "${ERR_FIFO}"
+                > /tmp/ansible_playbook_check_stdout.log \
+                2> /tmp/ansible_playbook_check_stderr.log
         else
             rm -f inventory_static.yml
             ansible-playbook --check "${ANSIBLE_PLAYBOOK}" \
-                > "${OUT_FIFO}" \
-                2> "${ERR_FIFO}"
+                > /tmp/ansible_playbook_check_stdout.log \
+                2> /tmp/ansible_playbook_check_stderr.log
         fi
-
-        # Ensure tee writers flush fully before reading logs
-        AP_RC=$?
-        wait "${TEE_OUT_PID}" "${TEE_ERR_PID}"
-        rm -f "${OUT_FIFO}" "${ERR_FIFO}"
 
         # Indent STDOUT
         if [[ -s /tmp/ansible_playbook_check_stdout.log ]]; then
@@ -370,11 +357,6 @@ if [ "${SKIP_CHECK}" != "true" ]; then
 fi
 
 EXIT_CODE=0
-
-if [ ${#MISSING_CMDS[@]} -gt 0 ]; then
-    echo "FATAL: missing required commands: ${MISSING_CMDS[*]}" >&2
-    EXIT_CODE=127
-fi
 
 source "$(dirname "$0")/../shared/debug.sh" >&2
 
