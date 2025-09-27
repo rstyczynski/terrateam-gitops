@@ -72,7 +72,7 @@ else
     ANSIBLE_ROOT=${TERRATEAM_ROOT}/${TERRATEAM_DIR}
 fi
 cd ${ANSIBLE_ROOT} | exit 2
-PWD
+pwd
 ls -la
 
 #
