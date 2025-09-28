@@ -69,7 +69,12 @@ else
   echo "(none)"
 fi
 
-# Output blocks
+if [ -n "${ANSIBLE_PING_STDERR}" ] && [ "${ANSIBLE_PING_STDERR}" != "null" ]; then
+    echo
+    echo "⚠️ warnings & errors"
+    printf "%s\n" "${ANSIBLE_PING_STDERR}"
+fi
+
 echo
 echo "✅ Ansible Python"
 echo "━━━━━━━━━━━━━━━"
@@ -78,7 +83,6 @@ if [ -n "${ANSIBLE_PYTHON_STDOUT}" ] && [ "${ANSIBLE_PYTHON_STDOUT}" != "null" ]
 else
   echo "(none)"
 fi
-
 
 if [ -n "${ANSIBLE_PYTHON_STDERR}" ] && [ "${ANSIBLE_PYTHON_STDERR}" != "null" ]; then
     echo

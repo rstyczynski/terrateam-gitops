@@ -317,7 +317,7 @@ fi
 #
 # run setup
 #
-if [ "${SKIP_SETUP}" != "true" ]; then
+if [ "${PYTHON_INFO}" == "true" ]; then
     {
         echo
         if [ -s inventory_static.yml ]; then
