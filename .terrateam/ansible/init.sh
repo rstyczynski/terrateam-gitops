@@ -28,24 +28,6 @@ ls -la
 #
 ansible-playbook --version
 
-
-#
-# execute init script
-#
-CTX_JSON=$(python3 -c 'import sys,yaml,json; print(json.dumps(yaml.safe_load(open(sys.argv[1]))))' ${TERRATEAM_PLAN_FILE})
-INIT_SCRIPT=$(echo "${CTX_JSON}" | jq -r '.ansible_execution_context.control.init_script // empty')
-if [ -n "${INIT_SCRIPT}" ]; then
-    echo "Executing init script from pipeline context..."
-    eval "${INIT_SCRIPT}"
-    INIT_EXIT_CODE=$?
-    if [ $INIT_EXIT_CODE -ne 0 ]; then
-        echo "Error: Init script failed with exit code $INIT_EXIT_CODE" >&2
-        exit $INIT_EXIT_CODE
-    fi
-else
-    echo "No init script found in pipeline context."
-fi
-
 #
 # detect ansible.cfg
 #
@@ -84,6 +66,51 @@ if [ ! -z "${ANSIBLE_CUSTOM_REQUIREMENTS}" ]; then
 else
     echo "Info. No requirements to install. Requirements file not found in workspace directory."
 fi
+
+
+#
+# execute init script
+#
+CTX_JSON=$(python3 -c 'import sys,yaml,json; print(json.dumps(yaml.safe_load(open(sys.argv[1]))))' ${TERRATEAM_PLAN_FILE})
+INIT_SCRIPT=$(echo "${CTX_JSON}" | jq -r '.ansible_execution_context.control.init_script // empty')
+# Execute the init_script line by line, filtering forbidden programs
+
+# Define forbidden programs (space-separated)
+FORBIDDEN_PROGRAMS="ansible-galaxy rm shutdown reboot halt poweroff mkfs dd :(){"
+
+if [ -n "$INIT_SCRIPT" ]; then
+    echo "Executing init_script with forbidden program filtering..."
+    # Read the script line by line
+    while IFS= read -r line; do
+        # Skip empty lines and comments
+        trimmed="$(echo "$line" | sed 's/^[[:space:]]*//')"
+        if [[ -z "$trimmed" || "$trimmed" =~ ^# ]]; then
+            continue
+        fi
+
+        # Check for forbidden programs
+        forbidden_found=0
+        for prog in $FORBIDDEN_PROGRAMS; do
+            # Use word boundary to avoid partial matches
+            if [[ "$line" =~ (^|[[:space:];|&])$prog([[:space:];|&()]|$) ]]; then
+                echo "⚠️  Forbidden program '$prog' detected in init_script line: $line" >&2
+                forbidden_found=1
+                break
+            fi
+        done
+
+        if [ $forbidden_found -eq 0 ]; then
+            echo "+ $line"
+            eval "$line"
+        else
+            echo "⛔ Skipping forbidden line: $line" >&2
+        fi
+    done <<< "$INIT_SCRIPT"
+else
+    echo "No init_script found in ansible_execution_context."
+fi
+
+
 
 EXIT_CODE=0
 
