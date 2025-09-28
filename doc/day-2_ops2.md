@@ -135,7 +135,7 @@ Check mode is a powerful Ansible capability to validate changes made by the play
 
 Now let's run the same in the pipeline. The pipeline is triggered by a file change under a branch and a pull request, what is controlled by a Terrateam GitHub extension. To trigger the pipeline execute following steps:
 
-1. Create a branch with name: your_name/day-2_ops1. Add your name or other unique string the branch name.
+1. Create a branch with name: your_name/day-2_ops2. Add your name or other unique string the branch name.
 
 2. Change variable file to provide any change, here additional timestamp argument is added just to trigger the pipeline.
 
