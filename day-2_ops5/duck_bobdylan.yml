@@ -6,4 +6,4 @@
     - role: myorg.publicapi.duckduckgo
 
   vars:
-    duckduckgo_query: "Led Zeppelin"
+    duckduckgo_query: "Bob Dylan"
