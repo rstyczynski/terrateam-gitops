@@ -320,16 +320,12 @@ fi
 if [ "${PYTHON_INFO}" == "true" ]; then
     {
         echo
+        echo "  ANSIBLE_PYTHON:"
         if [ -s inventory_static.yml ]; then
-            echo "  ANSIBLE_PYTHON: |"
+            
             ansible all -m setup -a 'filter=ansible_python*' -i inventory_static.yml \
             > /tmp/ansible_python_stdout.log 2> /tmp/ansible_python_stderr.log
-        else
-            echo "  ANSIBLE_PYTHON:"
-            touch /tmp/ansible_python_stdout.log
-            touch /tmp/ansible_python_stderr.log
         fi
-
 
         # Indent STDOUT
         if [[ -s /tmp/ansible_ping_stdout.log ]]; then
