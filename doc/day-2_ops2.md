@@ -1,17 +1,15 @@
 ## day-2_ops2
 
-Ansible Engine is provided with capability to protect pipeline from installing collections from public sources allowing only dir and git ones. Playbook uses git based collection to interact with DuckGoGo search, having in a requirements.yml public collection. You will see how the pipeline protects from such configurations. Some plays can't be used in check mode due to some reasons. Pipeline provides possibility skip the check mode.
-
-This example uses GitHub pull request interaction assuming you are familiar with this interface. Look at day2-ops1 description for details.
+Ansible Engine is provided with capability to protect pipeline from installing collections from public sources allowing only `dir` and `git` sources. Playbook uses git based collection to interact with DuckDuckGo search, with a collection declared in `requirements.yml`. Some plays can't be used in check mode due to some reasons. Pipeline provides possibility to skip the check mode.
 
 ### Goals
 
-* install collection
+* install collections
 * pipeline control to skip check mode
 
 ### CLI
 
-The play uses DuckGoGo query role that is part of `myorg.publicapi` collection. The dependency is registered in `requirement.yml` file.
+The play uses DuckDuckGo query role that is part of `myorg.publicapi` collection. The dependency is registered in `requirements.yml` file.
 
 ```yaml
 ---
@@ -87,13 +85,13 @@ PLAY RECAP *********************************************************************
 localhost                  : ok=2    changed=0    unreachable=0    failed=1    skipped=1    rescued=0    ignored=0  
 ```
 
-to see critical errors. This play does not comply to Ansible requirements. Running play in a regular mode gives the proper response.
+to see critical errors. This play does not comply with Ansible requirements. Running play in a regular mode gives the proper response.
 
 ```bash
 ansible-playbook duck.yml
 ```
 
-Teh check mode failed, but in this play it does not break from regular run, whioch gives proper results.
+The check mode failed, but in this play it does not break from regular run, which gives proper results.
 
 ```text
 [WARNING]: No inventory was parsed, only implicit localhost is available
@@ -133,13 +131,13 @@ localhost                  : ok=7    changed=0    unreachable=0    failed=0    s
 
 ### Pipeline
 
-Check mode is a powerful Ansible capability to validate changes made by the playbook, without making any changes. The dry-run is powerful, however available only for properly written playbooks. Exemplary `myorg.publicapi.duckduckgo` role does not comply to Ansible standards, what may happen to your code. The pipeline makes it possible to skip `check`.
+Check mode is a powerful Ansible capability to validate changes made by the playbook, without making any changes. The dry-run is powerful, however available only for properly written playbooks. Exemplary `myorg.publicapi.duckduckgo` role does not comply with Ansible standards, what may happen to your code. The pipeline makes it possible to skip `check`.
 
 Now let's run the same in the pipeline. The pipeline is triggered by a file change under a branch and a pull request, what is controlled by a Terrateam GitHub extension. To trigger the pipeline execute following steps:
 
 1. Create a branch with name: your_name/day-2_ops1. Add your name or other unique string the branch name.
 
-2. Change variable file to provide ay change, here additional timestamp argument is added just to trigger the pipeline.
+2. Change variable file to provide any change, here additional timestamp argument is added just to trigger the pipeline.
 
 ```bash
 jq --arg date "$(date)" '.timestamp = $date' vars.json > /tmp/tmp.json && mv /tmp/tmp.json vars.json 
@@ -151,7 +149,7 @@ jq --arg date "$(date)" '.timestamp = $date' vars.json > /tmp/tmp.json && mv /tm
 
 5. create a pull request
 
-Open the pull request at https://github.com/rstyczynski/terrateam-gitops to notice that the plan operation is being executed.
+Open the pull request at https://github.com/rstyczynski/terrateam-gitops to see that the plan operation is being executed.
 
 ```text
 terrateam plan: day-2_ops2 default Waiting for status to be reported — Running
@@ -215,12 +213,12 @@ roles:
   []
 ```
 
-In the execution plan you see failure of one of tasks, as the API call was skipped in a check mode, and there was no data to process. We will fix it. Ypu see warnings from playbook execution - the same as in CLI mode. Inventory and ansible.cfg were not provided, what is indicated. Finally you see requirements.yml file, with `roles:[]`, what may be surprising. It's side effect of galaxy firewall processing.
+In the execution plan you see failure of one of tasks, as the API call was skipped in a check mode, and there was no data to process. We will fix it. You see warnings from playbook execution - the same as in CLI mode. Inventory and ansible.cfg were not provided, what is indicated. Finally you see requirements.yml file, with `roles:[]`, what may be surprising. It's side effect of galaxy firewall processing.
 
-As the code is not dry-run compliant, let's disable check mode at the pipeline using ansible_piepline.yml control file.
+As the code is not dry-run compliant, let's disable check mode at the pipeline using ansible_pipeline.yml control file.
 
 ```bash
-cat > ansible_piepline.yml <<EOF
+cat > ansible_pipeline.yml <<EOF
 ---
 ansible_piepline:
   control:
@@ -228,7 +226,7 @@ ansible_piepline:
 EOF
 ```
 
-Commit the change with message "dry run mode disable", and push, to notice that the pipeline is  triggered. Wait for the new plan with check mode step disabled.
+Commit the change with message "dry run mode disable", and push, to notice that the pipeline is triggered. Wait for the new plan with check mode step disabled.
 
 ```text
 Ansible Execution Context
@@ -309,10 +307,10 @@ PLAY RECAP *********************************************************************
 localhost                  : ok=7    changed=0    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0
 ```
 
-Your playbook applied changes at target systems, the execution context is stored at the Terrateam server. Drop all changes, as we do not want to push them into the repository.
+Your playbook applied changes to target systems, the execution context is stored at the Terrateam server. Drop all changes, because we do not want to push them to the repository.
 
 > **Note:** After a successful apply, you will merge and delete the feature branch to ensure all related files are in the main branch. In your local repository, switch back to the main branch and pull the latest changes.
 
 ### Summary
 
-You learnt that the pipeline automatically installs collections, and how to control potentially required skip of the dry-run mode using `ansible_piepline.yml` control file.
+You learnt that the pipeline automatically installs collections, and how to control potentially required skip of the dry-run mode using `ansible_pipeline.yml` control file.
