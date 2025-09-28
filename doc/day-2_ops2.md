@@ -307,7 +307,7 @@ PLAY RECAP *********************************************************************
 localhost                  : ok=7    changed=0    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0
 ```
 
-Your playbook logic was executed, and the execution context is stored at the Terrateam server. Drop all changes, because we do not want to push them to the repository, by closing the pull request and deleting a branch.
+The playbook logic was executed, and the execution context is stored at the Terrateam server. Drop all changes, because we do not want to push them to the repository, by closing the pull request and deleting a branch.
 
 > **Note:** In regular situation, after a successful apply, you will merge and delete the feature branch to ensure all related files are in the `main`. In your local repository you will switch back to the main branch and pull the latest changes.
 

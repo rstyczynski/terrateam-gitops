@@ -88,10 +88,10 @@ Now let's run the same in the pipeline. The pipeline is triggered by a file chan
 
 1. Create a branch with name: your_name/day-2_ops3. Add your name or other unique string the branch name.
 
-2. Change variable file to provide any change, here additional timestamp argument is added just to trigger the pipeline.
+2. Change any file; here additional timestamp argument is added just to trigger the pipeline.
 
 ```bash
-sed $'/^\\[duck_api:vars\\]/a\\\ntimpastamp='"$(date)"$'\n' inventory.ini > /tmp/inventory.ini
+sed $'/^\\[duck_api:vars\\]/a\\\ntimestamp='"$(date)"$'\n' inventory.ini > /tmp/inventory.ini
 mv /tmp/inventory.ini inventory.ini
 ```
 
@@ -179,7 +179,7 @@ all:
           ansible_connection: local
       vars:
         duckduckgo_query: Led Zeppelin
-        timpastamp: Sun Sep 28 13:19:15 CEST 2025
+        timestamp: Sun Sep 28 13:19:15 CEST 2025
 
 🗄️ ansible.cfg file
 ━━━━━━━━━━━━━━━━━━━
@@ -197,7 +197,7 @@ roles:
   []
 ```
 
-Noe the plan is almost complete, having:
+Now the plan is almost complete, having:
 
 * playbook name
 * ping section
@@ -208,7 +208,6 @@ Noe the plan is almost complete, having:
 Notice the plan converted to yaml format - it's a side effect of capturing inventory state into the plan. The inventory whatever format it's provided e.g. dynamic plugin is converted to static plan to be used during final apply. It prevents from unexpected changes when execution context is changed between plan and apply e.g. some tags were reassigned to compute instances.
 
 Interesting is that the plan section switched here from `(none)` as now the `localhost` was registered with connection type `local` and Ansible was able to execute `ping` module. 
-
 
 To execute the play send apply command to the pipeline
 
@@ -263,7 +262,7 @@ PLAY RECAP *********************************************************************
 localhost                  : ok=8    changed=0    unreachable=0    failed=0    skipped=3    rescued=0    ignored=0
 ```
 
-Your playbook logic was executed, and the execution context is stored at the Terrateam server. Drop all changes, because we do not want to push them to the repository, by closing the pull request and deleting a branch.
+The playbook logic was executed, and the execution context is stored at the Terrateam server. Drop all changes, because we do not want to push them to the repository, by closing the pull request and deleting a branch.
 
 > **Note:** After a successful apply, you will merge and delete the feature branch to ensure all related files are in the main branch. In your local repository, switch back to the main branch and pull the latest changes.
 
