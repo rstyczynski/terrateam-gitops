@@ -1,9 +1,17 @@
 ---
 - name: DuckDuckGo Instant Answer via Ansible (using collection)
   hosts: duck_api
+  vars:
+    duckduckgo_query: "Bob Dylan"
 
   roles:
     - role: myorg.publicapi.duckduckgo
 
-  vars:
-    duckduckgo_query: "Bob Dylan"
+  tasks:
+    - name: Get Object Storage namespace
+      oracle.oci.oci_object_storage_namespace_facts:
+      register: ns
+
+    - name: Show namespace
+      ansible.builtin.debug:
+        msg: "Namespace is {{ ns.namespace }}"

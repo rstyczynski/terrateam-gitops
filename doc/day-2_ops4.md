@@ -13,7 +13,7 @@ To speed up the execution I'll disable fact collection, and to make it invisible
 gathering = explicit
 ```
 
-Let's run the play to notice that 'Gathering Facts' task is not executed anymore.
+Let's run the play to notice that `Gathering Facts` task is not executed anymore.
 
 ```bash
 cd day-2_ops4
@@ -21,7 +21,7 @@ ansible-galaxy install -r requirements.yml
 ansible-playbook duck.yml -i inventory.ini
 ```
 
-Notice python related warning that moved to the moment of calling Duck API - it's the first moment when python on managed node is executed, and indeed 'Gathering Facts' task is no at the execution report.
+Notice python related warning that moved to the moment of calling Duck API - it's the first moment when python on managed node is executed, and indeed `Gathering Facts` task is no at the execution report.
 
 ```text
 PLAY [DuckDuckGo Instant Answer via Ansible (using collection)] ***********************************************

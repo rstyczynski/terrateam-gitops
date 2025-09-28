@@ -1,12 +1,3 @@
 ---
 ansible_piepline:
-  ansible_playbook: duck_ledzeppelin.yml
-  debug:
-    init: true
-    plan: true
-    diff: false
-    apply: false
-    output: false
-    shared: false
-    skip_ping: true
-    skip_check: false
+  ansible_playbook: duck_bobdylan.yml

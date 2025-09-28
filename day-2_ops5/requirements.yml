@@ -5,6 +5,4 @@ collections:
     source: https://github.com/rstyczynski/ansible-collection-howto.git#/collections/ansible_collections/myorg/publicapi
     version: 0.2.1
   - name: oracle.oci
-    type: galaxy
-    source: https://github.com/oracle/ansible-oci-modules.git
-    version: v2.25.0
+    version: ">=5.4.0"

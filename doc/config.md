@@ -17,7 +17,7 @@ Exercises aims to familiarize you with the following Ansible Engine capabilities
 
 ## Configure your environment
 
-As exercises use ansible on you computer, you need to install python, and Ansible packages. It's always the good practice to install packages in python virtual environment.
+As exercises use Ansible on you computer, you need to install python, and Ansible packages. It's always the good practice to install packages in python virtual environment.
 
 Install python3 using your environment technique. Here code for MacOS.
 
