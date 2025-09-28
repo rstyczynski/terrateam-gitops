@@ -40,7 +40,6 @@ ansible-playbook venv_manager.yml
 ansible-playbook duck.yml -i inventory.ini 
 ```
 
-
 ### Pipeline
 
 Now let's run the same in the pipeline. It's more complex as now we need to setup virtual environment.
