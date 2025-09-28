@@ -326,6 +326,8 @@ if [ "${PYTHON_INFO}" == "true" ]; then
             > /tmp/ansible_python_stdout.log 2> /tmp/ansible_python_stderr.log
         else
             echo "  ANSIBLE_PYTHON:"
+            touch /tmp/ansible_python_stdout.log
+            touch /tmp/ansible_python_stderr.log
         fi
 
 
@@ -342,7 +344,7 @@ if [ "${PYTHON_INFO}" == "true" ]; then
             echo "    STDERR: |"
             sed 's/^/      /' /tmp/ansible_python_stderr.log
         else
-        echo "    STDERR:"
+            echo "    STDERR:"
         fi
 
     } >> "${PLAN_FILE}"
