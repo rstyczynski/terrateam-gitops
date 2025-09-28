@@ -118,6 +118,8 @@ roles:
 
 In the execution plan you see failure of one of tasks, as the API call was skipped in a check mode, and there was no data to process. We will fix it. Ypu see warnings from playbook execution - the same as in CLI mode. Inventory and ansible.cfg were not provided, what is indicated. Finally you see requirements.yml file, with `roles:[]`, what may be surprising. It's side effect of galaxy firewall processing.
 
+As the code is not dry-run compliant, lets disable check mode at the pipeline.
+
 ```bash
 cat > ansible_piepline.yml <<EOF
 ---
@@ -127,7 +129,10 @@ ansible_piepline:
 EOF
 ```
 
+Commit the change with message "dry run mode disable", and push, to notice that the pipeline is  triggered. Wait for the new plan.
+
 ```text
+
 ```
 
 ### Summary
