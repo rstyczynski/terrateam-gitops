@@ -46,7 +46,7 @@ cd vendor
 git clone https://github.com/oracle/oci-ansible-collection.git
 cd oci-ansible-collection
 git fetch --tags
-git checkout v4.31.0
+git checkout v5.5.0
 ansible-galaxy collection build 
 mv oracle-oci*.tar.gz ..
 cd ..
