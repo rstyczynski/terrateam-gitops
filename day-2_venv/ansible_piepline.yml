@@ -4,4 +4,6 @@ ansible_piepline:
   control:
     init_script: |
       ansible-galaxy install -r requirements.yml
+      apt-get update
+      apt-get install -y python3-venv
       ansible-playbook venv_manager.yml
