@@ -95,7 +95,7 @@ sed $'/^\\[duck_api:vars\\]/a\\\ntimpastamp='"$(date)"$'\n' inventory.ini > /tmp
 mv /tmp/inventory.ini inventory.ini
 ```
 
-3. commit with message "trigger day-2_ops2"
+3. commit with message "trigger day-2_ops3"
 
 4. push branch
 
