@@ -88,7 +88,7 @@ Now let's run the same in the pipeline. The pipeline is triggered by a file chan
 
 1. Create a branch with name: your_name/day-2_ops3. Add your name or other unique string the branch name.
 
-2. Change variable file to provide any change, here additional timestamp argument is added just to trigger the pipeline.
+2. Change any file; here additional timestamp argument is added just to trigger the pipeline.
 
 ```bash
 sed $'/^\\[duck_api:vars\\]/a\\\ntimpastamp='"$(date)"$'\n' inventory.ini > /tmp/inventory.ini
