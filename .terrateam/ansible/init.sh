@@ -71,7 +71,7 @@ fi
 #
 # execute init script
 #
-CTX_JSON=$(python3 -c 'import sys,yaml,json; print(json.dumps(yaml.safe_load(open(sys.argv[1]))))' ${TERRATEAM_PLAN_FILE})
+CTX_JSON=$(python3 -c 'import sys,yaml,json; print(json.dumps(yaml.safe_load(open(sys.argv[1]))))' ./ansible_piepline.yml)
 INIT_SCRIPT=$(echo "${CTX_JSON}" | jq -r '.ansible_execution_context.control.init_script // empty')
 # Execute the init_script line by line, filtering forbidden programs
 
