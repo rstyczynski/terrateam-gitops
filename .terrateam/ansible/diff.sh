@@ -31,6 +31,9 @@ ANSIBLE_PLAYBOOK_CHECK_STDERR=$(echo "${CTX_JSON}" | jq -r '.ansible_execution_c
 ANSIBLE_PYTHON_STDOUT=$(echo "${CTX_JSON}" | jq -r '.ansible_execution_context.ANSIBLE_PYTHON.STDOUT')
 ANSIBLE_PYTHON_STDERR=$(echo "${CTX_JSON}" | jq -r '.ansible_execution_context.ANSIBLE_PYTHON.STDERR')
 
+echo "ANSIBLE_PYTHON_STDOUT: $ANSIBLE_PYTHON_STDOUT" >&2
+echo "ANSIBLE_PYTHON_STDERR: $ANSIBLE_PYTHON_STDERR" >&2
+
 TERRATEAM_ROOT=$(echo "${CTX_JSON}" | jq -r '.ansible_execution_context.ENV.TERRATEAM_ROOT')
 TERRATEAM_DIR=$(echo "${CTX_JSON}" | jq -r '.ansible_execution_context.ENV.TERRATEAM_DIR')
 TERRATEAM_WORKSPACE=$(echo "${CTX_JSON}" | jq -r '.ansible_execution_context.ENV.TERRATEAM_WORKSPACE')
