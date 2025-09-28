@@ -1,0 +1,5 @@
+---
+ansible_piepline:
+  debug:
+    diff: true
+    plan: true
