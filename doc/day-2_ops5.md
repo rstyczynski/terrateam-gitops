@@ -115,7 +115,11 @@ Now let's run the same in the pipeline. The pipeline is triggered by a file chan
 
 1. Create a branch with name: your_name/day-2_ops5. Add your name or other unique string the branch name.
 
-2. Change variable file to provide any change.
+2. Change vars.json file; here additional timestamp argument is added just to trigger the pipeline.
+
+```bash
+jq --arg date "$(date)" '.timestamp = $date' vars.json > /tmp/tmp.json && mv /tmp/tmp.json vars.json
+```
 
 3. Commit with message "trigger day-2_ops5"
 

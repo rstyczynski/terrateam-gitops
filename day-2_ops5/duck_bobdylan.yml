@@ -1,9 +1,9 @@
 ---
 - name: DuckDuckGo Instant Answer via Ansible (using collection)
   hosts: duck_api
-  vars:
-    duckduckgo_query: "Bob Dylan"
-
+  vars_files:
+    - vars.json
+    
   roles:
     - role: myorg.publicapi.duckduckgo
 
