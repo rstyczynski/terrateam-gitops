@@ -172,8 +172,10 @@ localhost                  : ok=2    changed=1    unreachable=0    failed=0    s
 
 Now you can merge and delete the branch. Your playbook applied changes at target systems, the execution context is stored at the Terrateam server, and all related files are in the main branch.
 
-### summary
+At the repository working directory, switch back to main brach, and pull the changes.
+
+### Summary
 
 You executed simple playbook using check based approach. You did the same form a CLI and the pipeline.
 
-Note that variable and the playbook itself are not presented at the plan document being part of the repository. Reviewer looking at the plan in case of required verification should validate content of the playbook and variables. Variables are of course partially visible in the check execution output. 
+Note that variable and the playbook itself are not presented at the plan document being part of the repository. Reviewer looking at the plan in case of required verification should validate content of the playbook and variables. Variables are of course partially visible in the check execution output.

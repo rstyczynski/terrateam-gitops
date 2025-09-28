@@ -114,12 +114,15 @@ ansible-playbook $PLAYBOOK -i inventory_static.yml 2> >(tee /tmp/ansible_stderr.
 
 === Pipeline control 
 
-Pipeline detects ansible_piepline.yml file in the playbook directory. The file is used to control the execution context of the Ansible engine. On this stage debug flags, and playbook name are defined.
+Pipeline detects ansible_piepline.yml file in the playbook directory. The file is used to control the execution context of the Ansible engine. On this stage debug flags, playbook name, and control over ping and check modes are defined.
 
 ```yaml
 ---
 ansible_piepline:
   ansible_playbook: duck_ledzeppelin.yml
+  control:
+    skip_ping: true
+    skip_check: true
   debug:
     init: true
     plan: false

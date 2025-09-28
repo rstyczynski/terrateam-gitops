@@ -125,15 +125,94 @@ cat > ansible_piepline.yml <<EOF
 ---
 ansible_piepline:
   control:
-    skip_check: false
+    skip_check: true
 EOF
 ```
 
-Commit the change with message "dry run mode disable", and push, to notice that the pipeline is  triggered. Wait for the new plan.
+Commit the change with message "dry run mode disable", and push, to notice that the pipeline is  triggered. Wait for the new plan with check mode step disabled.
 
 ```text
+Ansible Execution Context
+━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ Playbook
+━━━━━━━━━━━
+duck.yml
 
+✅ Ansible Ping
+━━━━━━━━━━━━━━━
+(none)
+
+✅ Ansible Playbook Check
+━━━━━━━━━━━━━━━━━━━━━━━━━
+(none)
+
+🗄️ Inventory file
+━━━━━━━━━━━━━━━━━
+(none)
+
+🗄️ ansible.cfg file
+━━━━━━━━━━━━━━━━━━━
+(none)
+
+🗄️ requirements file
+━━━━━━━━━━━━━━━━━━━━
+---
+collections:
+  - name: collections/ansible_collections/myorg/publicapi/
+    type: git
+    source: https://github.com/rstyczynski/ansible-collection-howto.git#/collections/ansible_collections/myorg/publicapi
+    version: 0.1.2
+roles:
+  []
 ```
+
+To execute the play send apply command to the pipeline
+
+```bash
+terrateam apply
+```
+
+Once executed you see that the play ran successfully.
+
+```text
+✅ Running ansible-playbook
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PLAY [DuckDuckGo Instant Answer via Ansible (using collection)] ****************
+
+TASK [myorg.publicapi.duckduckgo : Validating arguments against arg spec 'main' - Query DuckDuckGo] ***
+ok: [localhost]
+
+TASK [myorg.publicapi.duckduckgo : Validate inputs (explicit)] *****************
+ok: [localhost]
+
+TASK [myorg.publicapi.duckduckgo : Call DuckDuckGo Instant Answer API] *********
+ok: [localhost]
+
+TASK [myorg.publicapi.duckduckgo : Normalize JSON payload] *********************
+ok: [localhost]
+
+TASK [myorg.publicapi.duckduckgo : Build final answer (Answer -> AbstractText -> top 3 RelatedTopics)] ***
+ok: [localhost]
+
+TASK [myorg.publicapi.duckduckgo : Store role outputs as facts] ****************
+ok: [localhost]
+
+TASK [myorg.publicapi.duckduckgo : Show result] ********************************
+ok: [localhost] => {
+    "msg": "Wolfgang Amadeus Mozart A prolific and influential composer of the Classical period.\\nConstanze Mozart A German soprano, later a businesswoman.\\nLeopold Mozart A German composer, violinist, and music theorist."
+}
+
+TASK [Persist role outputs] ****************************************************
+skipping: [localhost]
+
+PLAY RECAP *********************************************************************
+localhost                  : ok=7    changed=0    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0
+```
+
+To finalize merge, delete branch, and close pull request.
+
+At the repository working directory, switch back to main brach, and pull the changes.
 
 ### Summary
 
