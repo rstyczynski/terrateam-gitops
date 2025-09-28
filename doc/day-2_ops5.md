@@ -136,25 +136,75 @@ terrateam plan: day-2_ops5 default Waiting for status to be reported — Running
 Once it's completed click on `Expand for plan output details` under pull request conversation comment's `Terrateam Plan Output` to see ansible execution plan.
 
 ```text
+Ansible Execution Context
+━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ Playbook
+━━━━━━━━━━━
+duck_bobdylan.yml
 
+✅ Ansible Ping
+━━━━━━━━━━━━━━━
+localhost | FAILED! => {
+    "changed": false,
+    "module_stderr": "/bin/sh: 1: /Users/rstyczynski/projects/terrateam-gitops/.venv/bin/python: not found\n",
+    "module_stdout": "",
+    "msg": "The module failed to execute correctly, you probably need to set the interpreter.\nSee stdout/stderr for the exact error",
+    "rc": 127
+}
+
+✅ Ansible Playbook Check
+━━━━━━━━━━━━━━━━━━━━━━━━━
+(none)
+
+⚠️ warnings & errors
+ERROR! couldn't resolve module/action 'oracle.oci.oci_object_storage_namespace_facts'. This often indicates a misspelling, missing collection, or incorrect module path.
+
+The error appears to be in '/github/workspace/day-2_ops5/duck_bobdylan.yml': line 11, column 7, but may
+be elsewhere in the file depending on the exact syntax problem.
+
+The offending line appears to be:
+
+  tasks:
+    - name: Get Object Storage namespace
+      ^ here
+
+🗄️ Inventory file
+━━━━━━━━━━━━━━━━━
+all:
+  children:
+    duck_api:
+      hosts:
+        localhost:
+          ansible_connection: local
+
+🗄️ ansible.cfg file
+━━━━━━━━━━━━━━━━━━━
+[defaults]
+gathering = explicit
+interpreter_python = /Users/rstyczynski/projects/terrateam-gitops/.venv/bin/python
+
+🗄️ requirements file
+━━━━━━━━━━━━━━━━━━━━
+---
+collections:
+  - name: collections/ansible_collections/myorg/publicapi/
+    type: git
+    source: https://github.com/rstyczynski/ansible-collection-howto.git#/collections/ansible_collections/myorg/publicapi
+    version: 0.2.1
+  # BLOCKED by galaxy_firewall: name: oracle.oci
+  # BLOCKED by galaxy_firewall: version: '>=5.4.0'
+roles:
+  []
+
+⚠️ warnings & errors
+Warning: Requirements file uses public sources. Public sources removed.
 ```
 
-TODO: comment of the plan phase.
+Now you see 
 
-To execute the play send apply command to the pipeline
 
-```bash
-terrateam apply
-```
-
-Once executed you see that the play ran successfully.
-
-```text
-```
-
-Your playbook logic was executed, and the execution context is stored at the Terrateam server. Drop all changes, because we do not want to push them to the repository, by closing the pull request and deleting a branch.
-
-> **Note:** In regular situation, after a successful apply, you will merge and delete the feature branch to ensure all related files are in the `main`. In your local repository you will switch back to the main branch and pull the latest changes.
+Your playbook logic totally failed. The execution context is still stored at the Terrateam server for further analysis. Drop all changes, because we do not want to push them to the repository, by closing the pull request and deleting a branch.
 
 ### Summary
 
+Thus exercise presented  
