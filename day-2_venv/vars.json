@@ -1,5 +1,4 @@
 {
-  "ansible_python_interpreter": "{{ lookup('env','HOME') }}/.ansible/venv/bin/python",
   "duckduckgo_query": "The Alan Parsons Project",
   "timestamp": "Sun Sep 28 19:07:45 CEST 2025"
 }
