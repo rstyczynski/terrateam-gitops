@@ -322,9 +322,27 @@ if [ "${SKIP_SETUP}" != "true" ]; then
         echo
         if [ -s inventory_static.yml ]; then
             echo "  ANSIBLE_PYTHON: |"
-            ansible all -m setup -a 'filter=ansible_python*' -i inventory_static.yml | sed 's/^/    /'
+            ansible all -m setup -a 'filter=ansible_python*' -i inventory_static.yml \
+            > /tmp/ansible_python_stdout.log 2> /tmp/ansible_python_stderr.log
         else
             echo "  ANSIBLE_PYTHON:"
+        fi
+
+
+        # Indent STDOUT
+        if [[ -s /tmp/ansible_ping_stdout.log ]]; then
+            echo "    STDOUT: |"
+            sed 's/^/      /' /tmp/ansible_python_stdout.log
+        else
+            echo "    STDOUT:"
+        fi
+
+        # Indent STDERR
+        if [[ -s /tmp/ansible_ping_stderr.log ]]; then
+            echo "    STDERR: |"
+            sed 's/^/      /' /tmp/ansible_python_stderr.log
+        else
+        echo "    STDERR:"
         fi
 
     } >> "${PLAN_FILE}"

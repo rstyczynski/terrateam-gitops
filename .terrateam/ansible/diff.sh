@@ -28,6 +28,8 @@ ANSIBLE_PING_STDOUT=$(echo "${CTX_JSON}" | jq -r '.ansible_execution_context.ANS
 ANSIBLE_PING_STDERR=$(echo "${CTX_JSON}" | jq -r '.ansible_execution_context.ANSIBLE_PING.STDERR')
 ANSIBLE_PLAYBOOK_CHECK_STDOUT=$(echo "${CTX_JSON}" | jq -r '.ansible_execution_context.ANSIBLE_PLAYBOOK_CHECK.STDOUT')
 ANSIBLE_PLAYBOOK_CHECK_STDERR=$(echo "${CTX_JSON}" | jq -r '.ansible_execution_context.ANSIBLE_PLAYBOOK_CHECK.STDERR')
+ANSIBLE_PYTHON_STDOUT=$(echo "${CTX_JSON}" | jq -r '.ansible_execution_context.ANSIBLE_PYTHON.STDOUT')
+ANSIBLE_PYTHON_STDERR=$(echo "${CTX_JSON}" | jq -r '.ansible_execution_context.ANSIBLE_PYTHON.STDERR')
 
 TERRATEAM_ROOT=$(echo "${CTX_JSON}" | jq -r '.ansible_execution_context.ENV.TERRATEAM_ROOT')
 TERRATEAM_DIR=$(echo "${CTX_JSON}" | jq -r '.ansible_execution_context.ENV.TERRATEAM_DIR')
@@ -67,11 +69,21 @@ else
   echo "(none)"
 fi
 
+# Output blocks
+echo
+echo "✅ Ansible Python"
+echo "━━━━━━━━━━━━━━━"
+if [ -n "${ANSIBLE_PYTHON_STDOUT}" ] && [ "${ANSIBLE_PYTHON_STDOUT}" != "null" ]; then
+  printf "%s\n" "${ANSIBLE_PYTHON_STDOUT}"
+else
+  echo "(none)"
+fi
 
-if [ -n "${ANSIBLE_PING_STDERR}" ] && [ "${ANSIBLE_PING_STDERR}" != "null" ]; then
+
+if [ -n "${ANSIBLE_PYTHON_STDERR}" ] && [ "${ANSIBLE_PYTHON_STDERR}" != "null" ]; then
     echo
     echo "⚠️ warnings & errors"
-    printf "%s\n" "${ANSIBLE_PING_STDERR}"
+    printf "%s\n" "${ANSIBLE_PYTHON_STDERR}"
 fi
 
 echo
