@@ -93,12 +93,49 @@ to see critical errors. This play does not comply to Ansible requirements. Runni
 ansible-playbook duck.yml
 ```
 
-Check mode is a powerful Ansible capability to validate changes made by the playbook, without making any changes. The dry-run is powerful, however available only for properly written playbooks. Exemplary `myorg.publicapi.duckduckgo` role does not comply to Ansible standards, what may happen to your code. The pipeline makes it possible to skip `check`.
+Teh check mode failed, but in this play it does not break from regular run, whioch gives proper results.
+
+```text
+[WARNING]: No inventory was parsed, only implicit localhost is available
+[WARNING]: provided hosts list is empty, only localhost is available. Note that the implicit localhost does not match 'all'
+
+PLAY [DuckDuckGo Instant Answer via Ansible (using collection)] ***********************************************
+
+TASK [myorg.publicapi.duckduckgo : Validating arguments against arg spec 'main' - Query DuckDuckGo] ***********
+ok: [localhost]
+
+TASK [myorg.publicapi.duckduckgo : Validate inputs (explicit)] ************************************************
+ok: [localhost]
+
+TASK [myorg.publicapi.duckduckgo : Call DuckDuckGo Instant Answer API] ****************************************
+ok: [localhost]
+
+TASK [myorg.publicapi.duckduckgo : Normalize JSON payload] ****************************************************
+ok: [localhost]
+
+TASK [myorg.publicapi.duckduckgo : Build final answer (Answer -> AbstractText -> top 3 RelatedTopics)] ********
+ok: [localhost]
+
+TASK [myorg.publicapi.duckduckgo : Store role outputs as facts] ***********************************************
+ok: [localhost]
+
+TASK [myorg.publicapi.duckduckgo : Show result] ***************************************************************
+ok: [localhost] => {
+    "msg": "Wolfgang Amadeus Mozart A prolific and influential composer of the Classical period.\\nConstanze Mozart A German soprano, later a businesswoman.\\nLeopold Mozart A German composer, violinist, and music theorist."
+}
+
+TASK [Persist role outputs] ***********************************************************************************
+skipping: [localhost]
+
+PLAY RECAP ****************************************************************************************************
+localhost                  : ok=7    changed=0    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0   
+```
 
 ### Pipeline
 
+Check mode is a powerful Ansible capability to validate changes made by the playbook, without making any changes. The dry-run is powerful, however available only for properly written playbooks. Exemplary `myorg.publicapi.duckduckgo` role does not comply to Ansible standards, what may happen to your code. The pipeline makes it possible to skip `check`.
 
-Now let's run the same in the pipeline. The pipeline is triggered by a file change under a branch and a pull request, what is controlled by a Terrateram GitHub extension. To trigger the pipeline execute following steps:
+Now let's run the same in the pipeline. The pipeline is triggered by a file change under a branch and a pull request, what is controlled by a Terrateam GitHub extension. To trigger the pipeline execute following steps:
 
 1. Create a branch with name: your_name/day-2_ops1. Add your name or other unique string the branch name.
 
