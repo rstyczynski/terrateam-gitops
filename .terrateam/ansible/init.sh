@@ -19,7 +19,7 @@ else
     ANSIBLE_ROOT=${TERRATEAM_ROOT}/${TERRATEAM_DIR}
 fi
 cd ${ANSIBLE_ROOT} | exit 2
-PWD
+pwd
 ls -la
 
 #
@@ -27,6 +27,24 @@ ls -la
 # and if not, it installs it when ansible-playbook is executed.
 #
 ansible-playbook --version
+
+
+#
+# execute init script
+#
+CTX_JSON=$(python3 -c 'import sys,yaml,json; print(json.dumps(yaml.safe_load(open(sys.argv[1]))))' ${TERRATEAM_PLAN_FILE})
+INIT_SCRIPT=$(echo "${CTX_JSON}" | jq -r '.ansible_execution_context.control.init_script // empty')
+if [ -n "${INIT_SCRIPT}" ]; then
+    echo "Executing init script from pipeline context..."
+    eval "${INIT_SCRIPT}"
+    INIT_EXIT_CODE=$?
+    if [ $INIT_EXIT_CODE -ne 0 ]; then
+        echo "Error: Init script failed with exit code $INIT_EXIT_CODE" >&2
+        exit $INIT_EXIT_CODE
+    fi
+else
+    echo "No init script found in pipeline context."
+fi
 
 #
 # detect ansible.cfg
