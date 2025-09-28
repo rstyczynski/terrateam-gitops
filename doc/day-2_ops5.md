@@ -136,6 +136,7 @@ terrateam plan: day-2_ops5 default Waiting for status to be reported — Running
 Once it's completed click on `Expand for plan output details` under pull request conversation comment's `Terrateam Plan Output` to see ansible execution plan.
 
 ```text
+
 ```
 
 TODO: comment of the plan phase.
