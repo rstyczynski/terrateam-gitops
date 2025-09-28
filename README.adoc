@@ -36,6 +36,22 @@ toc::[]
 <<<
 == Examples
 
+
+Working with ansible you will use the repository from your command line to execute exactly the same by the pipeline. All the exercises work on a localhost, so you do not need to configure any machines to spin the playbooks.
+
+Exercises aims to familiarize you with the following Ansible Engine capabilities:
+
+* CLI / pipeline user experience
+* pipeline plan with ansible-playbook check mode and ping
+* pipeline control for debug purposes
+* pipeline control to disable ping or check
+* collection install from dir/git sources
+* collection install blocking public galaxy sources
+* work with inventory hosts and variables
+* work with ansible.cfg
+* GitHub ansible engine outputs for plan stage - plan-of-work
+* GitHub ansible engine outputs for apply stage - proof-of-work
+
 * *day-2_ops1*: Demonstrates a basic Ansible playbook that performs a series of simple tasks on a localhost host, reading parameters from a variable file.
 
 * *day-2_ops2*: Demonstrates gathering collections from a git source using requirements files. Moreover presents `ansible_piepline.yml` file to control Ansible execution context.
@@ -49,6 +65,8 @@ toc::[]
 * *terraform/day-1_cfg*: Contains the Terraform configuration for initial infrastructure provisioning, such as creating VMs, networks, or storage, which is concluded with Ansible based configuration.
 
 * *day-2_ops_workspace1*: Demonstrates use of workspaces to run Ansible playbooks. Covers change of the engine type: `DEV` workspace uses runs the debug engine, and `PROD` workspace runs the Ansible engine.
+
+Follow README.md files in the exercises directories for more details.
 
 == Ansible Engine philosophy
 
