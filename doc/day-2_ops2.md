@@ -61,7 +61,62 @@ terrateam plan: day-2_ops2 default Waiting for status to be reported — Running
 Once it's completed click on `Expand for plan output details` under pull request conversation comment's `Terrateam Plan Output` to see ansible execution plan.
 
 ```text
+Ansible Execution Context
+━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ Playbook
+━━━━━━━━━━━
+duck.yml
+
+✅ Ansible Ping
+━━━━━━━━━━━━━━━
+(none)
+
+✅ Ansible Playbook Check
+━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PLAY [DuckDuckGo Instant Answer via Ansible (using collection)] ****************
+
+TASK [myorg.publicapi.duckduckgo : Validating arguments against arg spec 'main' - Query DuckDuckGo] ***
+ok: [localhost]
+
+TASK [myorg.publicapi.duckduckgo : Validate inputs (explicit)] *****************
+ok: [localhost]
+
+TASK [myorg.publicapi.duckduckgo : Call DuckDuckGo Instant Answer API] *********
+skipping: [localhost]
+
+TASK [myorg.publicapi.duckduckgo : Normalize JSON payload] *********************
+fatal: [localhost]: FAILED! => {"msg": "The task includes an option with an undefined variable. The error was: Unable to look up a name or access an attribute in template string ({{ ddg.json | default(ddg.content | from_json) }}).\nMake sure your variable name does not contain invalid characters like '-': the JSON object must be str, bytes or bytearray, not AnsibleUndefined. the JSON object must be str, bytes or bytearray, not AnsibleUndefined. Unable to look up a name or access an attribute in template string ({{ ddg.json | default(ddg.content | from_json) }}).\nMake sure your variable name does not contain invalid characters like '-': the JSON object must be str, bytes or bytearray, not AnsibleUndefined. the JSON object must be str, bytes or bytearray, not AnsibleUndefined\n\nThe error appears to be in '/github/home/.ansible/collections/ansible_collections/myorg/publicapi/roles/duckduckgo/tasks/main.yml': line 18, column 3, but may\nbe elsewhere in the file depending on the exact syntax problem.\n\nThe offending line appears to be:\n\n\n- name: Normalize JSON payload\n  ^ here\n"}
+
+PLAY RECAP *********************************************************************
+localhost                  : ok=2    changed=0    unreachable=0    failed=1    skipped=1    rescued=0    ignored=0   
+
+⚠️ warnings & errors
+[WARNING]: No inventory was parsed, only implicit localhost is available
+[WARNING]: provided hosts list is empty, only localhost is available. Note that
+the implicit localhost does not match 'all'
+
+🗄️ Inventory file
+━━━━━━━━━━━━━━━━━
+(none)
+
+🗄️ ansible.cfg file
+━━━━━━━━━━━━━━━━━━━
+(none)
+
+🗄️ requirements file
+━━━━━━━━━━━━━━━━━━━━
+---
+collections:
+  - name: collections/ansible_collections/myorg/publicapi/
+    type: git
+    source: https://github.com/rstyczynski/ansible-collection-howto.git#/collections/ansible_collections/myorg/publicapi
+    version: 0.1.2
+roles:
+  []
 ```
+
+In the execution plan you see failure of one of tasks, as the API call was skipped in a check mode, and there was no data to process. We will fix it. Ypu see warnings from playbook execution - the same as in CLI mode. Inventory and ansible.cfg were not provided, what is indicated. Finally you see requirements.yml file, with `roles:[]`, what may be surprising. It's side effect of galaxy firewall processing.
 
 ```bash
 cat > ansible_piepline.yml <<EOF
