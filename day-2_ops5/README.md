@@ -53,8 +53,6 @@ The procedure below installs the OCI Python SDK, configures Ansible to use Pytho
 ```bash
 cd day-2_ops5
 pip install oci
-sed "s|^interpreter_python.*|interpreter_python = $(which python)|" ansible.cfg > /tmp/ansible.cfg
-mv /tmp/ansible.cfg ansible.cfg
 
 ansible-galaxy install -r requirements.yml 
 ansible-playbook duck_bobdylan.yml -i inventory.ini
