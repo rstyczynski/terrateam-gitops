@@ -290,7 +290,6 @@ if [ "${SKIP_PING}" != "true" ]; then
 
         # Run ansible ping, capture stdout and stderr
         if [ -s inventory_static.yml ]; then
-            source $HOME/.ansible/venv/bin/activate
             ansible all -m ping -i inventory_static.yml  > /tmp/ansible_ping_stdout.log 2> /tmp/ansible_ping_stderr.log
         else
             rm -f inventory_static.yml
