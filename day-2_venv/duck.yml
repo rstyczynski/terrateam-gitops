@@ -1,6 +1,7 @@
 ---
 - name: DuckDuckGo Instant Answer via Ansible (using collection)
   hosts: duck_api
+  become: false
   vars_files:
     - vars.json
 

@@ -9,9 +9,5 @@ ansible_piepline:
       ansible-playbook venv_manager.yml
       export ANSIBLE_PYTHON_INTERPRETER="$HOME/.ansible/venv/bin/python"
       source $HOME/.ansible/venv/bin/activate
-      $ANSIBLE_PYTHON_INTERPRETER --version
-      tree -d $HOME/.ansible/venv
-      echo "PATH: $PATH"
-      echo "ANSIBLE_PYTHON_INTERPRETER: $ANSIBLE_PYTHON_INTERPRETER"
-      echo "VIRTUAL_ENV: $VIRTUAL_ENV"
+
       
