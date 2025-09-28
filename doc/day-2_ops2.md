@@ -7,20 +7,84 @@ This example uses GitHub pull request interaction assuming you are familiar with
 ### Goals
 
 * install collection
-* familiarize with galaxy firewall
 * pipeline control to skip check mode
 
 ### CLI
+
+The play uses DuckGoGo query role that is part of `myorg.publicapi` collection. The dependency is registered in `requirement.yml` file.
+
+```yaml
+---
+collections:
+  - name: myorg.publicapi
+    type: git
+    source: https://github.com/rstyczynski/ansible-collection-howto.git#/collections/ansible_collections/myorg/publicapi
+    version: 0.1.2
+```
+
+and installed using regular ansible command.
 
 ```bash
 cd day-2_ops2
 ansible-galaxy install -r requirements.yml 
 ```
 
-In the first step execute the playbook at the command line in a check mode.
+Having the collection in place, let's execute the playbook at the command line in a dry-run mode to estimate changes that are planned to be done.
 
 ```bash
 ansible-playbook duck.yml --check
+```
+
+```text
+[WARNING]: No inventory was parsed, only implicit localhost is available
+[WARNING]: provided hosts list is empty, only localhost is available. Note that the implicit localhost does not match 'all'
+
+PLAY [DuckDuckGo Instant Answer via Ansible (using collection)] ***********************************************
+
+TASK [myorg.publicapi.duckduckgo : Validating arguments against arg spec 'main' - Query DuckDuckGo] ***********
+ok: [localhost]
+
+TASK [myorg.publicapi.duckduckgo : Validate inputs (explicit)] ************************************************
+ok: [localhost]
+
+TASK [myorg.publicapi.duckduckgo : Call DuckDuckGo Instant Answer API] ****************************************
+skipping: [localhost]
+
+TASK [myorg.publicapi.duckduckgo : Normalize JSON payload] ****************************************************
+[ERROR]: Task failed: Finalization of task args for 'ansible.builtin.set_fact' failed: Error while resolving value for 'ddg_json': object of type 'dict' has no attribute 'content'
+
+Task failed.
+Origin: /Users/rstyczynski/.ansible/collections/ansible_collections/myorg/publicapi/roles/duckduckgo/tasks/main.yml:18:3
+
+16   register: ddg
+17
+18 - name: Normalize JSON payload
+     ^ column 3
+
+<<< caused by >>>
+
+Finalization of task args for 'ansible.builtin.set_fact' failed.
+Origin: /Users/rstyczynski/.ansible/collections/ansible_collections/myorg/publicapi/roles/duckduckgo/tasks/main.yml:19:3
+
+17
+18 - name: Normalize JSON payload
+19   set_fact:
+     ^ column 3
+
+<<< caused by >>>
+
+Error while resolving value for 'ddg_json': object of type 'dict' has no attribute 'content'
+Origin: /Users/rstyczynski/.ansible/collections/ansible_collections/myorg/publicapi/roles/duckduckgo/tasks/main.yml:20:15
+
+18 - name: Normalize JSON payload
+19   set_fact:
+20     ddg_json: "{{ ddg.json | default(ddg.content | from_json) }}"
+                 ^ column 15
+
+fatal: [localhost]: FAILED! => {"changed": false, "msg": "Task failed: Finalization of task args for 'ansible.builtin.set_fact' failed: Error while resolving value for 'ddg_json': object of type 'dict' has no attribute 'content'"}
+
+PLAY RECAP ****************************************************************************************************
+localhost                  : ok=2    changed=0    unreachable=0    failed=1    skipped=1    rescued=0    ignored=0  
 ```
 
 to see critical errors. This play does not comply to Ansible requirements. Running play in a regular mode gives the proper response.
@@ -38,11 +102,9 @@ Now let's run the same in the pipeline. The pipeline is triggered by a file chan
 
 1. Create a branch with name: your_name/day-2_ops1. Add your name or other unique string the branch name.
 
-2. Change variable file
+2. Change variable file to provide ay change, here additional timestamp argument is added just to trigger the pipeline.
 
 ```bash
-QUERY="Hello World!"
-jq --arg query "$QUERY" '.duckduckgo_query = $query' vars.json > /tmp/tmp.json && mv /tmp/tmp.json vars.json
 jq --arg date "$(date)" '.timestamp = $date' vars.json > /tmp/tmp.json && mv /tmp/tmp.json vars.json 
 ```
 
@@ -210,9 +272,10 @@ PLAY RECAP *********************************************************************
 localhost                  : ok=7    changed=0    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0
 ```
 
-To finalize merge, delete branch, and close pull request.
+Your playbook applied changes at target systems, the execution context is stored at the Terrateam server. Drop all changes, as we do not want to push them into the repository.
 
-At the repository working directory, switch back to main brach, and pull the changes.
+> **Note:** After a successful apply, you will merge and delete the feature branch to ensure all related files are in the main branch. In your local repository, switch back to the main branch and pull the latest changes.
 
 ### Summary
 
+You learnt that the pipeline automatically installs collections, and how to control potentially required skip of the dry-run mode using `ansible_piepline.yml` control file.

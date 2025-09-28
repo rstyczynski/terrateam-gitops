@@ -170,12 +170,12 @@ localhost                  : ok=2    changed=1    unreachable=0    failed=0    s
 [WARNING]: provided hosts list is empty, only localhost is available. Note that the implicit localhost does not match 'all'
 ```
 
-Now you can merge and delete the branch. Your playbook applied changes at target systems, the execution context is stored at the Terrateam server, and all related files are in the main branch.
+Your playbook applied changes at target systems, the execution context is stored at the Terrateam server. Drop all changes, as we do not want to push them into the repository.
 
-At the repository working directory, switch back to main brach, and pull the changes.
+> **Note:** After a successful apply, you will merge and delete the feature branch to ensure all related files are in the main branch. In your local repository, switch back to the main branch and pull the latest changes.
 
 ### Summary
 
-You executed simple playbook using check based approach. You did the same form a CLI and the pipeline.
+You executed simple playbook using plan/apply based approach. You did the same form a CLI and the pipeline.
 
 Note that variable and the playbook itself are not presented at the plan document being part of the repository. Reviewer looking at the plan in case of required verification should validate content of the playbook and variables. Variables are of course partially visible in the check execution output.
