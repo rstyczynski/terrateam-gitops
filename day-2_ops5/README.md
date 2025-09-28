@@ -8,7 +8,7 @@
 
 ## Configure your environment
 
-For these exercises, you will use Ansible on your computer. You need to install Python and Ansible packages. It is always good practice to install packages in a Python virtual environment.
+For these exercises, you will use Ansible on your computer. You need to install Python and Ansible packages. It is considered good practice to install packages in a Python virtual environment.
 
 Install Python 3 using your environment's preferred method. Below is the command for macOS:
 
@@ -25,7 +25,7 @@ pip install --upgrade pip
 pip install "ansible-core==2.19.2" 
 ```
 
-Now all operations are performed using the Python 3 virtual environment with Ansible Core 2.19.2, which is the latest version.
+From now on, all operations will use the Python 3 virtual environment with Ansible Core 2.19.2 (the latest version).
 
 ## CLI
 
@@ -53,14 +53,12 @@ The procedure below installs the OCI Python SDK, configures Ansible to use Pytho
 ```bash
 cd day-2_ops5
 pip install oci
-sed "s|^interpreter_python.*|interpreter_python = $(which python)|" ansible.cfg > /tmp/ansible.cfg
-mv /tmp/ansible.cfg ansible.cfg
 
 ansible-galaxy install -r requirements.yml 
 ansible-playbook duck_bobdylan.yml -i inventory.ini
 ```
 
-The Ansible output performs everything as expected.
+The Ansible output confirms that everything works as expected.
 
 ```text
 PLAY [DuckDuckGo Instant Answer via Ansible (using collection)] ***********************************************
@@ -111,7 +109,7 @@ localhost                  : ok=9    changed=0    unreachable=0    failed=0    s
 
 ## Pipeline
 
-Now let's run the same in the pipeline. The situation is quite different, as we now have more than one play in the directory, and it is mandatory to instruct the pipeline which play to use. This is done using the `ansible_pipeline.yml` control file.
+Now let's run the same in the pipeline. The situation differs because multiple plays exist in the directory, and it is mandatory to specify which play the pipeline should use. This is done using the `ansible_pipeline.yml` control file.
 
 ```yaml
 ---
@@ -119,11 +117,11 @@ ansible_pipeline:
   ansible_playbook: duck_bobdylan.yml
 ```
 
-The pipeline is triggered by a file change under a branch and a pull request, controlled by a Terrateam GitHub extension. To trigger the pipeline, follow these steps:
+Trigger the pipeline by making a file change under a branch and a pull request, controlled by a Terrateam GitHub extension. Perform the following steps:
 
-1. Create a branch named: your_name/day-2_ops5. Add your name or another unique string to the branch name.
+1. Create a branch named: your_name/day-2_ops5. Include your name or another unique string in the branch name.
 
-2. Modify the `vars.json` file; here, an additional timestamp argument is added just to trigger the pipeline.
+2. Modify the `vars.json` file; here, add an additional timestamp argument just to trigger the pipeline.
 
 ```bash
 jq --arg date "$(date)" '.timestamp = $date' vars.json > /tmp/tmp.json && mv /tmp/tmp.json vars.json
@@ -152,12 +150,12 @@ duck_bobdylan.yml
 
 ✅ Ansible Ping
 ━━━━━━━━━━━━━━━
-localhost | FAILED! => {
+localhost | SUCCESS => {
+    "ansible_facts": {
+        "discovered_interpreter_python": "/usr/bin/python3"
+    },
     "changed": false,
-    "module_stderr": "/bin/sh: 1: /Users/rstyczynski/projects/terrateam-gitops/.venv/bin/python: not found\n",
-    "module_stdout": "",
-    "msg": "The module failed to execute correctly, you probably need to set the interpreter.\nSee stdout/stderr for the exact error",
-    "rc": 127
+    "ping": "pong"
 }
 
 ✅ Ansible Playbook Check
@@ -189,7 +187,6 @@ all:
 ━━━━━━━━━━━━━━━━━━━
 [defaults]
 gathering = explicit
-interpreter_python = /Users/rstyczynski/projects/terrateam-gitops/.venv/bin/python
 
 🗄️ requirements file
 ━━━━━━━━━━━━━━━━━━━━
@@ -208,7 +205,7 @@ roles:
 Warning: Requirements file uses public sources. Public sources removed.
 ```
 
-You can see in the execution plan that the play file was selected properly. The Ping step shows errors related to the wrong Python location. The check step presents errors related to a missing module, which is expected because the Galaxy firewall filtered out public Galaxy sources, as visible in the `requirements file` section.
+You can see in the execution plan that the play file was selected properly. The `ping` step executes correctly, and the `check` step presents errors related to a missing module, which is expected because the Galaxy firewall filtered out public Galaxy sources, as visible in the `requirements file` section.
 
 ```text
 ---
@@ -226,7 +223,7 @@ roles:
 Warning: Requirements file uses public sources. Public sources removed.
 ```
 
-Your playbook logic completely failed, which was expected and provides valuable debug information. More debugging can be enabled by setting debug levels in the `ansible_pipeline.yml` control file.
+Your playbook logic completely failed, which was expected and provides valuable debug information. Enable more debugging by setting debug levels in the `ansible_pipeline.yml` control file.
 
 ```yaml
 ---
@@ -237,8 +234,10 @@ ansible_pipeline:
     plan: true
 ```
 
-Even with the failure, the execution context is still stored on the Terrateam server for further analysis. Discard all changes because we do not want to push them to the repository by closing the pull request and deleting the branch.
+Even with the failure, the execution context is still stored on the Terrateam server for further analysis. The exercise is successful because the pipeline prevents installing collections from a Galaxy source.
+
+Discard all changes because we do not want to push them to the repository by closing the pull request and deleting the branch.
 
 ## Summary
 
-This exercise demonstrated how to specify the play filename when there is more than one play in the directory. You learned that the Galaxy firewall filters public Galaxy sources, and you saw how Ansible Ping errors and stderr output help diagnose failures. Additional debug flags in the control file can provide further insight.
+This exercise demonstrates how to specify the play filename when there is more than one play in the directory. You learn that the Galaxy firewall filters public Galaxy sources, and you see how error output helps diagnose failures. You learn that additional debug flags in the control file can provide further insight.
