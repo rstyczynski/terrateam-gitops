@@ -269,4 +269,4 @@ Your playbook logic was executed, and the execution context is stored at the Ter
 
 ### Summary
 
-You lernt how Ansible pipeline handled `inventory.ini` file and how to change collection version at `requirement.yml` file.
+You learnt how Ansible pipeline handled `inventory.ini` file and how to change collection version at `requirement.yml` file. The example presented minimalistic play invoking one role with simplest possible play.
