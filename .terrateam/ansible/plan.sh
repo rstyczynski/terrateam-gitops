@@ -286,7 +286,7 @@ if [ "${SKIP_PING}" != "true" ]; then
     {
         echo
         echo "  ANSIBLE_PING:"
-        cd ${ANSIBLE_ROOT}
+        cd ${ANSIBLE_ROOT} || exit 2
 
         # Run ansible ping, capture stdout and stderr
         if [ -s inventory_static.yml ]; then
