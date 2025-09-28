@@ -7,6 +7,17 @@ ansible_piepline:
       apt-get update
       apt-get install -y python3 python3-venv
       ansible-playbook venv_manager.yml
-      #export ANSIBLE_PYTHON_INTERPRETER="$HOME/.ansible/venv/bin/python"
+      export ANSIBLE_PYTHON_INTERPRETER="$HOME/.ansible/venv/bin/python"
       source $HOME/.ansible/venv/bin/activate
       $ANSIBLE_PYTHON_INTERPRETER --version
+      tree -d $HOME/.ansible/venv
+      echo "PATH: $PATH"
+      echo "ANSIBLE_PYTHON_INTERPRETER: $ANSIBLE_PYTHON_INTERPRETER"
+      echo "PYTHONPATH: $PYTHONPATH"
+      echo "VIRTUAL_ENV: $VIRTUAL_ENV"
+      echo "VIRTUAL_ENV_PROMPT: $VIRTUAL_ENV_PROMPT"
+      echo "VIRTUAL_ENV_DISABLE_PROMPT: $VIRTUAL_ENV_DISABLE_PROMPT"
+      echo "VIRTUAL_ENV_RENAME: $VIRTUAL_ENV_RENAME"
+      echo "VIRTUAL_ENV_RENAME_PROMPT: $VIRTUAL_ENV_RENAME_PROMPT"
+      echo "VIRTUAL_ENV_RENAME_PROMPT_MESSAGE: $VIRTUAL_ENV_RENAME_PROMPT_MESSAGE"
+      echo "VIRTUAL_ENV_RENAME_PROMPT_MESSAGE_: $VIRTUAL_ENV_RENAME_PROMPT_MESSAGE_"
