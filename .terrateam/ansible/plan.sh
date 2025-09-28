@@ -286,11 +286,13 @@ if [ "${SKIP_PING}" != "true" ]; then
     {
         echo
         echo "  ANSIBLE_PING:"
-        cd ${ANSIBLE_ROOT}
+        cd ${ANSIBLE_ROOT} || exit 2
 
         # Run ansible ping, capture stdout and stderr
         if [ -s inventory_static.yml ]; then
-            ansible all -m ping -i inventory_static.yml > /tmp/ansible_ping_stdout.log 2> /tmp/ansible_ping_stderr.log
+            ansible -i 'localhost,' -c local -m setup localhost -a 'filter=ansible_python*'
+
+            ansible all -m ping -i inventory_static.yml  > /tmp/ansible_ping_stdout.log 2> /tmp/ansible_ping_stderr.log
         else
             rm -f inventory_static.yml
             touch /tmp/ansible_ping_stdout.log

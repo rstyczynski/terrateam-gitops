@@ -1,6 +1,0 @@
----
-ansible_piepline:
-  control:
-    init_script: |
-      ansible-galaxy install -r requirements.yml
-      ansible-playbook venv_manager.yml
