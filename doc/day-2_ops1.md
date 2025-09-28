@@ -170,9 +170,9 @@ localhost                  : ok=2    changed=1    unreachable=0    failed=0    s
 [WARNING]: provided hosts list is empty, only localhost is available. Note that the implicit localhost does not match 'all'
 ```
 
-Your playbook applied changes at target systems, the execution context is stored at the Terrateam server. Drop all changes, as we do not want to push them into the repository.
+Your playbook logic was executed, and the execution context is stored at the Terrateam server. Drop all changes, because we do not want to push them to the repository, by closing the pull request and deleting a branch.
 
-> **Note:** After a successful apply, you will merge and delete the feature branch to ensure all related files are in the main branch. In your local repository, switch back to the main branch and pull the latest changes.
+> **Note:** In regular situation, after a successful apply, you will merge and delete the feature branch to ensure all related files are in the `main`. In your local repository you will switch back to the main branch and pull the latest changes.
 
 ### Summary
 
