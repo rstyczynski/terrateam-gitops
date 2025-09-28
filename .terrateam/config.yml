@@ -61,6 +61,12 @@ dirs:
     when_modified:
       file_patterns: ["${DIR}/*"]
       autoplan: true
+      
+  day-2-venv:
+    tags: [ANS_code]
+    when_modified:
+      file_patterns: ["${DIR}/*"]
+      autoplan: true
 
   day-2_ops_subdir1/dev: 
     tags: [DEBUG_code]
