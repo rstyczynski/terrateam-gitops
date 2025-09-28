@@ -22,7 +22,7 @@ orig_roles = list(data.get("roles", []) or [])
 filtered_collections = []
 removed_collections = []
 for c in orig_collections:
-    if isinstance(c, dict) and c.get("type") in ("dir", "git"):
+    if isinstance(c, dict) and c.get("type") in ("dir", "git", "file"):
         filtered_collections.append(c)
     else:
         removed_collections.append(c)
@@ -33,7 +33,7 @@ removed_roles = []
 for r in orig_roles:
     if isinstance(r, dict):
         src = r.get("src", "")
-        if src.startswith("git+") or src.startswith("https://") or r.get("type") == "dir" or r.get("type") == "file":
+        if src.startswith("git+") or src.startswith("https://") or r.get("type") == "dir":
             filtered_roles.append(r)
         else:
             removed_roles.append(r)
