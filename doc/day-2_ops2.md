@@ -1,13 +1,34 @@
-## day-2_ops2
+# day-2_ops2
 
-Ansible Engine is provided with capability to protect pipeline from installing collections from public sources allowing only `dir` and `git` sources. Playbook uses git based collection to interact with DuckDuckGo search, with a collection declared in `requirements.yml`. Some plays can't be used in check mode due to some reasons. Pipeline provides possibility to skip the check mode.
+Playbook uses git based collection to interact with DuckDuckGo search, with a collection declared in `requirements.yml`. Some plays can't be used in check mode due to some reasons. Pipeline provides possibility to skip the check mode.
 
-### Goals
+## Goals
 
 * install collections
 * pipeline control to skip check mode
 
-### CLI
+## Configure your environment
+
+For these exercises, you will use Ansible on your computer. You need to install Python and Ansible packages. It is always good practice to install packages in a Python virtual environment.
+
+Install Python 3 using your environment's preferred method. Below is the command for macOS:
+
+```bash
+brew install python3
+```
+
+Once Python is ready, create a virtual environment and install the required packages. Note that all operations are done in the repository root. Also, `.venv` is added to `.gitignore`, so it will not be included in any commits.
+
+```bash
+python3 -m venv .venv 
+source .venv/bin/activate 
+pip install --upgrade pip 
+pip install "ansible-core==2.19.2" 
+```
+
+Now all operations are performed using the Python 3 virtual environment with Ansible Core 2.19.2, which is the latest version.
+
+## CLI
 
 The play uses DuckDuckGo query role that is part of `myorg.publicapi` collection. The dependency is registered in `requirements.yml` file.
 
@@ -129,7 +150,7 @@ PLAY RECAP *********************************************************************
 localhost                  : ok=7    changed=0    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0   
 ```
 
-### Pipeline
+## Pipeline
 
 Check mode is a powerful Ansible capability to validate changes made by the playbook, without making any changes. The dry-run is powerful, however available only for properly written playbooks. Exemplary `myorg.publicapi.duckduckgo` role does not comply with Ansible standards, what may happen to your code. The pipeline makes it possible to skip `check`.
 
@@ -311,6 +332,6 @@ The playbook logic was executed, and the execution context is stored at the Terr
 
 > **Note:** In regular situation, after a successful apply, you will merge and delete the feature branch to ensure all related files are in the `main`. In your local repository you will switch back to the main branch and pull the latest changes.
 
-### Summary
+## Summary
 
 You learnt that the pipeline automatically installs collections, and how to control potentially required skip of the dry-run mode using `ansible_pipeline.yml` control file.

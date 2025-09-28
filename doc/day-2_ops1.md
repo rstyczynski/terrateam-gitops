@@ -1,13 +1,34 @@
-## day-2_ops1
+# day-2_ops1
 
-### Goals
+## Goals
 
 * execute simple playbook
 * familiarize with CLI / pipeline user experience
 * familiarize with GitHub ansible engine outputs for plan stage
 * familiarize with GitHub ansible engine outputs for apply stage
 
-### CLI
+## Configure your environment
+
+For these exercises, you will use Ansible on your computer. You need to install Python and Ansible packages. It is always good practice to install packages in a Python virtual environment.
+
+Install Python 3 using your environment's preferred method. Below is the command for macOS:
+
+```bash
+brew install python3
+```
+
+Once Python is ready, create a virtual environment and install the required packages. Note that all operations are done in the repository root. Also, `.venv` is added to `.gitignore`, so it will not be included in any commits.
+
+```bash
+python3 -m venv .venv 
+source .venv/bin/activate 
+pip install --upgrade pip 
+pip install "ansible-core==2.19.2" 
+```
+
+Now all operations are performed using the Python 3 virtual environment with Ansible Core 2.19.2, which is the latest version.
+
+## CLI
 
 In the first step execute the playbook at the command line in a check mode.
 
@@ -65,7 +86,7 @@ localhost                  : ok=2    changed=1    unreachable=0    failed=0    s
 
 As you see the playbook just reads variable file and outputs some information, reporting warnings to stderr. The fact of changing the target system is reported by a check mode. This capability us used in a plan-of-work at the pipeline.
 
-### pipeline
+## pipeline
 
 Now let's run the same in the pipeline. The pipeline is triggered by a file change under a branch and a pull request, what is controlled by a Terrateram GitHub extension. To trigger the pipeline execute following steps:
 
@@ -174,7 +195,7 @@ The playbook logic was executed, and the execution context is stored at the Terr
 
 > **Note:** In regular situation, after a successful apply, you will merge and delete the feature branch to ensure all related files are in the `main`. In your local repository you will switch back to the main branch and pull the latest changes.
 
-### Summary
+## Summary
 
 You executed simple playbook using plan/apply based approach. You did the same form a CLI and the pipeline.
 

@@ -1,11 +1,32 @@
-## day-2_ops3
+# day-2_ops3
 
-### Goals
+## Goals
 
 * use inventory.ini
 * install collections with required git tag
 
-### CLI
+## Configure your environment
+
+For these exercises, you will use Ansible on your computer. You need to install Python and Ansible packages. It is always good practice to install packages in a Python virtual environment.
+
+Install Python 3 using your environment's preferred method. Below is the command for macOS:
+
+```bash
+brew install python3
+```
+
+Once Python is ready, create a virtual environment and install the required packages. Note that all operations are done in the repository root. Also, `.venv` is added to `.gitignore`, so it will not be included in any commits.
+
+```bash
+python3 -m venv .venv 
+source .venv/bin/activate 
+pip install --upgrade pip 
+pip install "ansible-core==2.19.2" 
+```
+
+Now all operations are performed using the Python 3 virtual environment with Ansible Core 2.19.2, which is the latest version.
+
+## CLI
 
 To eliminate Dry Run issues we observed in previous example, the duck query role was updated to be compatible with check mode and tagged with 0.2.1 version tag. This change is reflected in `requirements.yml` file.
 
@@ -82,7 +103,7 @@ PLAY RECAP *********************************************************************
 localhost                  : ok=8    changed=0    unreachable=0    failed=0    skipped=3    rescued=0    ignored=0
 ```
 
-### Pipeline
+## Pipeline
 
 Now let's run the same in the pipeline. The pipeline is triggered by a file change under a branch and a pull request, what is controlled by a Terrateam GitHub extension. To trigger the pipeline execute following steps:
 
@@ -266,6 +287,6 @@ The playbook logic was executed, and the execution context is stored at the Terr
 
 > **Note:** After a successful apply, you will merge and delete the feature branch to ensure all related files are in the main branch. In your local repository, switch back to the main branch and pull the latest changes.
 
-### Summary
+## Summary
 
 You learnt how Ansible pipeline handled `inventory.ini` file and how to change collection version at `requirement.yml` file. The example presented minimalistic play invoking one role with simplest possible play.

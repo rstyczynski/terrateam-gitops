@@ -1,6 +1,6 @@
-## day-2_ops5
+# day-2_ops5
 
-### Goals
+## Goals
 
 * Select the play to be executed using the `ansible_pipeline.yml` control file.
 * Filter public Galaxy sources from the `requirements.yml` file.
@@ -27,7 +27,7 @@ pip install "ansible-core==2.19.2"
 
 Now all operations are performed using the Python 3 virtual environment with Ansible Core 2.19.2, which is the latest version.
 
-### CLI
+## CLI
 
 The CLI uses OCI, and it is assumed you have OCI access configured. To validate, execute the following command:
 
@@ -109,7 +109,7 @@ PLAY RECAP *********************************************************************
 localhost                  : ok=9    changed=0    unreachable=0    failed=0    skipped=3    rescued=0    ignored=0   
 ```
 
-### Pipeline
+## Pipeline
 
 Now let's run the same in the pipeline. The situation is quite different, as we now have more than one play in the directory, and it is mandatory to instruct the pipeline which play to use. This is done using the `ansible_pipeline.yml` control file.
 
@@ -239,6 +239,6 @@ ansible_pipeline:
 
 Even with the failure, the execution context is still stored on the Terrateam server for further analysis. Discard all changes because we do not want to push them to the repository by closing the pull request and deleting the branch.
 
-### Summary
+## Summary
 
 This exercise demonstrated how to specify the play filename when there is more than one play in the directory. You learned that the Galaxy firewall filters public Galaxy sources, and you saw how Ansible Ping errors and stderr output help diagnose failures. Additional debug flags in the control file can provide further insight.
