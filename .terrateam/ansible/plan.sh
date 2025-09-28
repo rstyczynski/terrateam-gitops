@@ -320,8 +320,12 @@ fi
 if [ "${SKIP_SETUP}" != "true" ]; then
     {
         echo
-        echo "  ANSIBLE_PYTHON_: |"
-        ansible all -m setup -a 'filter=ansible_python*' | sed 's/^/    /'
+        if [ -s inventory_static.yml ]; then
+            echo "  ANSIBLE_PYTHON: |"
+            ansible all -m setup -a 'filter=ansible_python*' -i inventory_static.yml | sed 's/^/    /'
+        else
+            echo "  ANSIBLE_PYTHON:"
+        fi
 
     } >> "${PLAN_FILE}"
 fi
