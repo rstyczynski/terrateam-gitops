@@ -40,6 +40,19 @@ ansible-playbook venv_manager.yml
 ansible-playbook duck.yml -i inventory.ini 
 ```
 
+```bash
+mkdir vendor
+cd vendor
+git clone https://github.com/oracle/oci-ansible-collection.git
+cd oci-ansible-collection
+git fetch --tags
+git checkout v4.31.0
+ansible-galaxy collection build 
+mv oracle-oci*.tar.gz ..
+cd ..
+rm -rf oci-ansible-collection
+```
+
 ### Pipeline
 
 Now let's run the same in the pipeline. It's more complex as now we need to setup virtual environment.

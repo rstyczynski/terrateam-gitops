@@ -6,3 +6,4 @@ collections:
   - name: myorg's toolchain utilities
     type: git
     source: https://github.com/rstyczynski/ansible-collection-howto.git#/collections/ansible_collections/myorg/toolchain
+  - name: vendor/oracle-oci-4.31.0.tar.gz
