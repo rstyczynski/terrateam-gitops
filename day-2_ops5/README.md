@@ -41,6 +41,8 @@ You should see a response showing the namespace ID and the output from the OCI p
 {
   "data": "zr83uv6vz6na"
 }
+```
+```test
 Collecting oci
   Using cached oci-2.160.2-py3-none-any.whl.metadata (5.8 kB)
   (...)
