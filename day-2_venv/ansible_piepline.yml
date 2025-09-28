@@ -1,5 +1,6 @@
 ---
 ansible_piepline:
+  ansible_playbook: duck.yml
   control:
     init_script: |
       ansible-galaxy install -r requirements.yml
