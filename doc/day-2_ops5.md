@@ -111,7 +111,15 @@ localhost                  : ok=9    changed=0    unreachable=0    failed=0    s
 
 ### Pipeline
 
-Now let's run the same in the pipeline. The pipeline is triggered by a file change under a branch and a pull request, what is controlled by a Terrateam GitHub extension. To trigger the pipeline execute following steps:
+Now let's run the same in the pipeline. the situation is much different as now we have more than one play in the directory, and it's mandatory to instruct the pipeline which play to use, what is done using `ansible_piepline.yml` control file.
+
+```yaml
+---
+ansible_piepline:
+  ansible_playbook: duck_bobdylan.yml
+```
+
+The pipeline is triggered by a file change under a branch and a pull request, what is controlled by a Terrateam GitHub extension. To trigger the pipeline execute following steps:
 
 1. Create a branch with name: your_name/day-2_ops5. Add your name or other unique string the branch name.
 
@@ -200,11 +208,37 @@ roles:
 Warning: Requirements file uses public sources. Public sources removed.
 ```
 
-Now you see 
+You see on the execution plan that the play file was selected properly. Ping step presents errors related to wrong python location. Check presents errors related to missing module, what is expected, as galaxy firewall filtered out public galaxy sources, what is visible in `requirements file` section.
 
+```text
+---
+collections:
+  - name: collections/ansible_collections/myorg/publicapi/
+    type: git
+    source: https://github.com/rstyczynski/ansible-collection-howto.git#/collections/ansible_collections/myorg/publicapi
+    version: 0.2.1
+  # BLOCKED by galaxy_firewall: name: oracle.oci
+  # BLOCKED by galaxy_firewall: version: '>=5.4.0'
+roles:
+  []
 
-Your playbook logic totally failed. The execution context is still stored at the Terrateam server for further analysis. Drop all changes, because we do not want to push them to the repository, by closing the pull request and deleting a branch.
+⚠️ warnings & errors
+Warning: Requirements file uses public sources. Public sources removed.
+```
+
+Your playbook logic totally failed, what was expected and gives you valuable debug information. More debug may be requested by setting debug levels in `ansible_piepline.yml` control file.
+
+```yaml
+---
+ansible_piepline:
+  ansible_playbook: duck_bobdylan.yml
+  debug:
+    diff: true
+    plan: true
+```
+
+Even with the failure, the execution context is still stored at the Terrateam server for further analysis. Drop all changes, because we do not want to push them to the repository, by closing the pull request and deleting a branch.
 
 ### Summary
 
-Thus exercise presented  
+Thus exercise presented how to set play filename in case of having more than one plays in the directory. You learnt that galaxy firewall filters public galaxy sources, and you learnt how ping, and stederr presentation, and additional debug flags helps in diagnosing failures.
