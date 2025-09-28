@@ -314,6 +314,17 @@ if [ "${SKIP_PING}" != "true" ]; then
     } >> "${PLAN_FILE}"
 fi
 
+#
+# run setup
+#
+if [ "${SKIP_SETUP}" != "true" ]; then
+    {
+        echo
+        echo "  ANSIBLE_PYTHON_: |"
+        ansible all -m setup -a 'filter=ansible_python*' | sed 's/^/    /'
+
+    } >> "${PLAN_FILE}"
+fi
 
 #
 # run playbook in check mode
