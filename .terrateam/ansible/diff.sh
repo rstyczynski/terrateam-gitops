@@ -77,7 +77,7 @@ fi
 
 echo
 echo "✅ Ansible Python"
-echo "━━━━━━━━━━━━━━━"
+echo "━━━━━━━━━━━━━━━━━"
 if [ -n "${ANSIBLE_PYTHON_STDOUT}" ] && [ "${ANSIBLE_PYTHON_STDOUT}" != "null" ]; then
   printf "%s\n" "${ANSIBLE_PYTHON_STDOUT}"
 else
