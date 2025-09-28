@@ -29,10 +29,36 @@ to see critical errors. This play does not comply to Ansible requirements. Runni
 ansible-playbook duck.yml
 ```
 
-Check mode is a powerful Ansible capability to validate changes made by the playbook, however it's available only for properly written playbooks. Exemplary `myorg.publicapi.duckduckgo` role does not comply to Ansible standards, what may happen to your code. Pipeline makes it possible to skip `check`.
+Check mode is a powerful Ansible capability to validate changes made by the playbook, without making any changes. The dry-run is powerful, however available only for properly written playbooks. Exemplary `myorg.publicapi.duckduckgo` role does not comply to Ansible standards, what may happen to your code. The pipeline makes it possible to skip `check`.
 
 ### Pipeline
 
+
+Now let's run the same in the pipeline. The pipeline is triggered by a file change under a branch and a pull request, what is controlled by a Terrateram GitHub extension. To trigger the pipeline execute following steps:
+
+1. Create a branch with name: your_name/day-2_ops1. Add your name or other unique string the branch name.
+
+2. Change variable file
+
+```bash
+QUERY="Hello World!"
+jq --arg query "$QUERY" '.duckduckgo_query = $query' vars.json > /tmp/tmp.json && mv /tmp/tmp.json vars.json
+jq --arg date "$(date)" '.timestamp = $date' vars.json > /tmp/tmp.json && mv /tmp/tmp.json vars.json 
+```
+
+3. commit with message "trigger day-2_ops2"
+
+4. push branch
+
+5. create a pull request
+
+Open the pull request at https://github.com/rstyczynski/terrateam-gitops to notice that the plan operation is being executed.
+
+```text
+terrateam plan: day-2_ops2 default Waiting for status to be reported — Running
+```
+
+Once it's completed click on `Expand for plan output details` under pull request conversation comment's `Terrateam Plan Output` to see ansible execution plan.
 
 ```text
 ```
