@@ -1,6 +1,5 @@
 ---
 ansible_piepline:
-  ansible_playbook: duck_bobdylan.yml
   debug:
     diff: true
     plan: true
