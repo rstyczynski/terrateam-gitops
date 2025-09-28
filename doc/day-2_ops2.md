@@ -1,7 +1,5 @@
 # day-2_ops2
 
-Playbook uses git based collection to interact with DuckDuckGo search, with a collection declared in `requirements.yml`. Some plays can't be used in check mode due to some reasons. Pipeline provides possibility to skip the check mode.
-
 ## Goals
 
 * install collections
