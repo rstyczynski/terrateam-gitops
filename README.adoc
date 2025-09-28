@@ -36,7 +36,6 @@ toc::[]
 <<<
 == Examples
 
-
 Working with ansible you will use the repository from your command line to execute exactly the same by the pipeline. All the exercises work on a localhost, so you do not need to configure any machines to spin the playbooks.
 
 Exercises aims to familiarize you with the following Ansible Engine capabilities:
@@ -52,19 +51,21 @@ Exercises aims to familiarize you with the following Ansible Engine capabilities
 * GitHub ansible engine outputs for plan stage - plan-of-work
 * GitHub ansible engine outputs for apply stage - proof-of-work
 
-* *day-2_ops1*: Demonstrates a basic Ansible playbook that performs a series of simple tasks on a localhost host, reading parameters from a variable file.
+=== Exercises
 
-* *day-2_ops2*: Demonstrates gathering collections from a git source using requirements files. Moreover presents `ansible_piepline.yml` file to control Ansible execution context.
+* *day-2_ops1*: Demonstrates a basic Ansible playbook that performs a series of simple tasks on a localhost host, reading parameters from a variable file. [link](day-2_ops1/README.md)
 
-* *day-2_ops3*: Demonstrates use of `inventory.ini` to provide host names and play variables.
+* *day-2_ops2*: Demonstrates gathering collections from a git source using requirements files. Moreover presents `ansible_piepline.yml` file to control Ansible execution context. [link](day-2_ops2/README.md)
 
-* *day-2_ops4*: Demonstrates use of `ansible.cfg` to control Ansible execution context.
+* *day-2_ops3*: Demonstrates use of `inventory.ini` to provide host names and play variables. [link](day-2_ops3/README.md)
 
-* *day-2_ops5*: Demonstrates use of galaxy firewall to remove public sources from requirements.yml. Moreover presents `ansible_piepline.yml` file to control Ansible execution context - here the playbook name is defined to select one out of multiple playbooks.
+* *day-2_ops4*: Demonstrates use of `ansible.cfg` to control Ansible execution context. [link](day-2_ops4/README.md)
 
-* *terraform/day-1_cfg*: Contains the Terraform configuration for initial infrastructure provisioning, such as creating VMs, networks, or storage, which is concluded with Ansible based configuration.
+* *day-2_ops5*: Demonstrates use of galaxy firewall to remove public sources from requirements.yml. Moreover presents `ansible_piepline.yml` file to control Ansible execution context - here the playbook name is defined to select one out of multiple playbooks. [link](day-2_ops5/README.md)
 
-* *day-2_ops_workspace1*: Demonstrates use of workspaces to run Ansible playbooks. Covers change of the engine type: `DEV` workspace uses runs the debug engine, and `PROD` workspace runs the Ansible engine.
+* *terraform/day-1_cfg*: Contains the Terraform configuration for initial infrastructure provisioning, such as creating VMs, networks, or storage, which is concluded with Ansible based configuration. [link](terraform/day-1_cfg/README.md)
+
+* *day-2_ops_workspace1*: Demonstrates use of workspaces to run Ansible playbooks. Covers change of the engine type: `DEV` workspace uses runs the debug engine, and `PROD` workspace runs the Ansible engine. [link](day-2_ops_workspace1/README.md)
 
 Follow README.md files in the exercises directories for more details.
 
