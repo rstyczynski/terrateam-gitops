@@ -40,6 +40,18 @@ ansible-playbook venv_manager.yml
 ansible-playbook duck.yml -i inventory.ini 
 ```
 
+```bash
+mkdir vendor
+cd vendor
+git clone https://github.com/oracle/oci-ansible-collection.git
+cd oci-ansible-collection
+git fetch --tags
+git checkout v5.5.0
+ansible-galaxy collection build 
+mv oracle-oci*.tar.gz ..
+cd ..
+rm -rf oci-ansible-collection
+```
 
 ### Pipeline
 

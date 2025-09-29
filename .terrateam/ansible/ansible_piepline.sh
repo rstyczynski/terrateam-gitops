@@ -15,3 +15,4 @@ DEBUG_SHARED=$(echo "$piepline_ctx" | jq -r '.ansible_piepline.debug.shared // e
 
 SKIP_PING=$(echo "$piepline_ctx" | jq -r '.ansible_piepline.control.skip_ping // empty')
 SKIP_CHECK=$(echo "$piepline_ctx" | jq -r '.ansible_piepline.control.skip_check // empty')
+PYTHON_INFO=$(echo "$piepline_ctx" | jq -r '.ansible_piepline.control.python_info // empty')

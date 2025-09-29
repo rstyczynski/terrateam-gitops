@@ -290,8 +290,6 @@ if [ "${SKIP_PING}" != "true" ]; then
 
         # Run ansible ping, capture stdout and stderr
         if [ -s inventory_static.yml ]; then
-            ansible -i 'localhost,' -c local -m setup localhost -a 'filter=ansible_python*'
-
             ansible all -m ping -i inventory_static.yml  > /tmp/ansible_ping_stdout.log 2> /tmp/ansible_ping_stderr.log
         else
             rm -f inventory_static.yml
@@ -316,6 +314,37 @@ if [ "${SKIP_PING}" != "true" ]; then
     } >> "${PLAN_FILE}"
 fi
 
+#
+# run setup
+#
+if [ "${PYTHON_INFO}" == "true" ]; then
+    {
+        echo
+        echo "  ANSIBLE_PYTHON:"
+        if [ -s inventory_static.yml ]; then
+            
+            ansible all -m setup -a 'filter=ansible_python*' -i inventory_static.yml \
+            > /tmp/ansible_python_stdout.log 2> /tmp/ansible_python_stderr.log
+        fi
+
+        # Indent STDOUT
+        if [[ -s /tmp/ansible_ping_stdout.log ]]; then
+            echo "    STDOUT: |"
+            sed 's/^/      /' /tmp/ansible_python_stdout.log
+        else
+            echo "    STDOUT:"
+        fi
+
+        # Indent STDERR
+        if [[ -s /tmp/ansible_ping_stderr.log ]]; then
+            echo "    STDERR: |"
+            sed 's/^/      /' /tmp/ansible_python_stderr.log
+        else
+            echo "    STDERR:"
+        fi
+
+    } >> "${PLAN_FILE}"
+fi
 
 #
 # run playbook in check mode

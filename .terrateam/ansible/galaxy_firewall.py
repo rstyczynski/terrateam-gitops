@@ -22,7 +22,7 @@ orig_roles = list(data.get("roles", []) or [])
 filtered_collections = []
 removed_collections = []
 for c in orig_collections:
-    if isinstance(c, dict) and c.get("type") in ("dir", "git"):
+    if isinstance(c, dict) and c.get("type") in ("dir", "git", "file"):
         filtered_collections.append(c)
     else:
         removed_collections.append(c)

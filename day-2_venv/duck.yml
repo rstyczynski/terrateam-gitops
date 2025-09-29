@@ -16,3 +16,4 @@
     - name: Show namespace
       ansible.builtin.debug:
         msg: "Namespace is {{ ns.namespace }}"
+      when: ns.namespace is defined
